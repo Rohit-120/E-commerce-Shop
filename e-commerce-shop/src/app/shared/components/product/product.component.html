@@ -1,0 +1,27 @@
+<!-- Products Start -->
+
+    <div class="row px-xl-5">
+        <div *ngFor="let item of productItems" class="col-lg-3 col-md-4 col-sm-6 pb-1">
+            <div class="product-item bg-light mb-4">
+                <div class="product-img position-relative overflow-hidden">
+                    <img class="img-fluid w-100" src="{{item.image}}" alt="">
+                    <div class="product-action" *ngIf="item.productAction" >
+                        <a *ngFor="let action of item.productAction" class="btn btn-outline-dark btn-square" href=""><i class="{{action.icon}}"></i></a>
+                    </div>
+                </div>
+                <div class="text-center py-4">
+                    <a class="h6 text-decoration-none text-truncate" href="">{{item.productName}}</a>
+                    <div class="d-flex align-items-center justify-content-center mt-2">
+                        <h5>{{item.originalPrice | currency : 'USD'}}</h5><h6 class="text-muted ml-2"><del>{{item.checkedPrice | currency : 'USD'}}</del></h6>
+                    </div>
+                    <div *ngIf="item.ratingStar" class="d-flex align-items-center justify-content-center mb-1">
+                        <small *ngFor="let star of item.ratingStar" class="{{star.icon}} text-primary mr-1"></small>
+                        <small>({{item.totalRating}})</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Products End -->
+

@@ -1,0 +1,16 @@
+   <!-- Breadcrumb Start -->
+   <div class="container-fluid">
+    <div class="row px-xl-5">
+        <div class="col-12">
+            <nav class="breadcrumb bg-light mb-30">
+                <ng-container *ngFor="let item of breadcrumb ;let last = last" >
+
+                    <a *ngIf="!last" class="breadcrumb-item text-dark" [routerLink]="item.url">{{item.label}}</a>
+                    <!-- <a class="breadcrumb-item text-dark" href="#">Shop</a>-->
+                        <span *ngIf="last" [ngClass]="{'active': last}" class="breadcrumb-item ">{{item.label}}</span> 
+                    </ng-container>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
