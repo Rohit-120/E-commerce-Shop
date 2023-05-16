@@ -1,0 +1,29 @@
+<div class="container-fluid py-5">
+    <div class="row ">
+           <div class="col ">
+            <drag-scroll [scrollbar-hidden]="true" >
+                <div class="d-flex flex-row ">
+                    <div *ngFor="let item of vendors" class="bg-light p-4 m-3">
+                        <img src="{{item.image}}" style="height: 200px; width: 200px;" alt="">
+                    </div>
+                </div>
+            </drag-scroll>
+            </div>
+   </div>
+</div>
+ 
+ <!-- Vendor Start -->
+ <!-- <div class="container-fluid py-5">
+     <div class="row ">
+            <swiper [config]="config">
+            <div class="col swiper-wrapper">
+                <div class="d-flex flex-row swiper-slide">
+                    <div *ngFor="let item of vendors" class="bg-light p-4">
+                        <img src="{{item.image}}" style="height: 250px; width: 250px;" alt="">
+                    </div>
+                </div>
+            </div>
+        </swiper>
+    </div>
+</div> -->
+<!-- Vendor End -->

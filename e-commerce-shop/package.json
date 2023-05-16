@@ -18,8 +18,11 @@
     "@angular/platform-browser": "^14.0.0-next.0",
     "@angular/platform-browser-dynamic": "^14.0.0-next.0",
     "@angular/router": "^14.0.0-next.0",
+    "ngx-drag-scroll": "^15.0.0",
     "ngx-toastr": "^15.2.2",
+    "ngx-useful-swiper": "^10.0.1",
     "rxjs": "~7.5.0",
+    "swiper": "^6.8.4",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
   },

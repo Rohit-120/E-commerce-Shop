@@ -1,90 +1,31 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ApiService } from '../../services/api.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product',
   templateUrl: './product.component.html',
-  styleUrls: ['./product.component.scss']
+  styleUrls: ['./product.component.scss'],
+  changeDetection : ChangeDetectionStrategy.OnPush
 })
 export class ProductComponent implements OnInit {
-
-  productItems = [
-    {
-      image : 'assets/img/product-1.jpg',
-      productAction : this.productActionIcon(),
-      productName : 'Product Name goes here',
-      checkedPrice : 123,
-      originalPrice : 123,
-      ratingStar : this.ratingStarIcon() ,
-      totalRating : 99
-    },
-    {
-      image : 'assets/img/product-2.jpg',
-      productAction : this.productActionIcon(),
-      productName : 'Product Name goes here',
-      checkedPrice : 123,
-      originalPrice : 123,
-      ratingStar : this.ratingStarIcon() ,
-      totalRating : 99
-    },
-    {
-      image : 'assets/img/product-3.jpg',
-      productAction : this.productActionIcon(),
-      productName : 'Product Name goes here',
-      checkedPrice : 123,
-      originalPrice : 123,
-      ratingStar : this.ratingStarIcon() ,
-      totalRating : 99
-    },
-    {
-      image : 'assets/img/product-4.jpg',
-      productAction : this.productActionIcon(),
-      productName : 'Product Name goes here',
-      checkedPrice : 123,
-      originalPrice : 123,
-      ratingStar : this.ratingStarIcon() ,
-      totalRating : 99
-    },
-    {
-      image : 'assets/img/product-5.jpg',
-      productAction : this.productActionIcon(),
-      productName : 'Product Name goes here',
-      checkedPrice : 123,
-      originalPrice : 123,
-      ratingStar : this.ratingStarIcon() ,
-      totalRating : 99
-    },
-    {
-      image : 'assets/img/product-6.jpg',
-      productAction : this.productActionIcon(),
-      productName : 'Product Name goes here',
-      checkedPrice : 123,
-      originalPrice : 123,
-      ratingStar : this.ratingStarIcon() ,
-      totalRating : 99
-    },
-    {
-      image : 'assets/img/product-7.jpg',
-      productAction : this.productActionIcon(),
-      productName : 'Product Name goes here',
-      checkedPrice : 123,
-      originalPrice : 123,
-      ratingStar : this.ratingStarIcon() ,
-      totalRating : 99
-    },
-    {
-      image : 'assets/img/product-8.jpg',
-      productAction : this.productActionIcon(),
-      productName : 'Product Name goes here',
-      checkedPrice : 123,
-      originalPrice : 123,
-      ratingStar : this.ratingStarIcon() ,
-      totalRating : 99
-    },
-  ]
-
-  constructor() { }
+  products!:any[];
+ 
+  constructor(
+    private apiCall : ApiService,
+    private cdr : ChangeDetectorRef,
+    private router: Router
+  ) { }
   
   ngOnInit(): void {
+    //API call for All product features
+    this.apiCall.getAllProduct().subscribe({
+      next : (res:any) => {
+          this.products = res;     
+          console.log(res, 'swalwefk=========================');
+        this.cdr.markForCheck();
+      }
+    })
   }
 
   productActionIcon() {
@@ -122,6 +63,12 @@ export class ProductComponent implements OnInit {
         icon : 'fa fa-star',
       },
     ];
+  }
+
+  onShopDetail(item:any){
+    localStorage.setItem("shopDetailId",item.id)
+    console.log(localStorage.getItem("shopDetail"));
+    this.router.navigate(['shop-detail/'+ item.id]);
   }
 
 }

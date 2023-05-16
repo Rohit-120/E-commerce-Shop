@@ -11,6 +11,9 @@ import { ShopComponent } from './shop/shop.component';
 import { CategoriesComponent } from './categories/categories.component';
 import { SharedModule } from '../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { VendorComponent } from '../root-components/vendor/vendor.component';
+import { NgxUsefulSwiperModule } from 'ngx-useful-swiper';
+import { DragScrollModule } from 'ngx-drag-scroll';
 
 
 @NgModule({
@@ -21,14 +24,17 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ContactComponent,
     ProductDetailComponent,
     ShopComponent,
-    CategoriesComponent
+    CategoriesComponent,
+    VendorComponent
   ],
   imports: [
     CommonModule,
-    MainRoutingModule,
     SharedModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxUsefulSwiperModule,
+    DragScrollModule,
+    MainRoutingModule
   ]
 })
 export class MainModule { }

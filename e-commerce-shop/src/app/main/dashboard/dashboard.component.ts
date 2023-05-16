@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ApiService } from 'src/app/shared/services/api.service';
 import { BreadcrumbService } from 'src/app/shared/services/breadcrumb.service';
 
 @Component({
@@ -53,14 +54,18 @@ export class DashboardComponent implements OnInit {
 ]
 
   constructor(
-    private breadcrumbService: BreadcrumbService
-  ) { }
+    private breadcrumbService: BreadcrumbService,
+    private apiCall : ApiService,
+
+    ) { }
 
   ngOnInit(): void {
     this.breadcrumbService.breadcrumb.next([{
       label: 'Home',
       url : '/'
     }])
+
+  
   }
 
 }

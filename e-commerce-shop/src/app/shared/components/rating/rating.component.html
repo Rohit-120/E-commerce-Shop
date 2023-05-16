@@ -1,0 +1,14 @@
+<div class="d-flex align-items-center justify-content-center mb-1 text-primary" *ngIf="rating">
+    <small
+      [class]="(rating == 0) ? 'far fa-star mr-1' : (rating > 0 && rating < 1) ? 'fa fa-star-half-alt mr-1' : 'fa fa-star mr-1'"></small>
+    <small
+      [class]="(rating > 1 && rating < 2) ? 'fa fa-star-half-alt mr-1' : (rating >= 2) ? 'fa fa-star mr-1' : 'far fa-star mr-1'"></small>
+    <small
+      [class]="(rating > 2 && rating < 3) ? 'fa fa-star-half-alt mr-1' : (rating >= 3) ? 'fa fa-star mr-1' : 'far fa-star mr-1'"></small>
+    <small
+      [class]="(rating > 3 && rating < 4) ? 'fa fa-star-half-alt mr-1' : (rating >= 4) ? 'fa fa-star mr-1' : 'far fa-star mr-1'"></small>
+    <small
+      [class]="(rating > 4 && rating < 5) ? 'fa fa-star-half-alt mr-1' : (rating >= 5) ? 'fa fa-star mr-1' : 'far fa-star mr-1'"></small>
+      <small class="text-dark">({{ratingCount}})</small>
+    
+    </div>
