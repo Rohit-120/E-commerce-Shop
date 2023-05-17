@@ -66,8 +66,6 @@ export class ProductComponent implements OnInit {
   }
 
   onShopDetail(item:any){
-    localStorage.setItem("shopDetailId",item.id)
-    console.log(localStorage.getItem("shopDetail"));
     this.router.navigate(['shop-detail/'+ item.id]);
   }
 

@@ -14,6 +14,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { VendorComponent } from '../root-components/vendor/vendor.component';
 import { NgxUsefulSwiperModule } from 'ngx-useful-swiper';
 import { DragScrollModule } from 'ngx-drag-scroll';
+import { ShopDetailComponent } from './shop-detail/shop-detail.component';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { DragScrollModule } from 'ngx-drag-scroll';
     ProductDetailComponent,
     ShopComponent,
     CategoriesComponent,
-    VendorComponent
+    VendorComponent,
+    ShopDetailComponent
   ],
   imports: [
     CommonModule,

@@ -8,6 +8,7 @@ import { CartComponent } from './cart/cart.component';
 import { CheckoutComponent } from './checkout/checkout.component';
 import { ContactComponent } from './contact/contact.component';
 import { NotFoundComponent } from '../not-found/not-found.component';
+import { ShopDetailComponent } from './shop-detail/shop-detail.component';
 
 const routes: Routes = [
   {
@@ -29,7 +30,7 @@ const routes: Routes = [
       },
       {
         path : 'shop-detail/:id',
-        component : ProductDetailComponent
+        component : ShopDetailComponent
       },
       {
         path : 'cart', 
