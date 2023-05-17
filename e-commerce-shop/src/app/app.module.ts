@@ -15,6 +15,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxUsefulSwiperModule } from 'ngx-useful-swiper';
 import {  DragScrollModule } from 'ngx-drag-scroll';
 import { HttpClientModule } from '@angular/common/http'
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { HttpClientModule } from '@angular/common/http'
     AppRoutingModule,
     ReactiveFormsModule,
     FormsModule,
+    SharedModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     NgxUsefulSwiperModule,

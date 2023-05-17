@@ -15,9 +15,9 @@ import { RatingComponent } from './components/rating/rating.component'
   ],
   imports: [
     CommonModule,
-    // SharedRoutingModule,
+    SharedRoutingModule,
     HttpClientModule
   ],
-  exports : [ProductComponent, SpecialOfferComponent]
+  exports : [ProductComponent, SpecialOfferComponent, RatingComponent]
 })
 export class SharedModule { }

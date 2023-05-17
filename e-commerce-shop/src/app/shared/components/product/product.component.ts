@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { Router } from '@angular/router';
+import PRODUCT_ACTION_ICONS from '../../constant';
 
 @Component({
   selector: 'app-product',
@@ -10,7 +11,8 @@ import { Router } from '@angular/router';
 })
 export class ProductComponent implements OnInit {
   products!:any[];
- 
+  productActionIcon = PRODUCT_ACTION_ICONS; 
+
   constructor(
     private apiCall : ApiService,
     private cdr : ChangeDetectorRef,
@@ -18,55 +20,22 @@ export class ProductComponent implements OnInit {
   ) { }
   
   ngOnInit(): void {
-    //API call for All product features
+    this.getProducts();
+  }
+  
+  //API call for All product features
+  getProducts(){
     this.apiCall.getAllProduct().subscribe({
       next : (res:any) => {
           this.products = res;     
-          console.log(res, 'swalwefk=========================');
         this.cdr.markForCheck();
       }
     })
+    
   }
-
-  productActionIcon() {
-    return [
-      {
-        icon : 'fa fa-shopping-cart',
-      },
-      {
-        icon : 'fa fa-heart',
-      },
-      {
-        icon : 'fa fa-sync-alt',
-      },
-      { 
-        icon : 'fa fa-search',
-      },
-    ];
-  }
-
-  ratingStarIcon(){
-    return [
-      {
-        icon : 'fa fa-star',
-      },
-      {
-        icon : 'fa fa-star',
-      },
-      {
-        icon : 'fa fa-star',
-      },
-      {
-        icon : 'fa fa-star',
-      },
-      {
-        icon : 'fa fa-star',
-      },
-    ];
-  }
-
+  
   onShopDetail(item:any){
-    this.router.navigate(['shop-detail/'+ item.id]);
+    this.router.navigate(['shop-detail', item.id]);
   }
 
 }

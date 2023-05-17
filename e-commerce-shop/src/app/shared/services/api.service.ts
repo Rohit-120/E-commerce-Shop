@@ -21,6 +21,9 @@ export class ApiService {
     return this.http.getRequest(url);
   }
 
-  
+  getProductCategories(){
+    let url = 'https://fakestoreapi.com/products/categories';
+    return this.http.getRequest(url);
+  }
 
 }

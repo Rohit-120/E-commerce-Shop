@@ -1,52 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ApiService } from 'src/app/shared/services/api.service';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.scss']
+  styleUrls: ['./navbar.component.scss'],
+  changeDetection : ChangeDetectionStrategy.OnPush
 })
 export class NavbarComponent implements OnInit {
 
   // Object for main Categories navigation
-
-  navCategories = [
-    {
-      category : 'Shirts',
-      route : '',
-    },
-    {
-      category : 'Jeans',
-      route : '',
-    },
-    {
-      category : 'Swimwear',
-      route : '',
-    },
-    {
-      category : 'Sleepwear',
-      route : '',
-    },
-    {
-      category : 'Sportswear',
-      route : '',
-    },
-    {
-      category : 'Jumpsuits',
-      route : '',
-    },
-    {
-      category : 'Blazers',
-      route : '',
-    },
-    {
-      category : 'Jackets',
-      route : '',
-    },
-    {
-      category : 'Shoes',
-      route : '',
-    },
-  ]
+  navCategories : any = []
 
 
   // Object for main header navigation
@@ -59,10 +23,10 @@ export class NavbarComponent implements OnInit {
       navItem : 'Shop',
       route : '/shop'
     },
-    {
-      navItem : 'Shop Details',
-      route : '/shop-detail'
-    },
+    // {
+    //   navItem : 'Shop Details',
+    //   route : '/shop-detail'
+    // },
     {
       navItem : 'Pages',
       isChildren : true,
@@ -100,9 +64,23 @@ export class NavbarComponent implements OnInit {
   
 
 
-  constructor() { }
+  constructor(
+    private apiCall: ApiService,
+    private cdr : ChangeDetectorRef
+  ) { }
 
   ngOnInit(): void {
+    this.getProducts()
+  }
+
+  getProducts(){
+    this.apiCall.getProductCategories().subscribe({
+      next : (res) => {
+        console.log(res, 'Product..........');
+        this.navCategories = res; 
+        this.cdr.markForCheck();
+      }
+    })
   }
 
 }

@@ -180,24 +180,23 @@
                     <div *ngFor="let item of productItems" class="col-lg-4 col-md-6 col-sm-6 pb-1">
                         <div class="product-item bg-light mb-4">
                             <div class="product-img position-relative overflow-hidden">
-                                <img class="img-fluid w-100" src="{{item.image}}" alt="">
-                                <div class="product-action" *ngIf="item.productAction" >
-                                    <a *ngFor="let action of item.productAction" class="btn btn-outline-dark btn-square" href=""><i class="{{action.icon}}"></i></a>
+                                <img class="img-fluid w-100" style="height:300px ;"  src="{{item.image}}" alt="">
+                                <div class="product-action" *ngIf="productActionIcons" [routerLink]="['/shop-detail', item.id]">
+                                    <a *ngFor="let action of productActionIcons" class="btn btn-outline-dark btn-square" ><i class="{{action.icon}}"></i></a>
                                 </div>
                             </div>
                             <div class="text-center py-4">
-                                <a class="h6 text-decoration-none text-truncate" href="">{{item.productName}}</a>
+                                <a class="h6 text-decoration-none d-block text-truncate" [routerLink]="['/shop-detail', item.id]">{{item.title}}</a>
                                 <div class="d-flex align-items-center justify-content-center mt-2">
-                                    <h5>{{item.originalPrice | currency : 'USD'}}</h5><h6 class="text-muted ml-2"><del>{{item.checkedPrice | currency : 'USD'}}</del></h6>
+                                    <h5>{{item.price | currency : 'USD'}}</h5><h6 class="text-muted ml-2"><del>{{item.price | currency : 'USD'}}</del></h6>
                                 </div>
-                                <div *ngIf="item.ratingStar" class="d-flex align-items-center justify-content-center mb-1">
-                                    <small *ngFor="let star of item.ratingStar" class="{{star.icon}} text-primary mr-1"></small>
-                                    <small>({{item.totalRating}})</small>
+                                <div *ngIf="item.rating.rate" class="d-flex align-items-center justify-content-center mb-1 text-primary">
+                                    <app-rating [rating]="item.rating.rate" [ratingCount]="item.rating.count" ></app-rating>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
+                    <!-- <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
                         <div class="product-item bg-light mb-4">
                             <div class="product-img position-relative overflow-hidden">
                                 <img class="img-fluid w-100" src="./assets/img/product-3.jpg" alt="">
@@ -385,7 +384,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="col-12">
                         <nav>
                           <ul class="pagination justify-content-center">

@@ -4,9 +4,15 @@
         <div *ngFor="let item of products" class="col-lg-3 col-md-4 col-sm-6 pb-1">
             <div class="product-item bg-light mb-4">
                 <div class="product-img position-relative overflow-hidden">
-                    <img class="img-fluid w-100 " style="height:300px ;" src="{{item.image}}" alt="">
-                    <!-- <div class="product-action" *ngIf="item.productAction" >
-                        <a *ngFor="let action of item.productAction" class="btn btn-outline-dark btn-square" href=""><i class="{{action.icon}}"></i></a>
+                    <img class="img-fluid w-100 " style="height:300px ;" src="{{item.image}}"  alt="">
+                    <div class="product-action" [routerLink]="['/shop-detail', item.id]"  >
+                        <a *ngFor="let action of productActionIcon" class="btn btn-outline-dark btn-square"><i class="{{action.icon}}"></i></a>
+                    </div>
+                    <!-- <div class="product-action" [routerLink]="['/shop-detail', item.id]" >
+                        <a class="btn btn-outline-dark btn-square" ><i class="fa fa-shopping-cart"></i></a>
+                        <a class="btn btn-outline-dark btn-square"><i class="far fa-heart"></i></a>
+                        <a class="btn btn-outline-dark btn-square"><i class="fa fa-sync-alt"></i></a>
+                        <a class="btn btn-outline-dark btn-square"><i class="fa fa-search"></i></a>
                     </div> -->
                 </div>
                 <div class="text-center py-4">
@@ -14,9 +20,9 @@
                     <div class="d-flex align-items-center justify-content-center mt-2">
                         <h5>{{item.price | currency : 'USD'}}</h5><h6 class="text-muted ml-2"><del>{{item.price | currency : 'USD'}}</del></h6>
                     </div>
-                   <h1>{{item.rating.count}}</h1>
-                     <app-rating [rating] = "item.rating.rate" [ratingCount]="item.rating.count" ></app-rating>
-                    
+                    <div class="d-flex align-items-center justify-content-center mb-1 text-primary" *ngIf="item.rating.rate">
+                        <app-rating [rating] = "item.rating.rate" [ratingCount]="item.rating.count" ></app-rating>
+                    </div>
                 </div>
             </div>
         </div>

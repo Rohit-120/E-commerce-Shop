@@ -10,7 +10,14 @@ import { BreadcrumbService } from 'src/app/shared/services/breadcrumb.service';
 })
 export class ContactComponent implements OnInit {
 
-  contactForm : any;
+  // contactForm : any;
+    contactForm : FormGroup = this.fb.group({
+    name : ['', Validators.required],
+    email : ['', Validators.required],
+    subject : ['', Validators.required],
+    message : ['', Validators.required]
+
+  })
   
   constructor(
     private fb : FormBuilder,
@@ -19,13 +26,13 @@ export class ContactComponent implements OnInit {
     ) { }
     
     ngOnInit(): void {
-    this.contactForm = this.fb.group({
-      name : ['', Validators.required],
-      email : ['', Validators.required],
-      subject : ['', Validators.required],
-      message : ['', Validators.required]
+    // this.contactForm = this.fb.group({
+    //   name : ['', Validators.required],
+    //   email : ['', Validators.required],
+    //   subject : ['', Validators.required],
+    //   message : ['', Validators.required]
   
-    })
+    // })
 
     this.breadcrumbService.breadcrumb.next([
     {
@@ -46,4 +53,5 @@ export class ContactComponent implements OnInit {
     }
   }
 
+  
 }
