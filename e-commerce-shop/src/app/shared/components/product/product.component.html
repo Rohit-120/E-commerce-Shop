@@ -6,7 +6,7 @@
                 <div class="product-img position-relative overflow-hidden">
                     <img class="img-fluid w-100 " style="height:300px ;" src="{{item.image}}"  alt="">
                     <div class="product-action" [routerLink]="['/shop-detail', item.id]"  >
-                        <a *ngFor="let action of productActionIcon" class="btn btn-outline-dark btn-square"><i class="{{action.icon}}"></i></a>
+                        <a *ngFor="let action of productActionIcon" class="btn btn-outline-dark btn-square" [routerLink]="action.route" ><i class="{{action.icon}}"></i></a>
                     </div>
                     <!-- <div class="product-action" [routerLink]="['/shop-detail', item.id]" >
                         <a class="btn btn-outline-dark btn-square" ><i class="fa fa-shopping-cart"></i></a>
@@ -29,4 +29,3 @@
     </div>
 
 <!-- Products End -->
-

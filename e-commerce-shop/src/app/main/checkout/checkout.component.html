@@ -5,7 +5,7 @@
             <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Billing Address</span></h5>
             <div class="bg-light p-30 mb-5">
                 <!-- billing-form -->
-                <form [formGroup]="addressForm" (ngSubmit)="onAddressSubmit()">
+                <form [formGroup]="addressBillingForm">
                     <div class="row">
                         <ng-container formGroupName="fullName">
                             <div class="col-md-6 form-group">
@@ -119,9 +119,7 @@
                                 </li>
                             </ul> -->
                         </div>
-                        <div>
-                            <button class="btn btn-primary">submit</button>
-                        </div>
+                       
                         <div class="col-md-12 form-group">
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="newaccount">
@@ -131,7 +129,7 @@
                         <div class="col-md-12">
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="shipto">
-                                <label class="custom-control-label" for="shipto"  data-toggle="collapse" data-target="#shipping-address" #main >Ship to different address</label>
+                                <label class="custom-control-label" for="shipto"  data-toggle="collapse" data-target="#shipping-address"  >Ship to different address</label>
                             </div>
                         </div>
                     </div>
@@ -141,53 +139,122 @@
             <div class="collapse mb-5" id="shipping-address">
                 <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Shipping Address</span></h5>
                 <div class="bg-light p-30">
+                    <form [formGroup]="addressShippingForm" >
                     <div class="row">
-                        <div class="col-md-6 form-group">
-                            <label>First Name</label>
-                            <input class="form-control" type="text" placeholder="John">
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>Last Name</label>
-                            <input class="form-control" type="text" placeholder="Doe">
-                        </div>
+                        <ng-container formGroupName="fullName">
+                            <div class="col-md-6 form-group">
+                                <label>First Name</label>
+                                <input  formControlName="firstName" class="form-control" type="text" placeholder="John">
+                                <!-- firstName Validation -->
+                                <!-- <ul *ngIf="addressForm.controls['firstName'].invalid && (addressForm.controls['firstName'].dirty || addressForm.controls['firstName'].touched)">
+                                    <li *ngIf="addressForm.controls['firstName'].hasError('required')" style="color: red;">
+                                      Your firstname is required
+                                    </li>
+                                </ul> -->
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>Last Name</label>
+                                <input formControlName="lastName" class="form-control" type="text" placeholder="Doe">
+                                <!-- lastName Validation -->
+                                <!-- <pre>{{addressForm.controls|json}}</pre>
+                                <ul *ngIf="addressForm.controls['lastName']">
+                                    <h1>rohiiiiiiiiiiiiiii</h1>
+                                    <li *ngIf="addressForm.controls['lastName'].hasError('required')" style="color: red;">
+                                      Your lastname is required
+                                    </li>
+                                </ul> -->
+                            </div>
+                        </ng-container>
                         <div class="col-md-6 form-group">
                             <label>E-mail</label>
-                            <input class="form-control" type="text" placeholder="example@email.com">
+                            <input   formControlName="email" class="form-control" type="text" placeholder="example@email.com">
+                            <!-- email Validation -->
+                            <!-- <ul *ngIf="addressForm.controls['email'].invalid && (addressForm.controls['email'].dirty || addressForm.controls['email'].touched)">
+                                <li *ngIf="addressForm.controls['email'].hasError('required')" style="color: red;">
+                                  Your Email is required
+                                </li>
+                                <li *ngIf="addressForm.controls['email'].hasError('email')" style="color: red;">
+                                    Please enter valid Email
+                                  </li>
+                            </ul> -->
                         </div>
                         <div class="col-md-6 form-group">
                             <label>Mobile No</label>
-                            <input class="form-control" type="text" placeholder="+123 456 789">
+                            <input formControlName="phone" class="form-control" type="number" placeholder="+123 456 789">
+                            <!-- phone number Validation -->
+                            <!-- <ul *ngIf="addressForm.controls['phone'].invalid && (addressForm.controls['phone'].dirty || addressForm.controls['phone'].touched)">
+                                <li *ngIf="addressForm.controls['phone'].hasError('required')" style="color: red;">
+                                  Your phone Number is required
+                                </li>
+                            </ul> -->
                         </div>
-                        <div class="col-md-6 form-group">
-                            <label>Address Line 1</label>
-                            <input class="form-control" type="text" placeholder="123 Street">
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>Address Line 2</label>
-                            <input class="form-control" type="text" placeholder="123 Street">
-                        </div>
+                        <ng-container formGroupName="address">
+                            <div class="col-md-6 form-group">
+                                <label>Address Line 1</label>
+                                <input formControlName="line1" class="form-control" type="text" placeholder="123 Street">
+                                <!-- Address Line 1 Validation -->
+                                <!-- <ul *ngIf="addressForm.controls['line1'].invalid && (addressForm.controls['line1'].dirty || addressForm.controls['line1'].touched)">
+                                    <li *ngIf="addressForm.controls['line1'].hasError('required')" style="color: red;">
+                                      Your address is required
+                                    </li>
+                                </ul> -->
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>Address Line 2</label>
+                                <input formControlName="line2" class="form-control" type="text" placeholder="123 Street">
+                                <!-- Address Line 2 Validation -->
+                                <!-- <ul *ngIf="addressForm.controls['line2'].invalid && (addressForm.controls['line2'].dirty || addressForm.controls['line2'].touched)">
+                                    <li *ngIf="addressForm.controls['line2'].hasError('required')" style="color: red;">
+                                      Your address is required
+                                    </li>
+                                </ul> -->
+                            </div>
+                        </ng-container>
                         <div class="col-md-6 form-group">
                             <label>Country</label>
-                            <select class="custom-select">
-                                <option selected>United States</option>
-                                <option>Afghanistan</option>
-                                <option>Albania</option>
-                                <option>Algeria</option>
+                            <select formControlName="country" class="custom-select" placeholder="Choose Country">
+                                <option selected>Choose Country</option>
+                                <option *ngFor="let item of countries" >{{item}}</option>
                             </select>
+                            <!-- country Validation -->
+                                <!-- <ul *ngIf="addressForm.controls['country'].invalid && (addressForm.controls['country'].dirty || addressForm.controls['country'].touched)">
+                                    <li *ngIf="addressForm.controls['country'].hasError('required')" style="color: red;">
+                                      please Select your country.
+                                    </li>
+                                </ul> -->
                         </div>
                         <div class="col-md-6 form-group">
                             <label>City</label>
-                            <input class="form-control" type="text" placeholder="New York">
+                            <input formControlName="city" class="form-control" type="text" placeholder="New York">
+                            <!-- City Validation -->
+                            <!-- <ul *ngIf="addressForm.controls['city'].invalid && (addressForm.controls['city'].dirty || addressForm.controls['city'].touched)">
+                                <li *ngIf="addressForm.controls['city'].hasError('required')" style="color: red;">
+                                  Your City is required
+                                </li>
+                            </ul> -->
                         </div>
                         <div class="col-md-6 form-group">
                             <label>State</label>
-                            <input class="form-control" type="text" placeholder="New York">
+                            <input formControlName="state" class="form-control" type="text" placeholder="New York">
+                            <!-- State Validation -->
+                            <!-- <ul *ngIf="addressForm.controls['state'].invalid && (addressForm.controls['state'].dirty || addressForm.controls['state'].touched)">
+                                <li *ngIf="addressForm.controls['state'].hasError('required')" style="color: red;">
+                                  Your State is required
+                                </li>
+                            </ul> -->
                         </div>
                         <div class="col-md-6 form-group">
                             <label>ZIP Code</label>
-                            <input class="form-control" type="text" placeholder="123">
+                            <input formControlName="zipcode" class="form-control" type="number" placeholder="123">
+                            <!-- Zipcode Validation -->
+                            <!-- <ul *ngIf="addressForm.controls['zipcode'].invalid && (addressForm.controls['zipcode'].dirty || addressForm.controls['zipcode'].touched)">
+                                <li *ngIf="addressForm.controls['zipcode'].hasError('required')" style="color: red;">
+                                  Your zipcode is required
+                                </li>
+                            </ul> -->
                         </div>
                     </div>
+                </form>
                 </div>
             </div>
         </div>
@@ -246,11 +313,11 @@
                             <input type="radio" class="custom-control-input" name="payment" id="banktransfer">
                             <label class="custom-control-label" for="banktransfer">Bank Transfer</label>
                         </div>
-                    </div>
-                    <button class="btn btn-block btn-primary font-weight-bold py-3">Place Order</button>
+                    </div> 
+                    <button (click)="onAddressSubmit()" class="btn btn-block btn-primary font-weight-bold py-3" >Place Order</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!-- Checkout End -->
+<!-- Checkout End -->   

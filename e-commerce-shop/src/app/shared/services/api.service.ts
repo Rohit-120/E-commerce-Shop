@@ -32,4 +32,9 @@ export class ApiService {
     
   }
 
+  getCartItems(){    
+    let url = `https://fakestoreapi.com/carts/5`;
+    return this.http.getRequest(url);
+  }
+
 }
