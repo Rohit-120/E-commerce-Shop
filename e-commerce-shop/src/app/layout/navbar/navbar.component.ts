@@ -76,7 +76,6 @@ export class NavbarComponent implements OnInit {
   getProducts(){
     this.apiCall.getProductCategories().subscribe({
       next : (res) => {
-        console.log(res, 'Product..........');
         this.navCategories = res; 
         this.cdr.markForCheck();
       }

@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import PRODUCT_ACTION_ICONS from 'src/app/shared/constant';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { BreadcrumbService } from 'src/app/shared/services/breadcrumb.service';
@@ -14,12 +15,15 @@ export class ShopComponent implements OnInit {
   constructor(
     private breadcrumbService: BreadcrumbService,
     private apiCall : ApiService,
-    private cdr : ChangeDetectorRef
+    private cdr : ChangeDetectorRef,
+    private activateRouter: ActivatedRoute
   ) { }
 
   productActionIcons = PRODUCT_ACTION_ICONS;
-  productItems : any = []
+  // productItems : any = [];
+  itemsByCategories : any;
 
+  singleCategory : any = '';
   // productItems : any = [
   //   {
   //     image : 'assets/img/product-1.jpg',
@@ -88,6 +92,23 @@ export class ShopComponent implements OnInit {
   // ]
 
   ngOnInit(): void {
+
+    this.activateRouter.params.subscribe(params => {
+      this.singleCategory = params['category'];
+       
+      this.cdr.markForCheck();
+
+      if (this.singleCategory) {
+        console.log('category fun called');
+        
+        this.getCategories()
+      }else{
+        this.getProduct();
+        console.log('product fun called');
+
+      }
+    })
+
     // Breadcrumb Setup
     this.breadcrumbService.breadcrumb.next([
       {
@@ -103,16 +124,29 @@ export class ShopComponent implements OnInit {
         url : 'shop-list',
       }
     ])
-
-      //API call for All product features
-      this.apiCall.getAllProduct().subscribe({
-        next : (res) => {
-            this.productItems = res;
-            this.cdr.markForCheck()          
-        }
-      })
   }
-
+ 
+  //API call for product by categories.
+  getCategories(){
+    
+    this.apiCall.ProductByCategories(this.singleCategory).subscribe({
+      next : (res) => {
+          this.itemsByCategories = res;
+          this.cdr.markForCheck()          
+          console.log(res, 'ttttttttttttttttttdttttttttttt');
+      }
+    })
+  }
+  
+  getProduct(){
+    //API call for All product features
+    this.apiCall.getAllProduct().subscribe({
+      next : (res) => {
+          this.itemsByCategories = res;
+          this.cdr.markForCheck()          
+      }
+    })
+  }
 
   ratingStarIcon(){
     return [
