@@ -6,7 +6,7 @@ const PRODUCT_ACTION_ICONS =  [
       },
       {
         icon : 'fa fa-heart',
-        route : 'favorites'
+        // route : '/favorite'
       },
       {
         icon : 'fa fa-sync-alt',
@@ -14,7 +14,7 @@ const PRODUCT_ACTION_ICONS =  [
       },
       { 
         icon : 'fa fa-search',
-        route : ''
+        route : '/shop-detail'
       },
     ];
   export default PRODUCT_ACTION_ICONS;

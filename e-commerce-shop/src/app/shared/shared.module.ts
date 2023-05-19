@@ -7,12 +7,14 @@ import { SpecialOfferComponent } from './components/special-offer/special-offer.
 import { HttpClientModule } from '@angular/common/http';
 import { RatingComponent } from './components/rating/rating.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FavoriteComponent } from './components/favorite/favorite.component';
 
 @NgModule({
   declarations: [
     ProductComponent,
     SpecialOfferComponent,
     RatingComponent,
+    FavoriteComponent,
   ],
   imports: [
     CommonModule,
@@ -21,6 +23,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     ReactiveFormsModule
   ],
-  exports : [ProductComponent, SpecialOfferComponent, RatingComponent, ReactiveFormsModule]
+  exports : [ProductComponent, SpecialOfferComponent, RatingComponent, ReactiveFormsModule, FavoriteComponent]
 })
 export class SharedModule { }

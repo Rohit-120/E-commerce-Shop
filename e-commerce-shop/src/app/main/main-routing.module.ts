@@ -8,6 +8,7 @@ import { CheckoutComponent } from './checkout/checkout.component';
 import { ContactComponent } from './contact/contact.component';
 import { NotFoundComponent } from '../not-found/not-found.component';
 import { ShopDetailComponent } from './shop-detail/shop-detail.component';
+import { FavoriteComponent } from '../shared/components/favorite/favorite.component';
 
 const routes: Routes = [
   {
@@ -46,6 +47,10 @@ const routes: Routes = [
       {
         path : 'contact',
         component : ContactComponent
+      },
+      {
+        path : 'favorite',
+        component : FavoriteComponent
       },
      
     ]

@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
 import { ApiService } from '../../services/api.service';
 import { Router } from '@angular/router';
 import PRODUCT_ACTION_ICONS from '../../constant';
+import { StorageService } from '../../services/storage.service';
 
 @Component({
   selector: 'app-product',
@@ -16,7 +17,8 @@ export class ProductComponent implements OnInit {
   constructor(
     private apiCall : ApiService,
     private cdr : ChangeDetectorRef,
-    private router: Router
+    private router: Router,
+    private storageService: StorageService,
   ) { }
   
   ngOnInit(): void {
@@ -36,6 +38,13 @@ export class ProductComponent implements OnInit {
   
   onShopDetail(item:any){
     this.router.navigate(['shop-detail', item.id]);
+  }
+
+  onFavoriteClick(actionRoute:any, item:any){
+    if (actionRoute.route == '/favorite') {
+      this.storageService.set(`${item.id}`, item)
+    } 
+    
   }
 
 }

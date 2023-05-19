@@ -33,7 +33,7 @@ export class ApiService {
   }
 
   getCartItems(){    
-    let url = `https://fakestoreapi.com/carts/5`;
+    let url = `https://fakestoreapi.com/carts/`;
     return this.http.getRequest(url);
   }
 

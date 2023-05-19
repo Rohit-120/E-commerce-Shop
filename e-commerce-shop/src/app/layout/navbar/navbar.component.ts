@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/shared/services/api.service';
+import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
   selector: 'app-navbar',
@@ -51,27 +52,27 @@ export class NavbarComponent implements OnInit {
 
   addTo = [
     {
-      item : 0,
       icon : 'fas fa-heart',
       route : ''
     },
     {
-      item : 0,
       icon : 'fas fa-shopping-cart',
       route : '/cart'
     }
   ]
   
-
-
   constructor(
     private apiCall: ApiService,
-    private cdr : ChangeDetectorRef
+    private cdr : ChangeDetectorRef,
+    public commonService: CommonService
   ) { }
+
+
 
   ngOnInit(): void {
     this.getProducts()
   }
+  
 
   getProducts(){
     this.apiCall.getProductCategories().subscribe({
