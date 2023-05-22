@@ -51,14 +51,17 @@ export class CartComponent implements OnInit {
   getCartDetails() {
     this.apiCall.getCartItems().subscribe({
       next: (res: any) => {
+        console.log(res ,'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
+        
         for (const product of res.products) {
           this.apiCall.getSingleProduct(product.productId).subscribe({
             next: (result: any) => {
-              // console.log(result ,product.quantity, "quantity");
+              console.log(result ,product.quantity, "quantity");
               result['quantity'] = product.quantity;
               result['total'] = this.subTotal = parseInt(result.price) * parseInt(result.quantity);
               this.CartItems.push(result);
               this.commonService.totalCartItems.next(this.CartItems.length)
+              this.getAllTotal()
               this.cdr.markForCheck();
             },
           });
@@ -69,7 +72,7 @@ export class CartComponent implements OnInit {
 
   /**
    * @param index number of the Cart object  
-   * Decrease the Cart Quantity
+   * Increase the Cart Quantity
  */
   increase(index:number) {
 
@@ -80,11 +83,11 @@ export class CartComponent implements OnInit {
    this.getAllTotal()
   }
 
+
 /**
  * @param index number of the Cart object  
- * Increase the Cart Quantity
+ * Decrease the Cart Quantity
 */
-
   decrease(index: number) {
     if (this.CartItems[index].quantity > 0) {
       this.CartItems[index].quantity--;
@@ -92,6 +95,7 @@ export class CartComponent implements OnInit {
     }
   this.getAllTotal()    
   }
+
 
   // to get the total price
   getAllTotal() {

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from './http.service';
+import { map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class ApiService {
 
   getAllProduct(){
     let url = 'https://fakestoreapi.com/products?limit=8'
-    return this.http.getRequest(url);
+    return this.http.getRequest(url).pipe(map(response => response));
   }
 
 
@@ -33,7 +34,7 @@ export class ApiService {
   }
 
   getCartItems(){    
-    let url = `https://fakestoreapi.com/carts/`;
+    let url = `https://fakestoreapi.com/carts/2`;
     return this.http.getRequest(url);
   }
 

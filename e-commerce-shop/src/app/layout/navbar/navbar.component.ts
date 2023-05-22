@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { CommonService } from 'src/app/shared/services/common.service';
+import { StorageService } from 'src/app/shared/services/storage.service';
 
 @Component({
   selector: 'app-navbar',
@@ -12,7 +13,7 @@ export class NavbarComponent implements OnInit {
 
   // Object for main Categories navigation
   navCategories : any = []
-
+  favoriteItems!: number 
 
   // Object for main header navigation
   mainNavItems = [
@@ -64,16 +65,33 @@ export class NavbarComponent implements OnInit {
   constructor(
     private apiCall: ApiService,
     private cdr : ChangeDetectorRef,
-    public commonService: CommonService
+    public commonService: CommonService,
+    private storageService: StorageService
   ) { }
 
 
 
   ngOnInit(): void {
     this.getProducts()
+
+    this.getFavoriteItemsLen()  
+  }
+
+  /**
+   * Function to get total favorite items length.
+   */
+  getFavoriteItemsLen(){
+    let a :any= localStorage.getItem('favorite')
+    if (JSON.parse(a)) {
+      this.favoriteItems = JSON.parse(a).length
+    }
+    console.log(this.favoriteItems, 'favorite items Ns=============================');
+    this.cdr.markForCheck()
   }
   
-
+ /**
+   * Function to get product category
+   */
   getProducts(){
     this.apiCall.getProductCategories().subscribe({
       next : (res) => {

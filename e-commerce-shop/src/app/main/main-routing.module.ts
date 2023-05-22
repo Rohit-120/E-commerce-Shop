@@ -33,6 +33,10 @@ const routes: Routes = [
         component : ShopComponent
       },
       {
+        path : 'shop-detail',
+        component : ShopDetailComponent
+      },
+      {
         path : 'shop-detail/:id',
         component : ShopDetailComponent
       },

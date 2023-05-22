@@ -1,12 +1,18 @@
 <!-- Products Start -->
 
     <div class="row px-xl-5">
-        <div *ngFor="let item of products" class="col-lg-3 col-md-4 col-sm-6 pb-1">
+        <div *ngFor="let item of products ;let index = index" class="col-lg-3 col-md-4 col-sm-6 pb-1">
             <div class="product-item bg-light mb-4">
                 <div class="product-img position-relative overflow-hidden">
                     <img class="img-fluid w-100 " style="height:300px ;" src="{{item.image}}"  alt="">
-                    <div class="product-action" >
+                    <!-- <div class="product-action" >
                         <a *ngFor="let action of productActionIcon" class="btn btn-outline-dark btn-square" [routerLink]="action?.route" ><i (click)="onFavoriteClick(action, item)" class="{{action.icon}}"></i></a>
+                    </div> -->
+                    <div class="product-action">
+                        <a class="btn btn-outline-dark btn-square" [routerLink]="['/cart']" ><i class="fa fa-shopping-cart"></i></a>
+                        <a class="btn btn-outline-dark btn-square" (click)="onFavoriteClick(index)" ><i class="far fa-heart"></i></a>
+                        <a class="btn btn-outline-dark btn-square" ><i class="fa fa-sync-alt"></i></a>
+                        <a class="btn btn-outline-dark btn-square" (click)="onShopDetail(item)" ><i class="fa fa-search"></i></a>
                     </div>
                 </div>
                 <div class="text-center py-4">

@@ -6,7 +6,7 @@ const PRODUCT_ACTION_ICONS =  [
       },
       {
         icon : 'fa fa-heart',
-        // route : '/favorite'
+        route : '/favorite'
       },
       {
         icon : 'fa fa-sync-alt',
