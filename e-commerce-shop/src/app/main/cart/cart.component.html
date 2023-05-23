@@ -15,7 +15,7 @@
                 </thead>
                 <tbody class="align-middle">
                     <tr *ngFor="let item of CartItems; let index = index">
-                        <td><img src={{item.image}} alt="" style="width: 50px;"></td>
+                        <td><img  src={{item.image}} alt="" style="width: 50px;"></td>
                         <td class="align-middle">{{item.title}}</td>
                         <td class="align-middle">{{item.price}}</td>
                         <td class="align-middle">
@@ -25,7 +25,7 @@
                                     <i class="fa fa-minus"></i>
                                     </button>
                                 </div>
-                                <input type="text" min="1" max="5" class="form-control form-control-sm bg-secondary border-0 text-center" [(ngModel)]="item.quantity">
+                                <input type="text" min="1" max="5" class="form-control form-control-sm bg-secondary border-0 text-center" name="item.quantity" [(ngModel)]="item.quantity">
                                 <div class="input-group-btn">
                                     <button class="btn btn-sm btn-primary btn-plus" (click)="increase(index)">
                                         <i class="fa fa-plus"></i>

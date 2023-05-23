@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import PRODUCT_ACTION_ICONS from 'src/app/shared/constant';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { BreadcrumbService } from 'src/app/shared/services/breadcrumb.service';
+import { CurrencyChangeService } from 'src/app/shared/services/currency-change.service';
 
 @Component({
   selector: 'app-shop',
@@ -16,11 +17,11 @@ export class ShopComponent implements OnInit {
     private breadcrumbService: BreadcrumbService,
     private apiCall : ApiService,
     private cdr : ChangeDetectorRef,
-    private activateRouter: ActivatedRoute
+    private activateRouter: ActivatedRoute,
+    public currencyService: CurrencyChangeService
   ) { }
 
   productActionIcons = PRODUCT_ACTION_ICONS;
-  // productItems : any = [];
   itemsByCategories : any;
 
   singleCategory : any = '';
@@ -99,13 +100,9 @@ export class ShopComponent implements OnInit {
       this.cdr.markForCheck();
 
       if (this.singleCategory) {
-        console.log('category fun called');
-        
         this.getCategories()
       }else{
         this.getProduct();
-        console.log('product fun called');
-
       }
     })
 
@@ -133,7 +130,6 @@ export class ShopComponent implements OnInit {
       next : (res) => {
           this.itemsByCategories = res;
           this.cdr.markForCheck()          
-          console.log(res, 'ttttttttttttttttttdttttttttttt');
       }
     })
   }

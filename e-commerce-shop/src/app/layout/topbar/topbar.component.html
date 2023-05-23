@@ -19,23 +19,19 @@
                     </div>
                 </div>
                 <div class="btn-group mx-2" >
-                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">{{currencies.USD}}</button>
+                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">{{currencyChange}}</button>
                     <div class="dropdown-menu dropdown-menu-right">
-                        <button class="dropdown-item" type="button">{{currencies.EUR}}</button>
-                        <button class="dropdown-item" type="button">{{currencies.GBP}}</button>
-                        <button class="dropdown-item" type="button">{{currencies.CAD}}</button>
+                        <button *ngFor="let item of currencies"  class="dropdown-item" type="button" (click)="onCurrencyChange(item)" >{{item}}</button>
                     </div>
                 </div>
                 <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">{{languages.EN}}</button>
+                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">{{'EN'}}</button>
                     <div class="dropdown-menu dropdown-menu-right">
-                        <button class="dropdown-item" type="button">{{languages.FR}}</button>
-                        <button class="dropdown-item" type="button">{{languages.AR}}</button>
-                        <button class="dropdown-item" type="button">{{languages.RU}}</button>
+                        <button *ngFor="let item of languages" class="dropdown-item" type="button">{{item}}</button>
                     </div>
                 </div>
             </div>
-            <div class="d-inline-flex align-items-center d-block d-lg-none">
+            <div class="d-inline-flex align-items-center d-block d-lg-none">    
                 <a href="" class="btn px-0 ml-2">
                     <i class="fas fa-heart text-dark"></i>
                     <span class="badge text-dark border border-dark rounded-circle" style="padding-bottom: 2px;">0</span>
@@ -57,11 +53,11 @@
         <div class="col-lg-4 col-6 text-left">
             <form action="">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search for products">
+                    <input type="text" class="form-control" name="searchData" placeholder="Search for products" [(ngModel)]="searchData">
                     <div class="input-group-append">
-                        <span class="input-group-text bg-transparent text-primary">
+                        <button class="input-group-text bg-transparent text-primary" (click)="productSearchClick()">
                             <i class="fa fa-search"></i>
-                        </span>
+                        </button>
                     </div>
                 </div>
             </form>

@@ -21,21 +21,20 @@ export class FavoriteComponent implements OnInit {
     if (favItem) {
       this.favoriteItems = JSON.parse(favItem);
     }
-
-    this.commonService.fav.subscribe({
+    this.commonService.favorite.subscribe({
       next: (res: any) => {
-        console.log(res, 'deeeeeeeeeeeeeeeeee');
         if (res) {
           this.favoriteItems = res.filter((item: any) => {
             return item.isFavorite == true;
           });
-          
+          this.commonService.FavoriteItemLength.next(this.favoriteItems)
         }
       },
       error: (err) => {
         console.log(err);
       },
     });
+    
     localStorage.setItem('favorite', JSON.stringify(this.favoriteItems));
 
     // this.getFavoriteItems();

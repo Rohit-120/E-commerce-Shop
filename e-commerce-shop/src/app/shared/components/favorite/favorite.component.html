@@ -5,9 +5,6 @@
         <div class="product-item bg-light mb-4">
             <div class="product-img position-relative overflow-hidden">
                 <img class="img-fluid w-100 " style="height:300px ;" src="{{item.image}}"  alt="">
-                <!-- <div class="product-action" >
-                    <a *ngFor="let action of productActionIcon" class="btn btn-outline-dark btn-square" [routerLink]="action?.route" ><i (click)="onFavoriteClick(action, item)" class="{{action.icon}}"></i></a>
-                </div> -->
                 <div class="product-action">
                     <a class="btn btn-outline-dark btn-square" [routerLink]="['/cart']" ><i class="fa fa-shopping-cart"></i></a>
                     <a class="btn btn-outline-danger text-danger btn-square"  ><i class="fa fa-heart"></i></a>

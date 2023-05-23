@@ -6,9 +6,9 @@ import {
 } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { Router } from '@angular/router';
-import PRODUCT_ACTION_ICONS from '../../constant';
 import { StorageService } from '../../services/storage.service';
 import { CommonService } from '../../services/common.service';
+import { CurrencyChangeService } from '../../services/currency-change.service';
 
 @Component({
   selector: 'app-product',
@@ -19,7 +19,6 @@ import { CommonService } from '../../services/common.service';
 export class ProductComponent implements OnInit {
   products!: any[];
   fav: boolean = false;
-  productActionIcon = PRODUCT_ACTION_ICONS;
   favoriteProduct: any[] = [];
 
   constructor(
@@ -27,10 +26,11 @@ export class ProductComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private router: Router,
     private storageService: StorageService,
-    private common: CommonService
+    private common: CommonService,
+    public currencyService: CurrencyChangeService
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit(){
     this.getProducts();
   }
 
@@ -49,9 +49,7 @@ export class ProductComponent implements OnInit {
   }
 
   onFavoriteClick(index: any) {
-    // this.favoriteProduct.push(item);
-    // localStorage.setItem('favorite' ,JSON.stringify(this.favoriteProduct));
-    // this.storageService.set(`favorite`, this.favoriteProduct)
+    
     if (this.products[index].isFavorite) {
       this.products[index].isFavorite = false;
     } 
@@ -59,6 +57,7 @@ export class ProductComponent implements OnInit {
       
       this.products[index].isFavorite = true;
     }
-    this.common.fav.next(this.products);
+    
+    this.common.favorite.next(this.products);
   }
 }

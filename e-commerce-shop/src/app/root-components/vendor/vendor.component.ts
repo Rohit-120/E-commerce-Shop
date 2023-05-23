@@ -35,16 +35,6 @@ export class VendorComponent implements OnInit {
     },
   ]
 
-  config: SwiperOptions = {
-    pagination: { el: '.swiper-pagination', clickable: true },
-    width : 1000,
-    loop : true,
-    autoplay : true,
-    
-    setWrapperSize : true,
-    effect : 'slide'
-  };
-
   constructor() { }
 
   ngOnInit(): void {

@@ -18,7 +18,7 @@ export class CartComponent implements OnInit {
   CartItems: any[] = [];
   quantity: number = 1;
   subTotal: number = 0;
-  shipping:number = 10;
+  shipping: number = 10;
   selectedIndex: any = null;
 
   constructor(
@@ -51,17 +51,15 @@ export class CartComponent implements OnInit {
   getCartDetails() {
     this.apiCall.getCartItems().subscribe({
       next: (res: any) => {
-        console.log(res ,'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
-        
         for (const product of res.products) {
           this.apiCall.getSingleProduct(product.productId).subscribe({
             next: (result: any) => {
-              console.log(result ,product.quantity, "quantity");
               result['quantity'] = product.quantity;
-              result['total'] = this.subTotal = parseInt(result.price) * parseInt(result.quantity);
+              result['total'] = this.subTotal =
+              parseInt(result.price) * parseInt(result.quantity);
               this.CartItems.push(result);
-              this.commonService.totalCartItems.next(this.CartItems.length)
-              this.getAllTotal()
+              this.commonService.totalCartItems.next(this.CartItems.length);
+              this.getAllTotal();
               this.cdr.markForCheck();
             },
           });
@@ -71,49 +69,46 @@ export class CartComponent implements OnInit {
   }
 
   /**
-   * @param index number of the Cart object  
+   * @param index number of the Cart object
    * Increase the Cart Quantity
- */
-  increase(index:number) {
-
+   */
+  increase(index: number) {
     if (this.CartItems[index].quantity < 7) {
-      this.CartItems[index].quantity++
-      this.CartItems[index].total = this.CartItems[index].price * this.CartItems[index].quantity;
+      this.CartItems[index].quantity++;
+      this.CartItems[index].total =
+        this.CartItems[index].price * this.CartItems[index].quantity;
     }
-   this.getAllTotal()
+    this.getAllTotal();
   }
 
-
-/**
- * @param index number of the Cart object  
- * Decrease the Cart Quantity
-*/
+  /**
+   * @param index number of the Cart object
+   * Decrease the Cart Quantity
+   */
   decrease(index: number) {
     if (this.CartItems[index].quantity > 0) {
       this.CartItems[index].quantity--;
-      this.CartItems[index].total = this.CartItems[index].price * this.CartItems[index].quantity;
+      this.CartItems[index].total =
+        this.CartItems[index].price * this.CartItems[index].quantity;
     }
-  this.getAllTotal()    
+    this.getAllTotal();
   }
-
 
   // to get the total price
   getAllTotal() {
-    let tempTotal:number = 0;
+    let tempTotal: number = 0;
 
-      for (const item of this.CartItems) {
-        tempTotal += (item.total); 
-      }
-      this.subTotal = tempTotal; 
+    for (const item of this.CartItems) {
+      tempTotal += item.total;
+    }
+    this.subTotal = tempTotal;
 
-      this.subTotal <= 0 ? this.shipping = 0 : this.shipping = 10;
-      
+    this.subTotal <= 0 ? (this.shipping = 0) : (this.shipping = 10);
   }
 
   removeCart(index: number) {
     this.CartItems.splice(index, 1);
-    this.commonService.totalCartItems.next(this.CartItems.length)
-    this.getAllTotal()
+    this.commonService.totalCartItems.next(this.CartItems.length);
+    this.getAllTotal();
   }
-
 }

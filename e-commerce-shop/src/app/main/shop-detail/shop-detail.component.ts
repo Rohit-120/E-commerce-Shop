@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { BreadcrumbService } from 'src/app/shared/services/breadcrumb.service';
+import { CurrencyChangeService } from 'src/app/shared/services/currency-change.service';
 
 @Component({
   selector: 'app-shop-detail',
@@ -42,7 +43,8 @@ export class ShopDetailComponent implements OnInit {
     private apiCall: ApiService,
     private activeRouter: ActivatedRoute,
     private cdr: ChangeDetectorRef,
-    private toast : ToastrService
+    private toast : ToastrService,
+    public currencyService: CurrencyChangeService
   ) {
     // activeRouter.params.subscribe(params => {
     //   this.singleProductId = params['id'];

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CurrencyChangeService } from 'src/app/shared/services/currency-change.service';
 
 @Component({
   selector: 'app-topbar',
@@ -32,23 +34,30 @@ export class TopbarComponent implements OnInit {
   };
 
   // object to select currency and Language
- 
-    currencies: any = {
-      USD: 'USD',
-      EUR: 'EUR',
-      GBP: 'GBP',
-      CAD: 'CAD',
-    }
 
-    languages:any = {
-       EN: 'EN',
-       FR: 'FR',
-       AR: 'AR',
-       RU: 'RU',
-    }
-  
+  currencyChange: string = 'USD';
 
-  constructor() {}
+  currencies: any = ['USD', 'EUR', 'GBP', 'CAD'];
 
-  ngOnInit(): void {}
+  languages: any = ['EN', 'FR', 'AR', 'RU'];
+
+  searchData: string = '';
+
+  constructor(private router: Router, 
+    private route: ActivatedRoute,
+    private currencyService: CurrencyChangeService
+    ) {}
+
+  ngOnInit(): void {
+  }
+
+  productSearchClick() {
+    console.log(this.searchData, 'rohit');
+    this.router.navigate([`shop/${this.searchData}`]);
+  }
+
+  onCurrencyChange(item:string){
+    this.currencyChange = item;
+    this.currencyService.currencyChanges.next(item)
+  }
 }

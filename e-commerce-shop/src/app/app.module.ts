@@ -16,6 +16,7 @@ import { NgxUsefulSwiperModule } from 'ngx-useful-swiper';
 import {  DragScrollModule } from 'ngx-drag-scroll';
 import { HttpClientModule } from '@angular/common/http'
 import { SharedModule } from './shared/shared.module';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { SharedModule } from './shared/shared.module';
     ToastrModule.forRoot(),
     NgxUsefulSwiperModule,
     DragScrollModule,
-    HttpClientModule
+    HttpClientModule,
+    NgSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent],
