@@ -5,19 +5,24 @@ import { SharedRoutingModule } from './shared-routing.module';
 import { ProductComponent } from './components/product/product.component';
 import { SpecialOfferComponent } from './components/special-offer/special-offer.component';
 import { HttpClientModule } from '@angular/common/http';
-import { RatingComponent } from './components/rating/rating.component'
+import { RatingComponent } from './components/rating/rating.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FavoriteComponent } from './components/favorite/favorite.component';
 
 @NgModule({
   declarations: [
     ProductComponent,
     SpecialOfferComponent,
-    RatingComponent
+    RatingComponent,
+    FavoriteComponent,
   ],
   imports: [
     CommonModule,
-    // SharedRoutingModule,
-    HttpClientModule
+    SharedRoutingModule,
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
-  exports : [ProductComponent, SpecialOfferComponent]
+  exports : [ProductComponent, SpecialOfferComponent, RatingComponent, ReactiveFormsModule, FavoriteComponent]
 })
 export class SharedModule { }

@@ -3,12 +3,12 @@ import { RouterModule, Routes } from '@angular/router';
 import { FullComponent } from '../layout/full/full.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ShopComponent } from './shop/shop.component';
-import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { CartComponent } from './cart/cart.component';
 import { CheckoutComponent } from './checkout/checkout.component';
 import { ContactComponent } from './contact/contact.component';
 import { NotFoundComponent } from '../not-found/not-found.component';
 import { ShopDetailComponent } from './shop-detail/shop-detail.component';
+import { FavoriteComponent } from '../shared/components/favorite/favorite.component';
 
 const routes: Routes = [
   {
@@ -29,6 +29,14 @@ const routes: Routes = [
         component : ShopComponent
       },
       {
+        path : 'shop/:category',
+        component : ShopComponent
+      },
+      {
+        path : 'shop-detail',
+        component : ShopDetailComponent
+      },
+      {
         path : 'shop-detail/:id',
         component : ShopDetailComponent
       },
@@ -43,6 +51,10 @@ const routes: Routes = [
       {
         path : 'contact',
         component : ContactComponent
+      },
+      {
+        path : 'favorite',
+        component : FavoriteComponent
       },
      
     ]

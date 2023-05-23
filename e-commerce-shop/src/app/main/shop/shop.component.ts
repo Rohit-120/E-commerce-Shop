@@ -1,6 +1,9 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import PRODUCT_ACTION_ICONS from 'src/app/shared/constant';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { BreadcrumbService } from 'src/app/shared/services/breadcrumb.service';
+import { CurrencyChangeService } from 'src/app/shared/services/currency-change.service';
 
 @Component({
   selector: 'app-shop',
@@ -12,89 +15,98 @@ export class ShopComponent implements OnInit {
 
   constructor(
     private breadcrumbService: BreadcrumbService,
-    private apiCall : ApiService
+    private apiCall : ApiService,
+    private cdr : ChangeDetectorRef,
+    private activateRouter: ActivatedRoute,
+    public currencyService: CurrencyChangeService
   ) { }
 
-  productItems : any = [
-    {
-      image : 'assets/img/product-1.jpg',
-      productAction : this.productActionIcon(),
-      productName : 'Product Name goes here',
-      checkedPrice : 123,
-      originalPrice : 123,
-      ratingStar : this.ratingStarIcon() ,
-      totalRating : 99
-    },
-    {
-      image : 'assets/img/product-2.jpg',
-      productAction : this.productActionIcon(), 
-      productName : 'Product Name goes here',
-      checkedPrice : 123,
-      originalPrice : 123,
-      ratingStar : this.ratingStarIcon() ,
-      totalRating : 99
-    },
-    {
-      image : 'assets/img/product-3.jpg',
-      productAction : this.productActionIcon(),
-      productName : 'Product Name goes here',
-      checkedPrice : 123,
-      originalPrice : 123,
-      ratingStar : this.ratingStarIcon() ,
-      totalRating : 99
-    },
-    {
-      image : 'assets/img/product-4.jpg',
-      productAction : this.productActionIcon(),
-      productName : 'Product Name goes here',
-      checkedPrice : 123,
-      originalPrice : 123,
-      ratingStar : this.ratingStarIcon() ,
-      totalRating : 99
-    },
-    {
-      image : 'assets/img/product-5.jpg',
-      productAction : this.productActionIcon(),
-      productName : 'Product Name goes here',
-      checkedPrice : 123,
-      originalPrice : 123,
-      ratingStar : this.ratingStarIcon() ,
-      totalRating : 99
-    },
-    {
-      image : 'assets/img/product-6.jpg',
-      productAction : this.productActionIcon(),
-      productName : 'Product Name goes here',
-      checkedPrice : 123,
-      originalPrice : 123,
-      ratingStar : this.ratingStarIcon() ,
-      totalRating : 99
-    },
-    {
-      image : 'assets/img/product-7.jpg',
-      productAction : this.productActionIcon(),
-      productName : 'Product Name goes here',
-      checkedPrice : 123,
-      originalPrice : 123,
-      ratingStar : this.ratingStarIcon() ,
-      totalRating : 99
-    },
-    {
-      image : 'assets/img/product-8.jpg',
-      productAction : this.productActionIcon(),
-      productName : 'Product Name goes here',
-      checkedPrice : 123,
-      originalPrice : 123,
-      ratingStar : this.ratingStarIcon() ,
-      totalRating : 99
-    },
-  ]
+  productActionIcons = PRODUCT_ACTION_ICONS;
+  itemsByCategories : any;
 
+  singleCategory : any = '';
+  // productItems : any = [
+  //   {
+  //     image : 'assets/img/product-1.jpg',
+  //     productName : 'Product Name goes here',
+  //     checkedPrice : 123,
+  //     originalPrice : 123,
+  //     ratingStar : this.ratingStarIcon() ,
+  //     totalRating : 99
+  //   },
+  //   {
+  //     image : 'assets/img/product-2.jpg',
+  //     productName : 'Product Name goes here',
+  //     checkedPrice : 123,
+  //     originalPrice : 123,
+  //     ratingStar : this.ratingStarIcon() ,
+  //     totalRating : 99
+  //   },
+  //   {
+  //     image : 'assets/img/product-3.jpg',
+  //     productName : 'Product Name goes here',
+  //     checkedPrice : 123,
+  //     originalPrice : 123,
+  //     ratingStar : this.ratingStarIcon() ,
+  //     totalRating : 99
+  //   },
+  //   {
+  //     image : 'assets/img/product-4.jpg',
+  //     productName : 'Product Name goes here',
+  //     checkedPrice : 123,
+  //     originalPrice : 123,
+  //     ratingStar : this.ratingStarIcon() ,
+  //     totalRating : 99
+  //   },
+  //   {
+  //     image : 'assets/img/product-5.jpg',
+  //     productName : 'Product Name goes here',
+  //     checkedPrice : 123,
+  //     originalPrice : 123,
+  //     ratingStar : this.ratingStarIcon() ,
+  //     totalRating : 99
+  //   },
+  //   {
+  //     image : 'assets/img/product-6.jpg',
+  //     productName : 'Product Name goes here',
+  //     checkedPrice : 123,
+  //     originalPrice : 123,
+  //     ratingStar : this.ratingStarIcon() ,
+  //     totalRating : 99
+  //   },
+  //   {
+  //     image : 'assets/img/product-7.jpg',
+  //     productName : 'Product Name goes here',
+  //     checkedPrice : 123,
+  //     originalPrice : 123,
+  //     ratingStar : this.ratingStarIcon() ,
+  //     totalRating : 99
+  //   },
+  //   {
+  //     image : 'assets/img/product-8.jpg',
+  //     productName : 'Product Name goes here',
+  //     checkedPrice : 123,
+  //     originalPrice : 123,
+  //     ratingStar : this.ratingStarIcon() ,
+  //     totalRating : 99
+  //   },
+  // ]
 
-
-  
-  
   ngOnInit(): void {
+
+    this.activateRouter.params.subscribe(params => {
+      this.singleCategory = params['category'];
+       
+      this.cdr.markForCheck();
+
+      if (this.singleCategory) {
+        this.getCategories()
+      }else{
+        this.getProduct();
+      }
+    })
+
+    // Breadcrumb Setup
     this.breadcrumbService.breadcrumb.next([
       {
         label: 'Home',
@@ -109,32 +121,27 @@ export class ShopComponent implements OnInit {
         url : 'shop-list',
       }
     ])
-
-      // //API call for All product features
-      // this.apiCall.getAllProduct().subscribe({
-      //   next : (res) => {
-      //     console.log(res);
-          
-      //       this.productItems = res;          
-      //   }
-      // })
   }
-
-  productActionIcon() {
-    return [
-      {
-        icon : 'fa fa-shopping-cart',
-      },
-      {
-        icon : 'fa fa-heart',
-      },
-      {
-        icon : 'fa fa-sync-alt',
-      },
-      { 
-        icon : 'fa fa-search',
-      },
-    ];
+ 
+  //API call for product by categories.
+  getCategories(){
+    
+    this.apiCall.ProductByCategories(this.singleCategory).subscribe({
+      next : (res) => {
+          this.itemsByCategories = res;
+          this.cdr.markForCheck()          
+      }
+    })
+  }
+  
+  getProduct(){
+    //API call for All product features
+    this.apiCall.getAllProduct().subscribe({
+      next : (res) => {
+          this.itemsByCategories = res;
+          this.cdr.markForCheck()          
+      }
+    })
   }
 
   ratingStarIcon(){

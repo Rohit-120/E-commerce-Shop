@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ApiService } from 'src/app/shared/services/api.service';
+import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
   selector: 'app-categories',
@@ -30,9 +32,22 @@ export class CategoriesComponent implements OnInit {
     },
   ]
 
-  constructor() { }
+  constructor(
+    private commonService: CommonService,
+    private apiCall: ApiService,
+
+  ) { }
 
   ngOnInit(): void {
   }
+
+  // getCategories(){
+  //   this.apiCall.getProductCategories().subscribe({
+  //     next : (res) =>  {
+  //       console.log(res)
+        
+  //     }
+  //   })
+  // }
 
 }

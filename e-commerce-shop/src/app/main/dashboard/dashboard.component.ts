@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { BreadcrumbService } from 'src/app/shared/services/breadcrumb.service';
+import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -56,7 +57,7 @@ export class DashboardComponent implements OnInit {
   constructor(
     private breadcrumbService: BreadcrumbService,
     private apiCall : ApiService,
-
+    private commonService: CommonService
     ) { }
 
   ngOnInit(): void {

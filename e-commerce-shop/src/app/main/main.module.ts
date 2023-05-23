@@ -6,7 +6,6 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { CartComponent } from './cart/cart.component';
 import { CheckoutComponent } from './checkout/checkout.component';
 import { ContactComponent } from './contact/contact.component';
-import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { ShopComponent } from './shop/shop.component';
 import { CategoriesComponent } from './categories/categories.component';
 import { SharedModule } from '../shared/shared.module';
@@ -23,11 +22,11 @@ import { ShopDetailComponent } from './shop-detail/shop-detail.component';
     CartComponent,
     CheckoutComponent,
     ContactComponent,
-    ProductDetailComponent,
     ShopComponent,
     CategoriesComponent,
     VendorComponent,
-    ShopDetailComponent
+    ShopDetailComponent,
+    
   ],
   imports: [
     CommonModule,
