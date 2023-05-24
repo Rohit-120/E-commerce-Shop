@@ -2,15 +2,15 @@
 <div class="container-fluid bg-dark mb-30">
     <div class="row px-xl-5">
         <div class="col-lg-3 d-none d-lg-block">
-            <a class="btn d-flex align-items-center justify-content-between bg-primary w-100" (click)="categoryToggle()" data-toggle="collapse" href="#navbar-vertical" style="height: 65px; padding: 0 30px;">
+            <a class="btn d-flex align-items-center justify-content-between bg-primary w-100" [ngClass]="{'collapsed' : !isCollapsed}" (click)="categoryToggle()" style="height: 65px; padding: 0 30px;">
                 <h6 class="text-dark m-0"><i class="fa fa-bars mr-2"></i>Categories</h6>
                 <i class="fa fa-angle-down text-dark"></i>
             </a>
             
-            <nav [ngClass]="{'show' : isCollapsed}" class="collapse position-absolute navbar navbar-vertical navbar-light align-items-start p-0 bg-light" id="navbar-vertical" style="width: calc(100% - 30px); z-index: 999;">
+            <nav [ngClass]="{'show' : isCollapsed}" class="collapse position-absolute navbar navbar-vertical navbar-light align-items-start p-0 bg-light" style="width: calc(100% - 30px); z-index: 999;">
                 <div class="navbar-nav w-100">
                    
-                    <a class="nav-item nav-link" *ngFor="let item of navCategories" [routerLink]="['/shop', item]" >{{item}}</a>
+                    <a class="nav-item nav-link"  *ngFor="let item of navCategories" [routerLink]="['/shop', item]" (click)="categoryToggle()">{{item}}</a>
                     
                 </div>
             </nav>
@@ -27,15 +27,8 @@
                 <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                     <div class="navbar-nav mr-auto py-0">
                         <ng-container *ngFor="let item of mainNavItems; let first = first" >
-                        <a  [routerLink]="item.route" class="nav-item nav-link " [ngClass]="{'active' : first}" >{{item.navItem}}</a>
-                        
-                        <!-- <div *ngIf="item.isChildren" class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">{{item.navItem}} <i class="fa fa-angle-down mt-1"></i></a>
-                            <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
-                                <a [routerLink]="dropdown.route" class="dropdown-item" *ngFor="let dropdown of item.children" >{{dropdown.dropNavItem}}</a>
-                            </div>
-                        </div> -->
-                    </ng-container>
+                            <a  [routerLink]="item.route" class="nav-item nav-link " [ngClass]="{'active' : isNavActive}" routerLinkActive="active">{{item.navItem}}</a>
+                        </ng-container>
                     </div>
                     <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
                         <a [routerLink]="['/favorite']" class="btn px-0">

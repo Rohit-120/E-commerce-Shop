@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CommonService } from 'src/app/shared/services/common.service';
 import { CurrencyChangeService } from 'src/app/shared/services/currency-change.service';
 
 @Component({
@@ -37,7 +38,18 @@ export class TopbarComponent implements OnInit {
 
   currencyChange: string = 'USD';
 
-  currencies: any = ['USD', 'EUR', 'GBP', 'CAD'];
+  currencies: any = [
+    {name : 'USD', currencyPrice : 1}, 
+    {name : 'EUR', currencyPrice : 0.92}, 
+    {name : 'GBP', currencyPrice : 0.80}, 
+    {name : 'CAD', currencyPrice : 1.35},
+    {name : 'INR', currencyPrice : 82.7},
+    {name : 'AUD', currencyPrice : 1.51},
+    {name : 'JPY', currencyPrice : 138.5},
+
+
+
+  ];
 
   languages: any = ['EN', 'FR', 'AR', 'RU'];
 
@@ -45,19 +57,24 @@ export class TopbarComponent implements OnInit {
 
   constructor(private router: Router, 
     private route: ActivatedRoute,
-    private currencyService: CurrencyChangeService
+    private currencyService: CurrencyChangeService,
+    private commonService: CommonService
     ) {}
 
   ngOnInit(): void {
   }
 
   productSearchClick() {
-    console.log(this.searchData, 'rohit');
-    this.router.navigate([`shop/${this.searchData}`]);
+    this.commonService.dataToSearch.next(this.searchData);   
+    // this.router.navigate([`shop/${this.searchData}`]);
   }
 
-  onCurrencyChange(item:string){
-    this.currencyChange = item;
-    this.currencyService.currencyChanges.next(item)
+  onCurrencyChange(item:any){
+    let name = item.name;
+    let price = item.currencyPrice;
+    this.currencyChange = item.name;
+    this.commonService.currencyChanges.next({currencyName: name, currencyPrice: price})
+    
   }
 }
+  

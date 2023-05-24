@@ -12,7 +12,7 @@ export class ApiService {
   ) { }
 
   getAllProduct(){
-    let url = 'https://fakestoreapi.com/products?limit=8'
+    let url = 'https://fakestoreapi.com/products'
     return this.http.getRequest(url).pipe(map(response => response));
   }
 

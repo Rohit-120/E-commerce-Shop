@@ -2,8 +2,10 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  OnDestroy,
   OnInit,
 } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { BreadcrumbService } from 'src/app/shared/services/breadcrumb.service';
 import { CommonService } from 'src/app/shared/services/common.service';
@@ -14,12 +16,14 @@ import { CommonService } from 'src/app/shared/services/common.service';
   styleUrls: ['./cart.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CartComponent implements OnInit {
+export class CartComponent implements OnInit, OnDestroy {
   CartItems: any[] = [];
   quantity: number = 1;
   subTotal: number = 0;
   shipping: number = 10;
   selectedIndex: any = null;
+  currencyInfo:any;
+  subscriptions: Subscription[] = [];
 
   constructor(
     private breadcrumbService: BreadcrumbService,
@@ -45,14 +49,15 @@ export class CartComponent implements OnInit {
     ]);
 
     this.getCartDetails();
+    this.getCurrencyInfo();
   }
 
   //To get Cart Item details using ApiService
   getCartDetails() {
-    this.apiCall.getCartItems().subscribe({
+   let sub1 = this.apiCall.getCartItems().subscribe({
       next: (res: any) => {
         for (const product of res.products) {
-          this.apiCall.getSingleProduct(product.productId).subscribe({
+          let sub2 = this.apiCall.getSingleProduct(product.productId).subscribe({
             next: (result: any) => {
               result['quantity'] = product.quantity;
               result['total'] = this.subTotal =
@@ -63,9 +68,11 @@ export class CartComponent implements OnInit {
               this.cdr.markForCheck();
             },
           });
+          this.subscriptions.push(sub2)
         }
       },
     });
+    this.subscriptions.push(sub1);
   }
 
   /**
@@ -110,5 +117,20 @@ export class CartComponent implements OnInit {
     this.CartItems.splice(index, 1);
     this.commonService.totalCartItems.next(this.CartItems.length);
     this.getAllTotal();
+  }
+
+  getCurrencyInfo() {
+    let sub3 = this.commonService.currencyChanges.subscribe({
+      next: (res) => {
+        this.currencyInfo = res;
+        this.cdr.markForCheck();
+      },
+    });
+    this.subscriptions.push(sub3);
+  }
+
+  //Unsubscribe all subscriber on component Destroy
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 }

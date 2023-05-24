@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BreadcrumbService {
 // breadcrumb 
-  breadcrumb = new Subject<any>();     
+  breadcrumb = new BehaviorSubject<any>([{
+    label: 'Home',
+    url : '/'
+  }]);     
 
   constructor() { }
 }

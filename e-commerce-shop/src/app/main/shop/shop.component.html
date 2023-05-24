@@ -163,7 +163,7 @@
                             <div class="text-center py-4">
                                 <a class="h6 text-decoration-none d-block text-truncate" [routerLink]="['/shop-detail', item.id]">{{item.title}}</a>
                                 <div class="d-flex align-items-center justify-content-center mt-2">
-                                    <h5>{{item.price | currency : (currencyService.currencyChanges | async)}}</h5><h6 class="text-muted ml-2"><del>{{item.price | currency : (currencyService.currencyChanges | async)}}</del></h6>
+                                    <h5>{{item.price * currencyInfo.currencyPrice | currency : currencyInfo.currencyName}}</h5><h6 class="text-muted ml-2"><del>{{item.price * currencyInfo.currencyPrice | currency : currencyInfo.currencyName}}</del></h6>
                                 </div>
                                 <div *ngIf="item.rating.rate" class="d-flex align-items-center justify-content-center mb-1 text-primary">
                                     <!-- Star Rating Component -->

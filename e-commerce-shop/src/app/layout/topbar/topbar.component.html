@@ -21,7 +21,7 @@
                 <div class="btn-group mx-2" >
                     <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">{{currencyChange}}</button>
                     <div class="dropdown-menu dropdown-menu-right">
-                        <button *ngFor="let item of currencies"  class="dropdown-item" type="button" (click)="onCurrencyChange(item)" >{{item}}</button>
+                        <button *ngFor="let item of currencies"  class="dropdown-item" type="button" (click)="onCurrencyChange(item)" >{{item.name}}</button>
                     </div>
                 </div>
                 <div class="btn-group">
