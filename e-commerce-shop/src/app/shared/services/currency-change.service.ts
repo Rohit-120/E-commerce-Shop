@@ -6,7 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class CurrencyChangeService {
 
-  currencyChanges  = new BehaviorSubject<any>('USD');
+  //  currencyChanges  = new BehaviorSubject<any>('USD');
 
   constructor() { }
 }

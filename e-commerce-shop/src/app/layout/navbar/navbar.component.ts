@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChildren, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChildren, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { StorageService } from 'src/app/shared/services/storage.service';
@@ -9,12 +10,14 @@ import { StorageService } from 'src/app/shared/services/storage.service';
   styleUrls: ['./navbar.component.scss'],
   changeDetection : ChangeDetectionStrategy.OnPush
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
 
   navCategories : any = []
   favoriteItems!: number 
   totalCartLength! : number;
   isCollapsed : boolean = false;
+  isNavActive : boolean = false;
+  subscription: Subscription[] = [];
 
   // Object for main header navigation
   mainNavItems = [
@@ -54,7 +57,6 @@ export class NavbarComponent implements OnInit {
     private apiCall: ApiService,
     private cdr : ChangeDetectorRef,
     public commonService: CommonService,
-    private storageService: StorageService
   ) { }
 
 
@@ -70,43 +72,47 @@ export class NavbarComponent implements OnInit {
    * Function to get product category
    */
   getProductCategories(){
-    this.apiCall.getProductCategories().subscribe({
+    let sub1 = this.apiCall.getProductCategories().subscribe({
       next : (res) => {
         this.navCategories = res; 
         this.cdr.markForCheck();
         this.commonService.categories.next(this.navCategories);
       }
-    })
+    });
+    this.subscription.push(sub1);
   }
 
   /**
    * Function to get total favorite items length.
    */
   getFavoriteItemsLen(){
-    this.commonService.FavoriteItemLength.subscribe((data:any) => {
+    let sub2 = this.commonService.FavoriteItemLength.subscribe((data:any) => {
       this.favoriteItems = data.length;
       this.cdr.markForCheck();
-    })
+    });
+    this.subscription.push(sub2);
   }
 
   /**
    * Function to get Cart length of users .
    */
   cartItemLength(){
-    this.apiCall.getCartItems().subscribe({
+    let sub3 = this.apiCall.getCartItems().subscribe({
       next : (carts:any) => {
         this.totalCartLength =  carts.products.length;
         this.cdr.markForCheck();        
       }
-    })
+    });
+    this.subscription.push(sub3);
   }
   
   categoryToggle(){
-    if (this.isCollapsed) {
-      this.isCollapsed = false
-      
-    }else{
-      this.isCollapsed = true;
-    }
+    this.isCollapsed = !this.isCollapsed;
+    this.isNavActive = !this.isNavActive
   }
+
+  ngOnDestroy(): void {
+    this.subscription.forEach(sub => sub.unsubscribe());
+  }
+
 }

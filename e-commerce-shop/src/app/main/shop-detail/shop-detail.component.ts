@@ -1,50 +1,61 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { BreadcrumbService } from 'src/app/shared/services/breadcrumb.service';
+import { CommonService } from 'src/app/shared/services/common.service';
 import { CurrencyChangeService } from 'src/app/shared/services/currency-change.service';
 
 @Component({
   selector: 'app-shop-detail',
   templateUrl: './shop-detail.component.html',
   styleUrls: ['./shop-detail.component.scss'],
-  changeDetection : ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ShopDetailComponent implements OnInit {
-
+export class ShopDetailComponent implements OnInit, OnDestroy {
   singleProductId: any;
   singleProductDetails: any;
 
   // User Review Form..
-  reviewForm : FormGroup = this.fb.group({
-    rating : ['5', [Validators.required, Validators.max(5), Validators.min(1)]],
-    reviewMessage : ['', Validators.required],
-    name : ['', Validators.required],
-    email : ['', [Validators.required, Validators.email]],
-  })
+  reviewForm: FormGroup = this.fb.group({
+    rating: ['5', [Validators.required, Validators.max(5), Validators.min(1)]],
+    reviewMessage: ['', Validators.required],
+    name: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+  });
 
   //User review object
-  userReviews : any = [
+  userReviews: any = [
     {
-    userName : 'John Doe',
-    date : new Date(),
-    rating : 5,
-    reviewMessage : 'Diam amet duo labore stet elitr ea clita ipsum, tempor labore accusam ipsum et no at. Kasd diam tempor rebum magna dolores sed sed eirmod ipsum.',
-    name : '',
-    email :''
-    }
-  ]
+      userName: 'John Doe',
+      date: new Date(),
+      rating: 5,
+      reviewMessage:
+        'Diam amet duo labore stet elitr ea clita ipsum, tempor labore accusam ipsum et no at. Kasd diam tempor rebum magna dolores sed sed eirmod ipsum.',
+      name: '',
+      email: '',
+    },
+  ];
+
+  currencyInfo: any;
+  subscriptions: Subscription[] = [];
 
   constructor(
-    private fb : FormBuilder,
+    private fb: FormBuilder,
     private breadcrumbService: BreadcrumbService,
     private apiCall: ApiService,
     private activeRouter: ActivatedRoute,
     private cdr: ChangeDetectorRef,
-    private toast : ToastrService,
-    public currencyService: CurrencyChangeService
+    private toast: ToastrService,
+    public commonService: CommonService
   ) {
     // activeRouter.params.subscribe(params => {
     //   this.singleProductId = params['id'];
@@ -72,24 +83,44 @@ export class ShopDetailComponent implements OnInit {
       },
     ]);
 
-    
-    this.apiCall.getSingleProduct(this.singleProductId).subscribe({
-      next: (res) => {
-        console.log(res, 'Singleproduct');
-        this.singleProductDetails = res;
-        this.cdr.markForCheck()
-      },
-    });
+    this.getSingleProductDetails();
+    this.getCurrencyInfo();
   }
 
-  onReviewSubmit(){
+  getSingleProductDetails() {
+    let sub1 = this.apiCall.getSingleProduct(this.singleProductId).subscribe({
+      next: (res) => {
+        this.singleProductDetails = res;
+        this.cdr.markForCheck();
+      },
+    });
+    this.subscriptions.push(sub1);
+  }
+
+  onReviewSubmit() {
     if (this.reviewForm.valid) {
-      console.log(this.reviewForm.value, 'Review');
-      
-      this.userReviews.push({...this.reviewForm.value, userName : this.reviewForm.value.name, date : new Date()});
+      this.userReviews.push({
+        ...this.reviewForm.value,
+        userName: this.reviewForm.value.name,
+        date: new Date(),
+      });
       this.reviewForm.reset();
-    }else{
+    } else {
       this.toast.error('Enter valid information');
     }
+  }
+
+  getCurrencyInfo() {
+    let sub2 = this.commonService.currencyChanges.subscribe({
+      next: (res) => {
+        this.currencyInfo = res;
+        this.cdr.markForCheck();
+      },
+    });
+    this.subscriptions.push(sub2);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => sub.unsubscribe());    
   }
 }
