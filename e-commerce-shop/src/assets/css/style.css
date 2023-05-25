@@ -62,6 +62,7 @@ body {
   color: #6C757D;
   text-align: left;
   background-color: #F5F5F5;
+  top : 0 !important;
 }
 
 [tabindex="-1"]:focus:not(:focus-visible) {
@@ -3946,6 +3947,7 @@ input[type="button"].btn-block {
 
 .nav-tabs .nav-item {
   margin-bottom: -1px;
+
 }
 
 .nav-tabs .nav-link {
@@ -3994,6 +3996,7 @@ input[type="button"].btn-block {
 
 .tab-content > .tab-pane {
   display: none;
+  cu
 }
 
 .tab-content > .active {

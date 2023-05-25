@@ -38,4 +38,10 @@ export class ApiService {
     return this.http.getRequest(url);
   }
 
+  testApi(){    
+    let url = `http://192.168.1.175:5050/products`;
+    return this.http.getRequest(url);
+  }
+
+
 }

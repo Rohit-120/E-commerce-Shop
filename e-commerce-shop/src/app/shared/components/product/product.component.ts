@@ -9,7 +9,6 @@ import { ApiService } from '../../services/api.service';
 import { Router } from '@angular/router';
 import { StorageService } from '../../services/storage.service';
 import { CommonService } from '../../services/common.service';
-import { CurrencyChangeService } from '../../services/currency-change.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -43,6 +42,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   getProducts() {
     let sub1 = this.apiCall.getAllProduct().subscribe({
       next: (res: any) => {
+        // res['isFavorite'] = false
         this.products = res;
         this.cdr.markForCheck();
       },

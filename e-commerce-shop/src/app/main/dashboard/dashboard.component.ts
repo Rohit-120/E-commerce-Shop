@@ -32,8 +32,6 @@ export class DashboardComponent implements OnInit {
     },
   ];
 
-   
-
   features = [
   {
     feature : 'Quality Product',
@@ -54,6 +52,8 @@ export class DashboardComponent implements OnInit {
 
 ]
 
+carouselTabToggle:any = 0;
+
   constructor(
     private breadcrumbService: BreadcrumbService,
     private apiCall : ApiService,
@@ -61,12 +61,25 @@ export class DashboardComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    // this.breadcrumbService.breadcrumb.next([{
-    //   label: 'Home',
-    //   url : '/'
-    // }])
+     this.bulletButtonClick(this.carouselTabToggle)
 
-  
+     this.apiCall.testApi().subscribe({
+      next : (res) => {
+        console.log(res);
+        
+      }
+     })
   }
+
+  /**
+   * @param index index of clicked list of bullet button of hero carousel.. 
+   */
+  bulletButtonClick(index:number){
+    console.log(index);
+    this.carouselTabToggle = index;
+    setTimeout(() => this.bulletButtonClick, 2000)
+  }
+
+
 
 }
