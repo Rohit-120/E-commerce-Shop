@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { CurrencyChangeService } from 'src/app/shared/services/currency-change.service';
@@ -7,6 +7,7 @@ import { CurrencyChangeService } from 'src/app/shared/services/currency-change.s
   selector: 'app-topbar',
   templateUrl: './topbar.component.html',
   styleUrls: ['./topbar.component.scss'],
+  changeDetection : ChangeDetectionStrategy.OnPush
 })
 export class TopbarComponent implements OnInit {
   topbarNavItems: any = [
@@ -37,44 +38,60 @@ export class TopbarComponent implements OnInit {
   // object to select currency and Language
 
   currencyChange: string = 'USD';
+  languageLabel! : string ;
 
   currencies: any = [
-    {name : 'USD', currencyPrice : 1}, 
-    {name : 'EUR', currencyPrice : 0.92}, 
-    {name : 'GBP', currencyPrice : 0.80}, 
-    {name : 'CAD', currencyPrice : 1.35},
-    {name : 'INR', currencyPrice : 82.7},
-    {name : 'AUD', currencyPrice : 1.51},
-    {name : 'JPY', currencyPrice : 138.5},
-
-
-
+    { name: 'USD', currencyPrice: 1 },
+    { name: 'EUR', currencyPrice: 0.92 },
+    { name: 'GBP', currencyPrice: 0.8 },
+    { name: 'CAD', currencyPrice: 1.35 },
+    { name: 'INR', currencyPrice: 82.7 },
+    { name: 'AUD', currencyPrice: 1.51 },
+    { name: 'JPY', currencyPrice: 138.5 },
   ];
 
-  languages: any = ['EN', 'FR', 'AR', 'RU'];
+  languages: any = [
+    { label: 'EN', code : 'en' },
+    { label: 'FR', code : 'fr' },
+    { label: 'AR', code : 'ar' },
+    { label: 'RU', code : 'ru' },
+  ];
 
   searchData: string = '';
 
-  constructor(private router: Router, 
-    private route: ActivatedRoute,
-    private currencyService: CurrencyChangeService,
-    private commonService: CommonService
-    ) {}
+  constructor(
+    private commonService: CommonService,
+    private cdr : ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
+
   }
 
   productSearchClick() {
-    this.commonService.dataToSearch.next(this.searchData);   
+    this.commonService.dataToSearch.next(this.searchData);
     // this.router.navigate([`shop/${this.searchData}`]);
   }
 
-  onCurrencyChange(item:any){
+  onCurrencyChange(item: any) {
     let name = item.name;
     let price = item.currencyPrice;
     this.currencyChange = item.name;
-    this.commonService.currencyChanges.next({currencyName: name, currencyPrice: price})
-    
+    this.commonService.currencyChanges.next({
+      currencyName: name,
+      currencyPrice: price,
+    });
   }
+
+  onLanguageChange(language : any) {
+      this.languageLabel = language.label;
+      let lanCode = language.code;
+
+      console.log(language.code);
+
+      document.cookie = 'googtrans=' + `/en/${lanCode}`
+      // this.cdr.markForCheck()
+      location.reload();
+  }
+
 }
-  

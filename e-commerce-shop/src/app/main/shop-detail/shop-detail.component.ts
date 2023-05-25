@@ -23,7 +23,11 @@ import { CurrencyChangeService } from 'src/app/shared/services/currency-change.s
 export class ShopDetailComponent implements OnInit, OnDestroy {
   singleProductId: any;
   singleProductDetails: any;
-
+  currencyInfo: any;
+  subscriptions: Subscription[] = [];
+  detailNavbar: any[] = ['Description', 'Information', 'Reviews']
+  navbarToggle: any = 0;
+  
   // User Review Form..
   reviewForm: FormGroup = this.fb.group({
     rating: ['5', [Validators.required, Validators.max(5), Validators.min(1)]],
@@ -45,8 +49,6 @@ export class ShopDetailComponent implements OnInit, OnDestroy {
     },
   ];
 
-  currencyInfo: any;
-  subscriptions: Subscription[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -118,6 +120,12 @@ export class ShopDetailComponent implements OnInit, OnDestroy {
       },
     });
     this.subscriptions.push(sub2);
+  }
+
+  navbarClick(index:number){
+    console.log(index);
+    this.navbarToggle = index;
+    setTimeout(() => this.navbarClick, 2000)
   }
 
   ngOnDestroy(): void {

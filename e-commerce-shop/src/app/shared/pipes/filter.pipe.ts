@@ -1,9 +1,14 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 
 @Pipe({
   name: 'filter',
 })
 export class FilterPipe implements PipeTransform {
+  constructor(
+    private toastService: ToastrService
+  ) {}
+  
   /**
    *
    * @param value take object of products to filter
@@ -25,7 +30,11 @@ export class FilterPipe implements PipeTransform {
         filteredProduct.push(product);
       }
     }
-    console.log(filteredProduct);
+
+    if (filteredProduct.length == 0) {
+      this.toastService.info('There is no such product available');
+    }
+    // console.log(filteredProduct);
 
     return filteredProduct;
   }
