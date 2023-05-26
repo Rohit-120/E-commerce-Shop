@@ -11,7 +11,6 @@ import PRODUCT_ACTION_ICONS from 'src/app/shared/constant';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { BreadcrumbService } from 'src/app/shared/services/breadcrumb.service';
 import { CommonService } from 'src/app/shared/services/common.service';
-import { CurrencyChangeService } from 'src/app/shared/services/currency-change.service';
 
 @Component({
   selector: 'app-shop',
@@ -68,7 +67,7 @@ export class ShopComponent implements OnInit, OnDestroy {
     ]);
   }
 
-  //API call for product by categories.
+  //API call for particular categories products.
   getCategories() {
     let sub1 = this.apiCall.ProductByCategories(this.singleCategory).subscribe({
       next: (res) => {
@@ -79,17 +78,21 @@ export class ShopComponent implements OnInit, OnDestroy {
     this.subscriptions.push(sub1);
   }
 
+  //API call for All products
   getProduct() {
-    //API call for All product features
     let sub2 = this.apiCall.getAllProduct().subscribe({
-      next: (res) => {
-        this.itemsByCategories = res;
+      next: (res:any) => {
+        console.log(res.data.products, 'all products');
+        
+        this.itemsByCategories = res.data.products;
+
         this.cdr.markForCheck();
       },
     });
     this.subscriptions.push(sub2);
   }
 
+  //
   getCurrencyInfo() {
     let sub3 = this.commonService.currencyChanges.subscribe({
       next: (res) => {
@@ -100,7 +103,7 @@ export class ShopComponent implements OnInit, OnDestroy {
     this.subscriptions.push(sub3);
   }
 
-  //Unsubscribe all subscriptions in Destroy
+  //Unsubscribe all subscriptions on Component Destroy
   ngOnDestroy(): void {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
   }  
