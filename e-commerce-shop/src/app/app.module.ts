@@ -17,6 +17,7 @@ import {  DragScrollModule } from 'ngx-drag-scroll';
 import { HttpClientModule } from '@angular/common/http'
 import { SharedModule } from './shared/shared.module';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     NgxUsefulSwiperModule,
     DragScrollModule,
     HttpClientModule,
-    NgSelectModule
+    NgSelectModule,
+    NgxPaginationModule
   ],
   providers: [],
   bootstrap: [AppComponent],

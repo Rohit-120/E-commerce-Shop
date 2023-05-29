@@ -24,8 +24,6 @@ export class ProductComponent implements OnInit, OnDestroy {
   favoriteProduct: any[] = [];
   currencyInfo: any;
   subscriptions: Subscription[] = [];
-  @Input() featuredProduct: any[] = [];
-  @Input() featuredProd!: boolean
 
   constructor(
     private apiCall: ApiService,
@@ -36,13 +34,8 @@ export class ProductComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    if (this.featuredProd) {
-      console.log(this.featuredProduct, 'aaaaaaaaaaaaaaaaaa');
-      this.products = this.featuredProduct;
-      console.log(this.products, 'ooooooooooooooooooo');
-    } else {
-      this.getProducts();
-    }
+    this.getProducts();
+
     this.getCurrencyInfo();
   }
 
@@ -50,8 +43,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   getProducts() {
     let sub1 = this.apiCall.getAllProduct().subscribe({
       next: (res: any) => {
-        // res['isFavorite'] = false
-        this.products = res.data.products;
+        this.products = res.data;
         this.cdr.markForCheck();
       },
     });

@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { Route, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { CommonService } from 'src/app/shared/services/common.service';
 
@@ -10,28 +10,7 @@ import { CommonService } from 'src/app/shared/services/common.service';
 })
 export class CategoriesComponent implements OnInit {
 
-  categories : any = [
-    // {
-    //   image : 'assets/img/cat-1.jpg',
-    //   categoryName : 'Category Name',
-    //   totalProduct : '100 Product'
-    // },
-    // {
-    //   image : 'assets/img/cat-2.jpg',
-    //   categoryName : 'Category Name',
-    //   totalProduct : '100 Product'
-    // },
-    // {
-    //   image : 'assets/img/cat-3.jpg',
-    //   categoryName : 'Category Name',
-    //   totalProduct : '100 Product'
-    // },
-    // {
-    //   image : 'assets/img/cat-4.jpg',
-    //   categoryName : 'Category Name',
-    //   totalProduct : '100 Product'
-    // },
-  ]
+  categories : any = [];
 
 
 
@@ -49,15 +28,14 @@ export class CategoriesComponent implements OnInit {
   productCategory() {
     this.apiCall.getProductCategories().subscribe({
       next: (res: any) => {
-        console.log(res.data.categories, 'dashboard');
-        this.categories = res.data.categories;
+        this.categories = res.data;
         this.cdr.markForCheck();
       },
     });
   }
 
   categoryClick(item : any){
-      this.router.navigate([`/shop/${item.name}`])
+      this.router.navigate([`/shop/${item.title}`])
   }
 
 }

@@ -1,5 +1,4 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { SwiperOptions } from 'swiper';
 import { ApiService } from '../shared/services/api.service';
 
 @Component({
@@ -9,32 +8,7 @@ import { ApiService } from '../shared/services/api.service';
 })
 export class VendorComponent implements OnInit {
 
-  vendors : any = [
-    // {
-    //   image : 'assets/img/vendor-1.jpg',
-    // },
-    // {
-    //   image : 'assets/img/vendor-2.jpg',
-    // },
-    // {
-    //   image : 'assets/img/vendor-3.jpg',
-    // },
-    // {
-    //   image : 'assets/img/vendor-4.jpg',
-    // },
-    // {
-    //   image : 'assets/img/vendor-5.jpg',
-    // },
-    // {
-    //   image : 'assets/img/vendor-6.jpg',
-    // },
-    // {
-    //   image : 'assets/img/vendor-7.jpg',
-    // },
-    // {
-    //   image : 'assets/img/vendor-8.jpg',
-    // },
-  ]
+  vendors : any = [ ]
 
   constructor(
     private apiCall : ApiService,
@@ -49,7 +23,7 @@ export class VendorComponent implements OnInit {
   companyImage(): any {
     this.apiCall.getCompanyImage().subscribe({
       next : (res : any) => {
-         this.vendors  = res.data.images
+         this.vendors  = res.data
          this.cdr.markForCheck();
         
       }

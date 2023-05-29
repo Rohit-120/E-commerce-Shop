@@ -24,6 +24,34 @@ export class ShopComponent implements OnInit, OnDestroy {
   singleCategory: any = '';
   currencyInfo: any;
   subscriptions: Subscription[] = [];
+  currPage: string | number | undefined;
+  perPageItems!: number;
+
+  body: any = {
+    // // ---------------filter-----------
+    // filterByprice: [
+    //   {
+    //     min: 0,
+    //     max: 100,
+    //   },
+    //   {
+    //     min: 100,
+    //     max: 200,
+    //   },
+    // ],
+    // filterByColor: ['Black', 'Red'],
+    // FilterBySize: ['S', 'M', 'XXL'],
+    // isFeatured: true,
+    // isMarkedFavorite: true,
+    // // ----------------sort-------------
+    // sortBy: {
+    //   field: 'Rating',
+    //   order: 'asc/desc',
+    // },
+    // // ------------- skip,limit---------
+    // page: 1,
+    // limit: 5,
+  };
 
   constructor(
     private breadcrumbService: BreadcrumbService,
@@ -33,8 +61,6 @@ export class ShopComponent implements OnInit, OnDestroy {
     public commonService: CommonService
   ) {}
 
-
-
   ngOnInit(): void {
     this.activateRouter.params.subscribe((params) => {
       this.singleCategory = params['category'];
@@ -43,11 +69,12 @@ export class ShopComponent implements OnInit, OnDestroy {
 
       if (this.singleCategory) {
         this.getCategories();
-        this.getCurrencyInfo();
+        console.log('categories');
       } else {
         this.getProduct();
-        this.getCurrencyInfo();
+        console.log('all product');
       }
+      this.getCurrencyInfo();
     });
 
     // Breadcrumb Setup
@@ -69,30 +96,32 @@ export class ShopComponent implements OnInit, OnDestroy {
 
   //API call for particular categories products.
   getCategories() {
-    let sub1 = this.apiCall.ProductByCategories(this.singleCategory).subscribe({
-      next: (res) => {
-        this.itemsByCategories = res;
-        this.cdr.markForCheck();
-      },
-    });
+    let sub1 = this.apiCall
+      .getProductSpecificCategories(this.singleCategory)
+      .subscribe({
+        next: (res) => {
+          this.itemsByCategories = res.data;
+          this.cdr.markForCheck();
+        },
+      });
     this.subscriptions.push(sub1);
   }
 
   //API call for All products
   getProduct() {
-    let sub2 = this.apiCall.getAllProduct().subscribe({
-      next: (res:any) => {
-        console.log(res.data.products, 'all products');
-        
-        this.itemsByCategories = res.data.products;
-
+    let page = {
+      pagination: { page: this.currPage, productsPerPage: this.perPageItems },
+    };
+    let sub2 = this.apiCall.getAllProduct(page).subscribe({
+      next: (res: any) => {
+        this.itemsByCategories = res.data;
         this.cdr.markForCheck();
       },
     });
     this.subscriptions.push(sub2);
   }
 
-  //
+  //get all products currently information
   getCurrencyInfo() {
     let sub3 = this.commonService.currencyChanges.subscribe({
       next: (res) => {
@@ -103,8 +132,25 @@ export class ShopComponent implements OnInit, OnDestroy {
     this.subscriptions.push(sub3);
   }
 
+  pageChange(currPage: number) {
+    let page = {
+      pagination: { page: currPage, productsPerPage: this.perPageItems },
+    };
+    this.apiCall.getAllProduct(page).subscribe({
+      next: (res) => {
+        this.itemsByCategories = res.data;
+        this.cdr.markForCheck();
+      },
+    });
+  }
+
+  itemPerPage(item: any) {
+    console.log(item, 'page per item');
+    this.perPageItems = item;
+  }
+
   //Unsubscribe all subscriptions on Component Destroy
   ngOnDestroy(): void {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
-  }  
+  }
 }

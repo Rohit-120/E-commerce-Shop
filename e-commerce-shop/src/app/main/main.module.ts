@@ -14,6 +14,8 @@ import { NgxUsefulSwiperModule } from 'ngx-useful-swiper';
 import { DragScrollModule } from 'ngx-drag-scroll';
 import { ShopDetailComponent } from './shop-detail/shop-detail.component';
 import { VendorComponent } from '../vendor/vendor.component';
+import { FeaturedProductComponent } from 'src/main/components/featured-product/featured-product.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 
 @NgModule({
@@ -26,6 +28,7 @@ import { VendorComponent } from '../vendor/vendor.component';
     CategoriesComponent,
     VendorComponent,
     ShopDetailComponent,
+    FeaturedProductComponent
     
   ],
   imports: [
@@ -35,7 +38,8 @@ import { VendorComponent } from '../vendor/vendor.component';
     ReactiveFormsModule,
     NgxUsefulSwiperModule,
     DragScrollModule,
-    MainRoutingModule
+    MainRoutingModule,
+    NgxPaginationModule
   ]
 })
 export class MainModule { }

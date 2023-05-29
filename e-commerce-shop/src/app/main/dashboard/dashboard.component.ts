@@ -37,8 +37,7 @@ export class DashboardComponent implements OnInit {
     },
   ];
   carouselTabToggle: any = 0;
-  featuredProduct : any[] = [];
-
+  offerProduct: any[] = [];
 
   constructor(
     private apiCall: ApiService,
@@ -49,7 +48,6 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.heroPosterDetails();
-    this.featuredProducts();
     this.bulletButtonClick(this.carouselTabToggle);
 
   }
@@ -58,21 +56,14 @@ export class DashboardComponent implements OnInit {
   heroPosterDetails() {
     this.apiCall.getHeroPosterDetail().subscribe({
       next: (res: any) => {
-        this.homeCarouselItem = res.data.carousel;
+        this.homeCarouselItem = res.data.carousels;
+        this.offerProduct = res.data.offers
         this.cdr.markForCheck();
       },
     });
   }
 
-  featuredProducts(){
-    this.apiCall.getFeaturedProduct().subscribe({
-      next: (res: any) => {
-        console.log('featured product =====>', res.data.products);
-        this.featuredProduct = res.data.products;
-        this.cdr.markForCheck();
-      }
-    });
-  }
+  
 
   /**
    * @param index index of clicked list of bullet button of hero carousel..
