@@ -26,7 +26,7 @@ export class CategoriesComponent implements OnInit {
   }
 
   productCategory() {
-    this.apiCall.getProductCategories().subscribe({
+    this.apiCall.getTotalCategories().subscribe({
       next: (res: any) => {
         this.categories = res.data;
         this.cdr.markForCheck();

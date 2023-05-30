@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Form, FormBuilder, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
+import { ApiService } from 'src/app/shared/services/api.service';
 
 @Component({
   selector: 'app-footer',
@@ -7,9 +9,28 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FooterComponent implements OnInit {
 
-  constructor() { }
+  emailSignUp: FormGroup = this.fb.group({
+   email : ['', Validators.required]
+  })
+
+  constructor(
+    private fb : FormBuilder,
+    private apiCall : ApiService
+  ) { }
 
   ngOnInit(): void {
+  }
+
+  onSignUp(){
+      if (this.emailSignUp.valid){
+        console.log(this.emailSignUp.value, 'email already ');
+        this.apiCall.emailSignUp({userEmail : this.emailSignUp.value}).subscribe({
+          next : (res : any) => {
+            console.log(res, 'emailResponse');
+            
+          }
+        })
+      }
   }
 
 }

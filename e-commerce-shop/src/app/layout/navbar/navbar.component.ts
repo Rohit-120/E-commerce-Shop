@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChildren,
 import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { CommonService } from 'src/app/shared/services/common.service';
-import { StorageService } from 'src/app/shared/services/storage.service';
 
 @Component({
   selector: 'app-navbar',
@@ -72,7 +71,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
    * Function to get product category
    */
   getProductCategories(){
-    let sub1 = this.apiCall.getProductCategories().subscribe({
+    let sub1 = this.apiCall.getTotalCategories().subscribe({
       next : (res:any) => {
         this.navCategories = res.data; 
         this.cdr.markForCheck();

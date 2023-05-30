@@ -62,23 +62,26 @@ export class ApiService {
     return this.http.getRequest(url);
   }
 
-  getProductCategories(): Observable<any> {
+  getTotalCategories(): Observable<any> {
     let url = 'http://192.168.1.178:1108/products/categories';
     return this.http.getRequest(url);
   }
 
-  getProductSpecificCategories(category : any, body : any): Observable<any> {
+  getProductsByCategories(category : any): Observable<any> {
     let url = `http://192.168.1.178:1108/products/categories/${category}`;
-    return this.http.postRequest(url, body);
+    return this.http.getRequest(url);
   }
 
   getFeaturedProduct(): Observable<any> {
     let url = 'http://192.168.1.178:1108/products?isFeatured=true';
     return this.http.postRequest(url, {isFeatured: true});
   }
-  
-  getProductPerPage(body : any): Observable<any> {
-    let url = `http://192.168.1.178:1108/products`;
+
+  //Footer email Signup api
+
+  emailSignUp(body : any): Observable<any> {
+    let url = 'http://192.168.1.178:1108/signup';
     return this.http.postRequest(url, body);
   }
+
 }

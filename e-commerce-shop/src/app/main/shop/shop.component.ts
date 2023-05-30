@@ -24,15 +24,22 @@ export class ShopComponent implements OnInit, OnDestroy {
   singleCategory: any = '';
   currencyInfo: any;
   subscriptions: Subscription[] = [];
+  totalProducts!: number;
+  sortingDropdown: any = [
+    { label: 'rating(Low to High)', name: 'rating', order: 'asc' },
+    { label: 'rating(High to Low)', name: 'rating', order: 'desc' },
+    { label: 'price(Low to High)', name: 'price', order: 'asc' },
+    { label: 'price(High to Low)', name: 'price', order: 'desc' },
+  ];
+  currentSortItem: any;
+  currentSortLabel: string = 'Sort By';
   currPage: any = 1;
-  perPageItems: number = 8;
-  pageBody = {
-    pagination: { page: this.currPage, productsPerPage: this.perPageItems },
-  };
+  perPageItems: number = 5;
 
   body: any = {
+    filterByCategory: '',
     // // ---------------filter-----------
-    // filterByprice: [
+    // filterByPrice: [
     //   {
     //     min: 0,
     //     max: 100,
@@ -47,13 +54,13 @@ export class ShopComponent implements OnInit, OnDestroy {
     // isFeatured: true,
     // isMarkedFavorite: true,
     // // ----------------sort-------------
-    // sortBy: {
-    //   field: 'Rating',
-    //   order: 'asc/desc',
-    // },
+    sortBy: {
+      field: '', // fieldName
+      order: '', // asc or desc
+    },
     // // ------------- skip,limit---------
-    // page: 1,
-    // limit: 5,
+
+    pagination: { page: this.currPage, productsPerPage: this.perPageItems },
   };
 
   constructor(
@@ -66,14 +73,14 @@ export class ShopComponent implements OnInit, OnDestroy {
   isCategoryShow: boolean = false;
   ngOnInit(): void {
     this.activateRouter.params.subscribe((params) => {
-      this.singleCategory = params['category'];
+      this.body.filterByCategory = params['category'];
 
       this.cdr.markForCheck();
 
-      if (this.singleCategory) {
+      if (this.body.filterByCategory) {
         console.log('categories');
         this.isCategoryShow = true;
-        this.getCategories();
+        this.getCategoriesWiseProduct();
       } else {
         console.log('all product');
         this.getProduct();
@@ -100,31 +107,38 @@ export class ShopComponent implements OnInit, OnDestroy {
   }
 
   //API call for particular categories products if category available on activeRoute.
-  getCategories() {
-    let sub1 = this.apiCall
-      .getProductSpecificCategories(this.singleCategory, this.pageBody)
-      .subscribe({
-        next: (res) => {
-          this.itemsByCategories = res.data;
-          console.log('CATEGORY PRODUCTS =====>', res.data);
-
-          this.cdr.markForCheck();
-        },
-      });
+  getCategoriesWiseProduct() {
+    console.log('getCategoriesWiseProduct');
+    
+    let sub1 = this.apiCall.getAllProduct(this.body).subscribe({
+      next: (res) => {
+        this.itemsByCategories = res.data;
+        this.totalProducts = this.itemsByCategories.length;
+        
+        console.log('CATEGORY PRODUCTS =====>', res.data);
+        console.log(this.itemsByCategories.length, 'ppppppppppppppppppppppppppppp');
+        
+        this.cdr.markForCheck();
+      },
+    });
     this.subscriptions.push(sub1);
   }
 
   //API call for All products
   getProduct() {
-    let sub2 = this.apiCall.getAllProduct(this.pageBody).subscribe({
-      next: (res: any) => {
-        this.itemsByCategories = res.data;
-        console.log('GET PRODUCTS =====>', res.data);
-
-        this.cdr.markForCheck();
-      },
-    });
-    this.subscriptions.push(sub2);
+    if (this.isCategoryShow) {
+      this.getCategoriesWiseProduct();
+    } else {
+      let sub2 = this.apiCall.getAllProduct(this.body).subscribe({
+        next: (res: any) => {
+          this.totalProducts = res.totalProducts;
+          this.itemsByCategories = res.data;
+          console.log('GET PRODUCTS =====>', res.data);
+          this.cdr.markForCheck();
+        },
+      });
+      this.subscriptions.push(sub2);
+    }
   }
 
   getCurrencyInfo() {
@@ -139,15 +153,16 @@ export class ShopComponent implements OnInit, OnDestroy {
 
   pageChange(currPage: number) {
     if (this.isCategoryShow) {
-      this.getCategories();
+      this.getCategoriesWiseProduct();
     } else {
-      this.pageBody.pagination.page = currPage;
-      this.pageBody.pagination.productsPerPage = this.perPageItems;
-      this.apiCall.getAllProduct(this.pageBody).subscribe({
+      this.body.pagination.page = currPage;
+      this.body.pagination.productsPerPage = this.perPageItems;
+
+      this.apiCall.getAllProduct(this.body).subscribe({
         next: (res) => {
+          this.totalProducts = res.totalProducts;
           this.itemsByCategories = res.data;
           console.log('PAGE CHANGE =====>', res.data);
-
           this.cdr.markForCheck();
         },
       });
@@ -156,7 +171,24 @@ export class ShopComponent implements OnInit, OnDestroy {
 
   itemPerPage(item: any) {
     console.log(item, 'page per item');
-    this.perPageItems = item;
+    if (this.body.pagination.productsPerPage != item) {
+      this.body.pagination.productsPerPage = item;
+      this.perPageItems = item;
+      this.getProduct();
+      this.cdr.markForCheck();
+    }
+  }
+
+  sorting(item: any) {
+    this.currentSortLabel = item.label;
+    this.body.sortBy.field = item.name;
+    this.body.sortBy.order = item.order;
+
+    if (this.isCategoryShow) {
+      this.getCategoriesWiseProduct();
+    } else {
+      this.getProduct();
+    }
   }
 
   //Unsubscribe all subscriptions on Component Destroy
