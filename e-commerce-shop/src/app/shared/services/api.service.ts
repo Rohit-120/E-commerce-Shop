@@ -45,7 +45,9 @@ export class ApiService {
 
   // Node API calls
 
-  getAllProduct(body?:any): Observable<any> {    
+  getAllProduct(body?:any): Observable<any> {   
+    console.log(body);
+     
     let url = `http://192.168.1.178:1108/products`;
     return this.http.postRequest(url, body);
   }
@@ -65,9 +67,9 @@ export class ApiService {
     return this.http.getRequest(url);
   }
 
-  getProductSpecificCategories(category : any): Observable<any> {
+  getProductSpecificCategories(category : any, body : any): Observable<any> {
     let url = `http://192.168.1.178:1108/products/categories/${category}`;
-    return this.http.getRequest(url);
+    return this.http.postRequest(url, body);
   }
 
   getFeaturedProduct(): Observable<any> {

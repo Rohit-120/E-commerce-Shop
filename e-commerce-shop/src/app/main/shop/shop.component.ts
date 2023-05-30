@@ -24,8 +24,11 @@ export class ShopComponent implements OnInit, OnDestroy {
   singleCategory: any = '';
   currencyInfo: any;
   subscriptions: Subscription[] = [];
-  currPage: string | number | undefined;
-  perPageItems!: number;
+  currPage: any = 1;
+  perPageItems: number = 8;
+  pageBody = {
+    pagination: { page: this.currPage, productsPerPage: this.perPageItems },
+  };
 
   body: any = {
     // // ---------------filter-----------
@@ -60,7 +63,7 @@ export class ShopComponent implements OnInit, OnDestroy {
     private activateRouter: ActivatedRoute,
     public commonService: CommonService
   ) {}
-
+  isCategoryShow: boolean = false;
   ngOnInit(): void {
     this.activateRouter.params.subscribe((params) => {
       this.singleCategory = params['category'];
@@ -68,13 +71,15 @@ export class ShopComponent implements OnInit, OnDestroy {
       this.cdr.markForCheck();
 
       if (this.singleCategory) {
-        this.getCategories();
         console.log('categories');
+        this.isCategoryShow = true;
+        this.getCategories();
       } else {
-        this.getProduct();
         console.log('all product');
+        this.getProduct();
       }
       this.getCurrencyInfo();
+      // this.pageChange(this.currPage)
     });
 
     // Breadcrumb Setup
@@ -94,13 +99,15 @@ export class ShopComponent implements OnInit, OnDestroy {
     ]);
   }
 
-  //API call for particular categories products.
+  //API call for particular categories products if category available on activeRoute.
   getCategories() {
     let sub1 = this.apiCall
-      .getProductSpecificCategories(this.singleCategory)
+      .getProductSpecificCategories(this.singleCategory, this.pageBody)
       .subscribe({
         next: (res) => {
           this.itemsByCategories = res.data;
+          console.log('CATEGORY PRODUCTS =====>', res.data);
+
           this.cdr.markForCheck();
         },
       });
@@ -109,19 +116,18 @@ export class ShopComponent implements OnInit, OnDestroy {
 
   //API call for All products
   getProduct() {
-    let page = {
-      pagination: { page: this.currPage, productsPerPage: this.perPageItems },
-    };
-    let sub2 = this.apiCall.getAllProduct(page).subscribe({
+    let sub2 = this.apiCall.getAllProduct(this.pageBody).subscribe({
       next: (res: any) => {
         this.itemsByCategories = res.data;
+        console.log('GET PRODUCTS =====>', res.data);
+
         this.cdr.markForCheck();
       },
     });
     this.subscriptions.push(sub2);
   }
 
-  //get all products currently information
+  //get all products currency information
   getCurrencyInfo() {
     let sub3 = this.commonService.currencyChanges.subscribe({
       next: (res) => {
@@ -133,15 +139,20 @@ export class ShopComponent implements OnInit, OnDestroy {
   }
 
   pageChange(currPage: number) {
-    let page = {
-      pagination: { page: currPage, productsPerPage: this.perPageItems },
-    };
-    this.apiCall.getAllProduct(page).subscribe({
-      next: (res) => {
-        this.itemsByCategories = res.data;
-        this.cdr.markForCheck();
-      },
-    });
+    if (this.isCategoryShow) {
+      this.getCategories();
+    } else {
+      this.pageBody.pagination.page = currPage;
+      this.pageBody.pagination.productsPerPage = this.perPageItems;
+      this.apiCall.getAllProduct(this.pageBody).subscribe({
+        next: (res) => {
+          this.itemsByCategories = res.data;
+          console.log('PAGE CHANGE =====>', res.data);
+
+          this.cdr.markForCheck();
+        },
+      });
+    }
   }
 
   itemPerPage(item: any) {
