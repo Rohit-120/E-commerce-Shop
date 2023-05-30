@@ -127,7 +127,6 @@ export class ShopComponent implements OnInit, OnDestroy {
     this.subscriptions.push(sub2);
   }
 
-  //get all products currency information
   getCurrencyInfo() {
     let sub3 = this.commonService.currencyChanges.subscribe({
       next: (res) => {
