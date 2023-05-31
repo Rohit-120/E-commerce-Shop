@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Form, FormBuilder, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import { ApiService } from 'src/app/shared/services/api.service';
 
 @Component({
@@ -15,7 +16,8 @@ export class FooterComponent implements OnInit {
 
   constructor(
     private fb : FormBuilder,
-    private apiCall : ApiService
+    private apiCall : ApiService,
+    private toastService : ToastrService
   ) { }
 
   ngOnInit(): void {
@@ -24,12 +26,11 @@ export class FooterComponent implements OnInit {
   onSignUp(){
       if (this.emailSignUp.valid){
         console.log('email =====> ', this.emailSignUp.controls['email'].value);
-        // this.apiCall.emailSignUp({userEmail : this.emailSignUp.controls['email'].value}).subscribe({
-        //   next : (res : any) => {
-        //     console.log(res, 'emailResponse');
-            
-        //   }
-        // })
+        this.apiCall.emailSignUp({userEmail : this.emailSignUp.controls['email'].value}).subscribe({
+          next : (res : any) => {
+            this.toastService.success('Your email is '+ res.message)
+          }
+        })
       }
   }
 

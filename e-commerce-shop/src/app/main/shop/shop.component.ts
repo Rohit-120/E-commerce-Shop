@@ -8,6 +8,9 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import PRODUCT_ACTION_ICONS from 'src/app/shared/constant';
+import { BODY_FILTER } from 'src/app/shared/modals/interfaces';
+// import { BODY_FILTER } from 'src/app/shared/modals/interfaces';
+import { FilterPipe } from 'src/app/shared/pipes/filter.pipe';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { BreadcrumbService } from 'src/app/shared/services/breadcrumb.service';
 import { CommonService } from 'src/app/shared/services/common.service';
@@ -36,31 +39,26 @@ export class ShopComponent implements OnInit, OnDestroy {
   currPage: any = 1;
   perPageItems: number = 5;
 
-  body: any = {
-    filterByCategory: '',
-    // // ---------------filter-----------
-    // filterByPrice: [
-    //   {
-    //     min: 0,
-    //     max: 100,
-    //   },
-    //   {
-    //     min: 100,
-    //     max: 200,
-    //   },
-    // ],
-    // filterByColor: ['Black', 'Red'],
-    // FilterBySize: ['S', 'M', 'XXL'],
-    // isFeatured: true,
-    // isMarkedFavorite: true,
-    // // ----------------sort-------------
-    sortBy: {
-      field: '', // fieldName
-      order: '', // asc or desc
-    },
-    // // ------------- skip,limit---------
+  filterProducts: any = {};
 
-    pagination: { page: this.currPage, productsPerPage: this.perPageItems },
+  body: BODY_FILTER = {
+    filter : {
+
+      // // ---------------filter-----------
+      // filterByPrice:[],
+      // filterByColor: ['Black', 'Red'],
+      // FilterBySize: ['S', 'M', 'XXL'],
+      // isFeatured: true,
+      // isMarkedFavorite: true,
+      // // ----------------sort-------------
+    },
+      sort: {
+        field: '', // fieldName
+        order: '', // asc or desc
+      },
+      // // ------------- skip,limit---------
+      
+      pagination: { page: this.currPage, productsPerPage: this.perPageItems },
   };
 
   constructor(
@@ -73,20 +71,18 @@ export class ShopComponent implements OnInit, OnDestroy {
   isCategoryShow: boolean = false;
   ngOnInit(): void {
     this.activateRouter.params.subscribe((params) => {
-      this.body.filterByCategory = params['category'];
+      this.body.filter.category = params['category']||'';
 
       this.cdr.markForCheck();
 
-      if (this.body.filterByCategory) {
-        console.log('categories');
+      if ( this.body.filter.category) {
         this.isCategoryShow = true;
         this.getCategoriesWiseProduct();
       } else {
-        console.log('all product');
         this.getProduct();
       }
       this.getCurrencyInfo();
-      // this.pageChange(this.currPage)
+      this.getFilterList();
     });
 
     // Breadcrumb Setup
@@ -108,16 +104,13 @@ export class ShopComponent implements OnInit, OnDestroy {
 
   //API call for particular categories products if category available on activeRoute.
   getCategoriesWiseProduct() {
-    console.log('getCategoriesWiseProduct');
-    
+
     let sub1 = this.apiCall.getAllProduct(this.body).subscribe({
       next: (res) => {
         this.itemsByCategories = res.data;
         this.totalProducts = this.itemsByCategories.length;
-        
-        console.log('CATEGORY PRODUCTS =====>', res.data);
-        console.log(this.itemsByCategories.length, 'ppppppppppppppppppppppppppppp');
-        
+
+
         this.cdr.markForCheck();
       },
     });
@@ -133,7 +126,7 @@ export class ShopComponent implements OnInit, OnDestroy {
         next: (res: any) => {
           this.totalProducts = res.totalProducts;
           this.itemsByCategories = res.data;
-          console.log('GET PRODUCTS =====>', res.data);
+          
           this.cdr.markForCheck();
         },
       });
@@ -162,7 +155,6 @@ export class ShopComponent implements OnInit, OnDestroy {
         next: (res) => {
           this.totalProducts = res.totalProducts;
           this.itemsByCategories = res.data;
-          console.log('PAGE CHANGE =====>', res.data);
           this.cdr.markForCheck();
         },
       });
@@ -170,7 +162,7 @@ export class ShopComponent implements OnInit, OnDestroy {
   }
 
   itemPerPage(item: any) {
-    console.log(item, 'page per item');
+    // console.log(item, 'page per item');
     if (this.body.pagination.productsPerPage != item) {
       this.body.pagination.productsPerPage = item;
       this.perPageItems = item;
@@ -181,14 +173,49 @@ export class ShopComponent implements OnInit, OnDestroy {
 
   sorting(item: any) {
     this.currentSortLabel = item.label;
-    this.body.sortBy.field = item.name;
-    this.body.sortBy.order = item.order;
+    this.body.sort.field = item.name;
+    this.body.sort.order = item.order;
 
     if (this.isCategoryShow) {
       this.getCategoriesWiseProduct();
     } else {
       this.getProduct();
     }
+  }
+
+  getFilterList() {
+    this.apiCall.getProductFilterList().subscribe({
+      next : (res) => {
+        
+        this.filterProducts.filterByPrice =  res.data.priceRanges;
+        this.filterProducts.filterByColor =  res.data.colors;
+        this.filterProducts.filterBySize =  res.data.sizes;
+        this.cdr.markForCheck();
+      }
+    })
+  }
+
+  getFilterData(event:any,item : any, filterType : string){
+  
+    let priceRange :any = {
+      
+    };
+    priceRange['min']= item.min;
+    priceRange['max'] = item.max;
+    if(event.target.checked){
+      if(!("price" in this.body.filter) ){
+        this.body.filter.price=[]
+      }
+      this.body.filter?.price?.push(priceRange)
+      console.log("1111111111111111111111111111111111", this.body)
+    }else{
+      console.log(this.body.filter?.price?.indexOf(item), 'ininininininininin');
+      
+      let i = this.body.filter?.price?.indexOf(item);
+      
+      console.log("2222222222222222222222222222222222", this.body)
+    }
+    
   }
 
   //Unsubscribe all subscriptions on Component Destroy

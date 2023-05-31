@@ -77,6 +77,11 @@ export class ApiService {
     return this.http.postRequest(url, {isFeatured: true});
   }
 
+  getProductFilterList(): Observable<any> {
+    let url = 'http://192.168.1.178:1108/products/filters';
+    return this.http.getRequest(url);
+  }
+
   //Footer email Signup api
 
   emailSignUp(body : any): Observable<any> {
