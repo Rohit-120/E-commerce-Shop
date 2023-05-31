@@ -23,13 +23,13 @@ export class FooterComponent implements OnInit {
 
   onSignUp(){
       if (this.emailSignUp.valid){
-        console.log(this.emailSignUp.value, 'email already ');
-        this.apiCall.emailSignUp({userEmail : this.emailSignUp.value}).subscribe({
-          next : (res : any) => {
-            console.log(res, 'emailResponse');
+        console.log('email =====> ', this.emailSignUp.controls['email'].value);
+        // this.apiCall.emailSignUp({userEmail : this.emailSignUp.controls['email'].value}).subscribe({
+        //   next : (res : any) => {
+        //     console.log(res, 'emailResponse');
             
-          }
-        })
+        //   }
+        // })
       }
   }
 
