@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+} from '@angular/core';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { BreadcrumbService } from 'src/app/shared/services/breadcrumb.service';
 import { CommonService } from 'src/app/shared/services/common.service';
@@ -6,80 +11,64 @@ import { CommonService } from 'src/app/shared/services/common.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardComponent implements OnInit {
-
   // Object for Home carousel Section
-  homeCarouselItem = [
+  homeCarouselItem: any = [];
+  featureProd:boolean=true;
+  features = [
     {
-      title : 'Men Fashion',
-      description : 'Lorem rebum magna amet lorem magna erat diam stet. Sadips duo stet amet amet ndiam elitr ipsum diam',
-      button : 'Shop Now',
-      image : '/assets/img/carousel-1.jpg'
+      feature: 'Quality Product',
+      icon: 'fa fa-check',
     },
     {
-      title : 'Women Fashion',
-      description : 'Lorem rebum magna amet lorem magna erat diam stet. Sadips duo stet amet amet ndiam elitr ipsum diam',
-      button : 'Shop Now',
-      image : '/assets/img/carousel-2.jpg'
+      feature: 'Free Shipping',
+      icon: 'fa fa-shipping-fast',
     },
     {
-      title : 'Kids Fashion',
-      description : 'Lorem rebum magna amet lorem magna erat diam stet. Sadips duo stet amet amet ndiam elitr ipsum diam',
-      button : 'Shop Now',
-      image : '/assets/img/carousel-3.jpg'
+      feature: '14-Day Return',
+      icon: 'fas fa-exchange-alt',
+    },
+    {
+      feature: '24/7 Support',
+      icon: 'fa fa-phone-volume',
     },
   ];
-
-  features = [
-  {
-    feature : 'Quality Product',
-    icon : 'fa fa-check'
-  },
-  {
-    feature : 'Free Shipping',
-    icon : 'fa fa-shipping-fast'
-  },
-  {
-    feature : '14-Day Return',
-    icon : 'fas fa-exchange-alt'
-  },
-  {
-    feature : '24/7 Support',
-    icon : 'fa fa-phone-volume'
-  },
-
-]
-
-carouselTabToggle:any = 0;
+  carouselTabToggle: any = 0;
+  offerProduct: any[] = [];
 
   constructor(
-    private breadcrumbService: BreadcrumbService,
-    private apiCall : ApiService,
-    private commonService: CommonService
-    ) { }
+    private apiCall: ApiService,
+    private commonService: CommonService,
+    private cdr: ChangeDetectorRef
+  ) {}
+
 
   ngOnInit(): void {
-     this.bulletButtonClick(this.carouselTabToggle)
+    this.heroPosterDetails();
+    this.bulletButtonClick(this.carouselTabToggle);
 
-     this.apiCall.testApi().subscribe({
-      next : (res) => {
-        console.log(res);
-        
-      }
-     })
   }
+
+  // Api call for hero 
+  heroPosterDetails() {
+    this.apiCall.getHeroPosterDetail().subscribe({
+      next: (res: any) => {
+        this.homeCarouselItem = res.data.carousels;
+        this.offerProduct = res.data.offers
+        this.cdr.markForCheck();
+      },
+    });
+  }
+
+  
 
   /**
-   * @param index index of clicked list of bullet button of hero carousel.. 
+   * @param index index of clicked list of bullet button of hero carousel..
    */
-  bulletButtonClick(index:number){
-    console.log(index);
+  bulletButtonClick(index: number) {
     this.carouselTabToggle = index;
-    setTimeout(() => this.bulletButtonClick, 2000)
   }
-
-
-
 }

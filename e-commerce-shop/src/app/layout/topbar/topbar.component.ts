@@ -1,5 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ApiService } from 'src/app/shared/services/api.service';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { CurrencyChangeService } from 'src/app/shared/services/currency-change.service';
 
@@ -7,7 +13,7 @@ import { CurrencyChangeService } from 'src/app/shared/services/currency-change.s
   selector: 'app-topbar',
   templateUrl: './topbar.component.html',
   styleUrls: ['./topbar.component.scss'],
-  changeDetection : ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TopbarComponent implements OnInit {
   topbarNavItems: any = [
@@ -38,7 +44,7 @@ export class TopbarComponent implements OnInit {
   // object to select currency and Language
 
   currencyChange: string = 'USD';
-  languageLabel! : string ;
+  languageLabel!: string;
 
   currencies: any = [
     { name: 'USD', currencyPrice: 1 },
@@ -51,26 +57,27 @@ export class TopbarComponent implements OnInit {
   ];
 
   languages: any = [
-    { label: 'EN', code : 'en' },
-    { label: 'FR', code : 'fr' },
-    { label: 'AR', code : 'ar' },
-    { label: 'RU', code : 'ru' },
+    { label: 'EN', code: 'en' },
+    { label: 'FR', code: 'fr' },
+    { label: 'AR', code: 'ar' },
+    { label: 'RU', code: 'ru' },
   ];
 
   searchData: string = '';
 
   constructor(
     private commonService: CommonService,
-    private cdr : ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router,
+    private apiCall: ApiService
   ) {}
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {}
 
   productSearchClick() {
-    this.commonService.dataToSearch.next(this.searchData);
-    // this.router.navigate([`shop/${this.searchData}`]);
+    this.commonService.dataFromSearchInput.next(this.searchData);
+
+    this.router.navigate([`shop/${this.searchData}`]);
   }
 
   onCurrencyChange(item: any) {
@@ -83,15 +90,14 @@ export class TopbarComponent implements OnInit {
     });
   }
 
-  onLanguageChange(language : any) {
-      this.languageLabel = language.label;
-      let lanCode = language.code;
+  onLanguageChange(language: any) {
+    this.languageLabel = language.label;
+    let lanCode = language.code;
 
-      console.log(language.code);
+    console.log(language.code);
 
-      document.cookie = 'googtrans=' + `/en/${lanCode}`
-      // this.cdr.markForCheck()
-      location.reload();
+    document.cookie = 'googtrans=' + `/en/${lanCode}`;
+    // this.cdr.markForCheck()
+    location.reload();
   }
-
 }

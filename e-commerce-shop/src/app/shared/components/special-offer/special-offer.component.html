@@ -1,10 +1,10 @@
 
 
-<div *ngFor="let item of specialOfferItem  " class="product-offer mb-30" style="height: 200px;">
-    <img class="img-fluid" src="{{item.image}}" alt="">
+<div *ngFor="let item of offerProduct " class="product-offer mb-30" style="height: 200px;">
+    <img class="img-fluid" src="{{item.image | image}}" alt="">
     <div class="offer-text">
-        <h6 class="text-white text-uppercase">{{item.discount}}</h6>
-        <h3 class="text-white mb-3">{{item.title}}</h3>
-        <a [routerLink]="['/shop']" class="btn btn-primary">{{item.button}}</a>
+        <h6 class="text-white text-uppercase">{{item.offerTitle}}</h6>
+        <h3 class="text-white mb-3">{{item.offerType}}</h3>
+        <a [routerLink]="['/shop']" class="btn btn-primary">{{item.btnName}}</a>
     </div>
 </div>

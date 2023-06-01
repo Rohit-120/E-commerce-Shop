@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-special-offer',
@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./special-offer.component.scss']
 })
 export class SpecialOfferComponent implements OnInit {
+
+  @Input() offerProduct : any;
 
   // Object for Home Offer Section
   specialOfferItem = [
@@ -26,6 +28,7 @@ export class SpecialOfferComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+      
   }
 
 }

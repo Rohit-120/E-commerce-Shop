@@ -123,9 +123,7 @@ export class ShopDetailComponent implements OnInit, OnDestroy {
   }
 
   navbarClick(index:number){
-    console.log(index);
     this.navbarToggle = index;
-    setTimeout(() => this.navbarClick, 2000)
   }
 
   ngOnDestroy(): void {

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { CommonService } from '../../services/common.service';
 import { Subscription } from 'rxjs';
@@ -7,11 +7,11 @@ import { Subscription } from 'rxjs';
   selector: 'app-favorite',
   templateUrl: './favorite.component.html',
   styleUrls: ['./favorite.component.scss'],
+  changeDetection : ChangeDetectionStrategy.OnPush
 })
 export class FavoriteComponent implements OnInit, OnDestroy {
-  allLocalStoreItems: any[] = [];
   favoriteItems: any[] = [];
-  currencyInfo:any;
+  currencyInfo: any;
   subscriptions: Subscription[] = [];
 
   constructor(
@@ -21,29 +21,19 @@ export class FavoriteComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    let favItem: any = localStorage.getItem('favorite');
-    if (favItem) {
-      this.favoriteItems = JSON.parse(favItem);
-    }
-    let sub1 = this.commonService.favorite.subscribe({
-      next: (res: any) => {
-        if (res) {
-          this.favoriteItems = res.filter((item: any) => {
-            return item.isFavorite == true;
-          });
-          this.commonService.FavoriteItemLength.next(this.favoriteItems)
-        }
-      },
-      error: (err) => {
-        console.log(err);
-      },
-    });
-    this.subscriptions.push(sub1);
-    
-    localStorage.setItem('favorite', JSON.stringify(this.favoriteItems));
 
-    // this.getFavoriteItems();
+    this.getFavoriteItems();
     this.getCurrencyInfo();
+  
+  }
+
+  getFavoriteItems(){
+    this.apiCall.getAllProduct({filter: {isMarkedFavorite:true}}).subscribe({
+      next : (res: any) => {
+       this.favoriteItems =  res.data.products
+        this.cdr.markForCheck();
+      }
+    })
   }
 
   getCurrencyInfo() {
@@ -57,7 +47,7 @@ export class FavoriteComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => sub.unsubscribe());
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 
   /**
@@ -77,4 +67,3 @@ export class FavoriteComponent implements OnInit, OnDestroy {
   //   // console.log(this.favoriteItems.splice(removeItem, 1))
   // }
 }
-  

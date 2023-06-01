@@ -16,7 +16,7 @@ export class CommonService {
   currencyChanges  = new BehaviorSubject<any>({currencyName : 'USD', currencyPrice : 1});
 
   //user search input fields of products.
-  dataToSearch = new BehaviorSubject<any>('')
+  dataFromSearchInput = new BehaviorSubject<any>('')
 
   constructor(
     private apiService: ApiService,

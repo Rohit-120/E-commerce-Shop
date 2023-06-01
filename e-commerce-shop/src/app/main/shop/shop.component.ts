@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -8,10 +9,12 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import PRODUCT_ACTION_ICONS from 'src/app/shared/constant';
+import { BODY_FILTER } from 'src/app/shared/modals/interfaces';
+// import { BODY_FILTER } from 'src/app/shared/modals/interfaces';
+import { FilterPipe } from 'src/app/shared/pipes/filter.pipe';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { BreadcrumbService } from 'src/app/shared/services/breadcrumb.service';
 import { CommonService } from 'src/app/shared/services/common.service';
-import { CurrencyChangeService } from 'src/app/shared/services/currency-change.service';
 
 @Component({
   selector: 'app-shop',
@@ -25,6 +28,38 @@ export class ShopComponent implements OnInit, OnDestroy {
   singleCategory: any = '';
   currencyInfo: any;
   subscriptions: Subscription[] = [];
+  totalProducts!: number;
+  sortingDropdown: any = [
+    { label: 'rating(Low to High)', name: 'rating', order: 'asc' },
+    { label: 'rating(High to Low)', name: 'rating', order: 'desc' },
+    { label: 'price(Low to High)', name: 'price', order: 'asc' },
+    { label: 'price(High to Low)', name: 'price', order: 'desc' },
+  ];
+  currentSortItem: any;
+  currentSortLabel: string = 'Sort By';
+  currPage: any = 1;
+  perPageItems: number = 5;
+
+  filterProducts: any = {};
+
+  body: BODY_FILTER = {
+    filter: {
+      // // ---------------filter-----------
+      // filterByPrice:[],
+      // filterByColor: ['Black', 'Red'],
+      // FilterBySize: ['S', 'M',  'XXL'],
+      // isFeatured: true,
+      // isMarkedFavorite: true,
+      // // ----------------sort-------------
+    },
+    // sort: {
+    //   field: '', // fieldName
+    //   order: '', // asc or desc
+    // },
+    // // ------------- skip,limit---------
+
+    pagination: { page: this.currPage, productsPerPage: this.perPageItems },
+  };
 
   constructor(
     private breadcrumbService: BreadcrumbService,
@@ -33,22 +68,27 @@ export class ShopComponent implements OnInit, OnDestroy {
     private activateRouter: ActivatedRoute,
     public commonService: CommonService
   ) {}
-
-
-
+  isCategoryShow: boolean = false;
   ngOnInit(): void {
     this.activateRouter.params.subscribe((params) => {
-      this.singleCategory = params['category'];
+      if (params['category']) {
+        this.body.filter.category = params['category'];
+      } else {
+        delete this.body.filter.category;
+      }
 
       this.cdr.markForCheck();
 
-      if (this.singleCategory) {
-        this.getCategories();
-        this.getCurrencyInfo();
-      } else {
+      if (this.body.filter.category) {
+        this.isCategoryShow = true;
+        this.getCategoriesWiseProduct();
+      } else if (params['userInput']) {
+        this.getDataOfSearchBar();
+      } else {  
         this.getProduct();
-        this.getCurrencyInfo();
       }
+      this.getCurrencyInfo();
+      this.getFilterList();
     });
 
     // Breadcrumb Setup
@@ -68,26 +108,49 @@ export class ShopComponent implements OnInit, OnDestroy {
     ]);
   }
 
-  //API call for product by categories.
-  getCategories() {
-    let sub1 = this.apiCall.ProductByCategories(this.singleCategory).subscribe({
+  //API call for All products
+  getProduct() {
+    if (this.isCategoryShow) {
+      this.getCategoriesWiseProduct();
+    } else {
+      console.log(this.body, 'ssssssssssssssssss');
+      
+      let sub2 = this.apiCall.getAllProduct(this.body).subscribe({
+        next: (res: any) => {
+          this.totalProducts = res.totalProducts;
+          console.log(res.data.products, ' AAAAAAAAAAAAAAAA');
+
+          this.itemsByCategories = res.data.products;
+          this.cdr.markForCheck();
+        },
+      });
+      this.subscriptions.push(sub2);
+    }
+  }
+
+  getDataOfSearchBar() {
+    this.commonService.dataFromSearchInput.subscribe({
+      next: (res: any) => {
+        this.body.filter = {
+          search: res,
+        };
+        this.cdr.markForCheck();
+        this.getProduct();
+      },
+    });
+  }
+
+  //API call for particular categories products if category available on activeRoute.
+  getCategoriesWiseProduct() {
+    let sub1 = this.apiCall.getAllProduct(this.body).subscribe({
       next: (res) => {
-        this.itemsByCategories = res;
+        this.itemsByCategories = res.data.products;
+        this.totalProducts = this.itemsByCategories.length;
+
         this.cdr.markForCheck();
       },
     });
     this.subscriptions.push(sub1);
-  }
-
-  getProduct() {
-    //API call for All product features
-    let sub2 = this.apiCall.getAllProduct().subscribe({
-      next: (res) => {
-        this.itemsByCategories = res;
-        this.cdr.markForCheck();
-      },
-    });
-    this.subscriptions.push(sub2);
   }
 
   getCurrencyInfo() {
@@ -100,8 +163,95 @@ export class ShopComponent implements OnInit, OnDestroy {
     this.subscriptions.push(sub3);
   }
 
-  //Unsubscribe all subscriptions in Destroy
+  pageChange(currPage: number) {
+    if (this.isCategoryShow) {
+      this.getCategoriesWiseProduct();
+    } else {
+      this.body.pagination.page = currPage;
+      this.body.pagination.productsPerPage = this.perPageItems;
+
+      this.apiCall.getAllProduct(this.body).subscribe({
+        next: (res) => {
+          this.totalProducts = res.totalProducts;
+          this.itemsByCategories = res.data.products;
+          this.cdr.markForCheck();
+        },
+      });
+    }
+  }
+
+  itemPerPage(item: any) {
+    // console.log(item, 'page per item');
+    if (this.body.pagination.productsPerPage != item) {
+      this.body.pagination.productsPerPage = item;
+      this.perPageItems = item;
+      this.getProduct();
+      this.cdr.markForCheck();
+    }
+  }
+
+  sorting(item: any) {
+    this.currentSortLabel = item.label;
+    console.log(item, 'sorting');
+
+    this.body.sort = {
+      field: item.name,
+      order: item.order,
+    };
+
+    // this.body.sort.field = item.name;
+    // this.body.sort.order = item.order;
+
+    if (this.isCategoryShow) {
+      this.getCategoriesWiseProduct();
+    } else {
+      console.log(this.body, 'ON sorting');
+      this.getProduct();
+    }
+  }
+
+  getFilterList() {
+    this.apiCall.getProductFilterList().subscribe({
+      next: (res) => {
+        this.filterProducts.filterByPrice = res.data.priceRanges;
+        this.filterProducts.filterByColor = res.data.colors;
+        this.filterProducts.filterBySize = res.data.sizes;
+        this.cdr.markForCheck();
+      },
+    });
+  }
+
+  getFilterData(event: any, item: any, filterType: any) {
+    if (filterType === 'color') {
+      console.log(item, 'color filter');
+    }
+
+    let field = item;
+    if (field.totalProducts) {
+      delete field.totalProducts;
+    }
+
+    if (event.target.checked) {
+      if (!(`${filterType}` in this.body.filter)) {
+        this.body.filter[`${filterType}`] = [];
+      }
+
+      this.body.filter[`${filterType}`]?.push(field);
+      console.log('CHECK ======>', this.body);
+      this.getProduct();
+    } else {
+      console.log(this.body.filter[`${filterType}`]?.indexOf(field));
+      let i: any = this.body.filter[`${filterType}`]?.indexOf(field);
+      console.log('indexxxx ======> ', i);
+
+      this.body.filter[`${filterType}`].splice(i, 1);
+      console.log('UNCHECK ======>', this.body);
+      this.getProduct();
+    }
+  }
+
+  //Unsubscribe all subscriptions on Component Destroy
   ngOnDestroy(): void {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
-  }  
+  }
 }

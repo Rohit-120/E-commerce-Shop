@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  Input,
   OnDestroy,
   OnInit,
 } from '@angular/core';
@@ -21,7 +22,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   products!: any[];
   fav: boolean = false;
   favoriteProduct: any[] = [];
-  currencyInfo:any;
+  currencyInfo: any;
   subscriptions: Subscription[] = [];
 
   constructor(
@@ -34,16 +35,15 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getProducts();
-    this.getCurrencyInfo();
 
+    this.getCurrencyInfo();
   }
 
   //API call for All product features
   getProducts() {
     let sub1 = this.apiCall.getAllProduct().subscribe({
       next: (res: any) => {
-        // res['isFavorite'] = false
-        this.products = res;
+        this.products = res.data.products;
         this.cdr.markForCheck();
       },
     });
@@ -64,18 +64,17 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.commonService.favorite.next(this.products);
   }
 
-  getCurrencyInfo(){
+  getCurrencyInfo() {
     let sub2 = this.commonService.currencyChanges.subscribe({
-      next : (res) => {
-          this.currencyInfo = res;
-          this.cdr.markForCheck();        
-      }
+      next: (res) => {
+        this.currencyInfo = res;
+        this.cdr.markForCheck();
+      },
     });
     this.subscriptions.push(sub2);
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => sub.unsubscribe());
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
-
 }

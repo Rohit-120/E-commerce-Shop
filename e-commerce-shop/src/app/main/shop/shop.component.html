@@ -8,35 +8,15 @@
                 <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by price</span></h5>
                 <div class="bg-light p-4 mb-30">
                     <form>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                        <!-- <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                             <input type="checkbox" class="custom-control-input" checked id="price-all">
                             <label class="custom-control-label" for="price-all">All Price</label>
                             <span class="badge border font-weight-normal">1000</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="price-1">
-                            <label class="custom-control-label" for="price-1">$0 - $100</label>
-                            <span class="badge border font-weight-normal">150</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="price-2">
-                            <label class="custom-control-label" for="price-2">$100 - $200</label>
-                            <span class="badge border font-weight-normal">295</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="price-3">
-                            <label class="custom-control-label" for="price-3">$200 - $300</label>
-                            <span class="badge border font-weight-normal">246</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="price-4">
-                            <label class="custom-control-label" for="price-4">$300 - $400</label>
-                            <span class="badge border font-weight-normal">145</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between">
-                            <input type="checkbox" class="custom-control-input" id="price-5">
-                            <label class="custom-control-label" for="price-5">$400 - $500</label>
-                            <span class="badge border font-weight-normal">168</span>
+                        </div> -->
+                        <div *ngFor="let item of filterProducts.filterByPrice; let index = index" class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <input type="checkbox" class="custom-control-input" id="price-{{index + 1}}" (click)="getFilterData($event, item, 'price')" >
+                            <label class="custom-control-label" for="price-{{index + 1}}">{{item.min}}-{{item.max}}</label>
+                            <span class="badge border font-weight-normal">{{item.totalProducts}}</span>
                         </div>
                     </form>
                 </div>
@@ -46,35 +26,15 @@
                 <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by color</span></h5>
                 <div class="bg-light p-4 mb-30">
                     <form>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                        <!-- <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                             <input type="checkbox" class="custom-control-input" checked id="color-all">
-                            <label class="custom-control-label" for="price-all">All Color</label>
+                            <label class="custom-control-label" for="color-all">All Color</label>
                             <span class="badge border font-weight-normal">1000</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="color-1">
-                            <label class="custom-control-label" for="color-1">Black</label>
-                            <span class="badge border font-weight-normal">150</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="color-2">
-                            <label class="custom-control-label" for="color-2">White</label>
-                            <span class="badge border font-weight-normal">295</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="color-3">
-                            <label class="custom-control-label" for="color-3">Red</label>
-                            <span class="badge border font-weight-normal">246</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="color-4">
-                            <label class="custom-control-label" for="color-4">Blue</label>
-                            <span class="badge border font-weight-normal">145</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between">
-                            <input type="checkbox" class="custom-control-input" id="color-5">
-                            <label class="custom-control-label" for="color-5">Green</label>
-                            <span class="badge border font-weight-normal">168</span>
+                        </div> -->
+                        <div *ngFor="let item of filterProducts.filterByColor; let index = index" class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <input type="checkbox" class="custom-control-input" id="color-{{index}}" (click)="getFilterData($event, item.color, 'color')">
+                            <label class="custom-control-label" for="color-{{index}}">{{item.color}}</label>
+                            <span class="badge border font-weight-normal">{{item.totalProducts}}</span>
                         </div>
                     </form>
                 </div>
@@ -84,35 +44,15 @@
                 <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by size</span></h5>
                 <div class="bg-light p-4 mb-30">
                     <form>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                        <!-- <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                             <input type="checkbox" class="custom-control-input" checked id="size-all">
                             <label class="custom-control-label" for="size-all">All Size</label>
                             <span class="badge border font-weight-normal">1000</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="size-1">
-                            <label class="custom-control-label" for="size-1">XS</label>
-                            <span class="badge border font-weight-normal">150</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="size-2">
-                            <label class="custom-control-label" for="size-2">S</label>
-                            <span class="badge border font-weight-normal">295</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="size-3">
-                            <label class="custom-control-label" for="size-3">M</label>
-                            <span class="badge border font-weight-normal">246</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="size-4">
-                            <label class="custom-control-label" for="size-4">L</label>
-                            <span class="badge border font-weight-normal">145</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between">
-                            <input type="checkbox" class="custom-control-input" id="size-5">
-                            <label class="custom-control-label" for="size-5">XL</label>
-                            <span class="badge border font-weight-normal">168</span>
+                        </div> -->
+                        <div *ngFor="let item of filterProducts.filterBySize; let index = index" class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <input type="checkbox" class="custom-control-input" id="size-{{index}}" (click)="getFilterData($event, item.size, 'size')">
+                            <label class="custom-control-label" for="size-{{index}}">{{item.size}}</label>
+                            <span class="badge border font-weight-normal">{{item.totalProducts}}</span>
                         </div>
                     </form>
                 </div>
@@ -122,7 +62,7 @@
 
 
             <!-- Shop Product Start -->
-            
+
             <div class="col-lg-9 col-md-8">
                 <div class="row pb-3">
                     <div class="col-12 pb-1">
@@ -133,29 +73,25 @@
                             </div>
                             <div class="ml-2">
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Sorting</button>
+                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">{{currentSortLabel}}</button>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="#">Latest</a>
-                                        <a class="dropdown-item" href="#">Popularity</a>
-                                        <a class="dropdown-item" href="#">Best Rating</a>
+                                        <a *ngFor="let item of sortingDropdown" class="dropdown-item" (click)="sorting(item)" >{{item.label}}</a>
                                     </div>
                                 </div>
                                 <div class="btn-group ml-2">
-                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Showing</button>
+                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Product per Page ({{perPageItems}})</button>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="#">10</a>
-                                        <a class="dropdown-item" href="#">20</a>
-                                        <a class="dropdown-item" href="#">30</a>
+                                        <a *ngFor="let item of [5, 10, 20, 30]" class="dropdown-item" (click)="itemPerPage(item)" >{{item}}</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 
-                    <div *ngFor="let item of itemsByCategories" class="col-lg-4 col-md-6 col-sm-6 pb-1">
+                    <div *ngFor="let item of itemsByCategories | paginate : { itemsPerPage : perPageItems, currentPage : currPage, totalItems : totalProducts}" class="col-lg-4 col-md-6 col-sm-6 pb-1">
                         <div class="product-item bg-light mb-4">
                             <div class="product-img position-relative overflow-hidden">
-                                <img class="img-fluid w-100" style="height:300px ;"  src="{{item.image}}" alt="">
+                                <img class="img-fluid w-100" style="height:300px ;" src="{{item.image | image}}" alt="">
                                 <div class="product-action" *ngIf="productActionIcons" [routerLink]="['/shop-detail', item.id]">
                                     <a *ngFor="let action of productActionIcons" class="btn btn-outline-dark btn-square" [routerLink]="action.route" ><i class="{{action.icon}}"></i></a>
                                 </div>
@@ -173,15 +109,7 @@
                         </div>
                     </div>
                     <div class="col-12">
-                        <nav>
-                          <ul class="pagination justify-content-center">
-                            <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                          </ul>
-                        </nav>  
+                        <pagination-controls (pageChange)="pageChange(currPage = $event)"></pagination-controls>
                     </div>
                 </div>
             </div>
@@ -190,3 +118,81 @@
     </div>
     <!-- Shop End -->
 
+<!-- <div class="container">
+    <div id="demo" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <div class="card cardd">
+                    <div class="path">HOME / FACE <a>/ CLEANSERS</a> </div>
+                    <div class="row">
+                        <div class="col-md-6 text-center align-self-center"> <img class="img-fluid"
+                                src="https://i.imgur.com/7a9V4yw.png"> </div>
+                        <div class="col-md-6 info">
+                            <div class="row title">
+                                <div class="col">
+                                    <h2>Herbalism</h2>
+                                </div>
+                                <div class="col text-right"><a href="#"><i class="fa fa-heart-o"></i></a></div>
+                            </div>
+                            <p>Natural herbal wash</p> <span class="fa fa-star checked"></span> <span
+                                class="fa fa-star checked"></span> <span class="fa fa-star checked"></span> <span
+                                class="fa fa-star checked"></span> <span class="fa fa-star-half-full"></span> <span
+                                id="reviews">1590 Reviews</span>
+                            <div class="row price"> <label class="radio"> <input type="radio" name="size1" value="small"
+                                        checked> <span>
+                                        <div class="row"><b>1.5 oz.</b></div>
+                                        <div class="row">$12.95</div>
+                                    </span> </label> <label class="radio"> <input type="radio" name="size1"
+                                        value="large"> <span>
+                                        <div class="row"><b>4.4 oz.</b></div>
+                                        <div class="row">$21.95</div>
+                                    </span> </label> </div>
+                        </div>
+                    </div>
+                    <div class="row lower">
+                        <div class="col"> <a class="carousel-control-prev" href="#demo" data-slide="prev"><i
+                                    class="fa fa-arrow-left"></i></a> <a class="carousel-control-next" href="#demo"
+                                data-slide="next"><i class="fa fa-arrow-right"></i></a> </div>
+                        <div class="col text-right align-self-center"> <button class="btn">Add to cart</button> </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="card cardd">
+                    <div class="path">HOME / FACE <a>/ CLEANSERS</a> </div>
+                    <div class="row">
+                        <div class="col-md-6 text-center align-self-center"> <img class="img-fluid"
+                                src="https://i.imgur.com/7a9V4yw.png"> </div>
+                        <div class="col-md-6 info">
+                            <div class="row title">
+                                <div class="col">
+                                    <h2>Herbalism 2</h2>
+                                </div>
+                                <div class="col text-right"><a href="#"><i class="fa fa-heart-o"></i></a></div>
+                            </div>
+                            <p>Natural herbal wash pro</p> <span class="fa fa-star checked"></span> <span
+                                class="fa fa-star checked"></span> <span class="fa fa-star checked"></span> <span
+                                class="fa fa-star checked"></span> <span class="fa fa-star-half-full"></span> <span
+                                id="reviews">1590 Reviews</span>
+                            <div class="row price"> <label class="radio"> <input type="radio" name="size2"
+                                        value="small"> <span>
+                                        <div class="row"><b>13.5 oz.</b></div>
+                                        <div class="row">$36.95</div>
+                                    </span> </label> <label class="radio"> <input type="radio" name="size2"
+                                        value="large" checked> <span>
+                                        <div class="row"><b>18.4 oz.</b></div>
+                                        <div class="row">$61.95</div>
+                                    </span> </label> </div>
+                        </div>
+                    </div>
+                    <div class="row lower">
+                        <div class="col"> <a class="carousel-control-prev" href="#demo" data-slide="prev"><i
+                                    class="fa fa-arrow-left"></i></a> <a class="carousel-control-next" href="#demo"
+                                data-slide="next"><i class="fa fa-arrow-right"></i></a> </div>
+                        <div class="col text-right align-self-center"> <button class="btn">Add to cart</button> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->

@@ -9,6 +9,7 @@ import { RatingComponent } from './components/rating/rating.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FavoriteComponent } from './components/favorite/favorite.component';
 import { FilterPipe } from './pipes/filter.pipe';
+import { ImagePipe } from './pipes/image.pipe';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { FilterPipe } from './pipes/filter.pipe';
     RatingComponent,
     FavoriteComponent,
     FilterPipe,
+    ImagePipe,
   ],
   imports: [
     CommonModule,
@@ -25,6 +27,6 @@ import { FilterPipe } from './pipes/filter.pipe';
     FormsModule,
     ReactiveFormsModule
   ],
-  exports : [ProductComponent, SpecialOfferComponent, RatingComponent, ReactiveFormsModule, FavoriteComponent, FilterPipe]
+  exports : [ProductComponent, SpecialOfferComponent, RatingComponent, ReactiveFormsModule, FavoriteComponent, FilterPipe, ImagePipe]
 })
 export class SharedModule { }

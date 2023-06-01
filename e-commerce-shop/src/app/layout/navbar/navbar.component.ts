@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChildren,
 import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { CommonService } from 'src/app/shared/services/common.service';
-import { StorageService } from 'src/app/shared/services/storage.service';
 
 @Component({
   selector: 'app-navbar',
@@ -72,14 +71,17 @@ export class NavbarComponent implements OnInit, OnDestroy {
    * Function to get product category
    */
   getProductCategories(){
-    let sub1 = this.apiCall.getProductCategories().subscribe({
-      next : (res) => {
-        this.navCategories = res; 
+    let sub1 = this.apiCall.getTotalCategories({isCategoryList : true}).subscribe({
+      next : (res:any) => {
+        
+        this.navCategories = res.data.categories; 
         this.cdr.markForCheck();
+        console.log(this.navCategories, 'navabr comp');
+
         this.commonService.categories.next(this.navCategories);
       }
     });
-    this.subscription.push(sub1);
+    this.subscription.push(sub1); 
   }
 
   /**
@@ -109,7 +111,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
   categoryToggle(){
     this.isCollapsed = !this.isCollapsed;
     this.isNavActive = !this.isNavActive
+
   }
+
+  clickOutside(){}
 
   ngOnDestroy(): void {
     this.subscription.forEach(sub => sub.unsubscribe());
