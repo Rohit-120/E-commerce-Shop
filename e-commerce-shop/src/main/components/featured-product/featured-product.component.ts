@@ -32,9 +32,10 @@ export class FeaturedProductComponent implements OnInit, OnDestroy {
   }
 
   getFeaturesProduct() {
-    let sub1 = this.apiCall.getFeaturedProduct().subscribe({
+    
+    let sub1 = this.apiCall.getAllProduct({filter : {isFeatured : true}}).subscribe({
       next: (res) => {
-        this.featuredProduct = res.data;
+        this.featuredProduct = res.data.products;
         this.cdr.markForCheck();
       },
     });
@@ -60,7 +61,6 @@ export class FeaturedProductComponent implements OnInit, OnDestroy {
     } else {
       this.featuredProduct[index].isFavorite = true;
     }
-
     this.commonService.favorite.next(this.featuredProduct);
   }
 

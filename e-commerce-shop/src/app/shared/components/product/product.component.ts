@@ -43,7 +43,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   getProducts() {
     let sub1 = this.apiCall.getAllProduct().subscribe({
       next: (res: any) => {
-        this.products = res.data;
+        this.products = res.data.products;
         this.cdr.markForCheck();
       },
     });

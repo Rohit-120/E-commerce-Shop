@@ -46,35 +46,30 @@ export class ApiService {
   // Node API calls
 
   getAllProduct(body?:any): Observable<any> {   
-    console.log(body);
+    console.log('POST BODY =====> ', body);
      
     let url = `http://192.168.1.178:1108/products`;
     return this.http.postRequest(url, body);
   }
 
   getHeroPosterDetail(): Observable<any> {    
-    let url = `http://192.168.1.178:1108/poster`;
+    let url = `http://192.168.1.178:1108/advertisements`;
     return this.http.getRequest(url);
   }
-  
+
   getCompanyImage(): Observable<any> {    
     let url = `http://192.168.1.178:1108/vendors`;
     return this.http.getRequest(url);
   }
 
-  getTotalCategories(): Observable<any> {
-    let url = 'http://192.168.1.178:1108/products/categories';
-    return this.http.getRequest(url);
+  getTotalCategories(body:any): Observable<any> {
+    let url = 'http://192.168.1.178:1108/products';
+    return this.http.postRequest(url, body);
   }
 
   getProductsByCategories(category : any): Observable<any> {
     let url = `http://192.168.1.178:1108/products/categories/${category}`;
     return this.http.getRequest(url);
-  }
-
-  getFeaturedProduct(): Observable<any> {
-    let url = 'http://192.168.1.178:1108/products?isFeatured=true';
-    return this.http.postRequest(url, {isFeatured: true});
   }
 
   getProductFilterList(): Observable<any> {

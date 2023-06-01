@@ -71,14 +71,17 @@ export class NavbarComponent implements OnInit, OnDestroy {
    * Function to get product category
    */
   getProductCategories(){
-    let sub1 = this.apiCall.getTotalCategories().subscribe({
+    let sub1 = this.apiCall.getTotalCategories({isCategoryList : true}).subscribe({
       next : (res:any) => {
-        this.navCategories = res.data; 
+        
+        this.navCategories = res.data.categories; 
         this.cdr.markForCheck();
+        console.log(this.navCategories, 'navabr comp');
+
         this.commonService.categories.next(this.navCategories);
       }
     });
-    this.subscription.push(sub1);
+    this.subscription.push(sub1); 
   }
 
   /**
@@ -108,7 +111,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
   categoryToggle(){
     this.isCollapsed = !this.isCollapsed;
     this.isNavActive = !this.isNavActive
+
   }
+
+  clickOutside(){}
 
   ngOnDestroy(): void {
     this.subscription.forEach(sub => sub.unsubscribe());

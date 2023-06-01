@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -42,23 +43,22 @@ export class ShopComponent implements OnInit, OnDestroy {
   filterProducts: any = {};
 
   body: BODY_FILTER = {
-    filter : {
-
+    filter: {
       // // ---------------filter-----------
       // filterByPrice:[],
       // filterByColor: ['Black', 'Red'],
-      // FilterBySize: ['S', 'M', 'XXL'],
+      // FilterBySize: ['S', 'M',  'XXL'],
       // isFeatured: true,
       // isMarkedFavorite: true,
       // // ----------------sort-------------
     },
-      sort: {
-        field: '', // fieldName
-        order: '', // asc or desc
-      },
-      // // ------------- skip,limit---------
-      
-      pagination: { page: this.currPage, productsPerPage: this.perPageItems },
+    // sort: {
+    //   field: '', // fieldName
+    //   order: '', // asc or desc
+    // },
+    // // ------------- skip,limit---------
+
+    pagination: { page: this.currPage, productsPerPage: this.perPageItems },
   };
 
   constructor(
@@ -71,14 +71,20 @@ export class ShopComponent implements OnInit, OnDestroy {
   isCategoryShow: boolean = false;
   ngOnInit(): void {
     this.activateRouter.params.subscribe((params) => {
-      this.body.filter.category = params['category']||'';
+      if (params['category']) {
+        this.body.filter.category = params['category'];
+      } else {
+        delete this.body.filter.category;
+      }
 
       this.cdr.markForCheck();
 
-      if ( this.body.filter.category) {
+      if (this.body.filter.category) {
         this.isCategoryShow = true;
         this.getCategoriesWiseProduct();
-      } else {
+      } else if (params['userInput']) {
+        this.getDataOfSearchBar();
+      } else {  
         this.getProduct();
       }
       this.getCurrencyInfo();
@@ -102,36 +108,49 @@ export class ShopComponent implements OnInit, OnDestroy {
     ]);
   }
 
-  //API call for particular categories products if category available on activeRoute.
-  getCategoriesWiseProduct() {
-
-    let sub1 = this.apiCall.getAllProduct(this.body).subscribe({
-      next: (res) => {
-        this.itemsByCategories = res.data;
-        this.totalProducts = this.itemsByCategories.length;
-
-
-        this.cdr.markForCheck();
-      },
-    });
-    this.subscriptions.push(sub1);
-  }
-
   //API call for All products
   getProduct() {
     if (this.isCategoryShow) {
       this.getCategoriesWiseProduct();
     } else {
+      console.log(this.body, 'ssssssssssssssssss');
+      
       let sub2 = this.apiCall.getAllProduct(this.body).subscribe({
         next: (res: any) => {
           this.totalProducts = res.totalProducts;
-          this.itemsByCategories = res.data;
-          
+          console.log(res.data.products, ' AAAAAAAAAAAAAAAA');
+
+          this.itemsByCategories = res.data.products;
           this.cdr.markForCheck();
         },
       });
       this.subscriptions.push(sub2);
     }
+  }
+
+  getDataOfSearchBar() {
+    this.commonService.dataFromSearchInput.subscribe({
+      next: (res: any) => {
+        this.body.filter = {
+          search: res,
+        };
+        this.cdr.markForCheck();
+        this.getProduct();
+      },
+    });
+  }
+
+  //API call for particular categories products if category available on activeRoute.
+  getCategoriesWiseProduct() {
+    let sub1 = this.apiCall.getAllProduct(this.body).subscribe({
+      next: (res) => {
+        this.itemsByCategories = res.data.products;
+        this.totalProducts = this.itemsByCategories.length;
+
+        this.cdr.markForCheck();
+      },
+    });
+    this.subscriptions.push(sub1);
   }
 
   getCurrencyInfo() {
@@ -154,7 +173,7 @@ export class ShopComponent implements OnInit, OnDestroy {
       this.apiCall.getAllProduct(this.body).subscribe({
         next: (res) => {
           this.totalProducts = res.totalProducts;
-          this.itemsByCategories = res.data;
+          this.itemsByCategories = res.data.products;
           this.cdr.markForCheck();
         },
       });
@@ -173,49 +192,62 @@ export class ShopComponent implements OnInit, OnDestroy {
 
   sorting(item: any) {
     this.currentSortLabel = item.label;
-    this.body.sort.field = item.name;
-    this.body.sort.order = item.order;
+    console.log(item, 'sorting');
+
+    this.body.sort = {
+      field: item.name,
+      order: item.order,
+    };
+
+    // this.body.sort.field = item.name;
+    // this.body.sort.order = item.order;
 
     if (this.isCategoryShow) {
       this.getCategoriesWiseProduct();
     } else {
+      console.log(this.body, 'ON sorting');
       this.getProduct();
     }
   }
 
   getFilterList() {
     this.apiCall.getProductFilterList().subscribe({
-      next : (res) => {
-        
-        this.filterProducts.filterByPrice =  res.data.priceRanges;
-        this.filterProducts.filterByColor =  res.data.colors;
-        this.filterProducts.filterBySize =  res.data.sizes;
+      next: (res) => {
+        this.filterProducts.filterByPrice = res.data.priceRanges;
+        this.filterProducts.filterByColor = res.data.colors;
+        this.filterProducts.filterBySize = res.data.sizes;
         this.cdr.markForCheck();
-      }
-    })
+      },
+    });
   }
 
-  getFilterData(event:any,item : any, filterType : string){
-  
-    let priceRange :any = {
-      
-    };
-    priceRange['min']= item.min;
-    priceRange['max'] = item.max;
-    if(event.target.checked){
-      if(!("price" in this.body.filter) ){
-        this.body.filter.price=[]
-      }
-      this.body.filter?.price?.push(priceRange)
-      console.log("1111111111111111111111111111111111", this.body)
-    }else{
-      console.log(this.body.filter?.price?.indexOf(item), 'ininininininininin');
-      
-      let i = this.body.filter?.price?.indexOf(item);
-      
-      console.log("2222222222222222222222222222222222", this.body)
+  getFilterData(event: any, item: any, filterType: any) {
+    if (filterType === 'color') {
+      console.log(item, 'color filter');
     }
-    
+
+    let field = item;
+    if (field.totalProducts) {
+      delete field.totalProducts;
+    }
+
+    if (event.target.checked) {
+      if (!(`${filterType}` in this.body.filter)) {
+        this.body.filter[`${filterType}`] = [];
+      }
+
+      this.body.filter[`${filterType}`]?.push(field);
+      console.log('CHECK ======>', this.body);
+      this.getProduct();
+    } else {
+      console.log(this.body.filter[`${filterType}`]?.indexOf(field));
+      let i: any = this.body.filter[`${filterType}`]?.indexOf(field);
+      console.log('indexxxx ======> ', i);
+
+      this.body.filter[`${filterType}`].splice(i, 1);
+      console.log('UNCHECK ======>', this.body);
+      this.getProduct();
+    }
   }
 
   //Unsubscribe all subscriptions on Component Destroy
