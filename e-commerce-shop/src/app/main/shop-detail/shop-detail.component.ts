@@ -90,9 +90,10 @@ export class ShopDetailComponent implements OnInit, OnDestroy {
   }
 
   getSingleProductDetails() {
+    
     let sub1 = this.apiCall.getSingleProduct(this.singleProductId).subscribe({
       next: (res) => {
-        this.singleProductDetails = res;
+        this.singleProductDetails = res.data.products[0];
         this.cdr.markForCheck();
       },
     });

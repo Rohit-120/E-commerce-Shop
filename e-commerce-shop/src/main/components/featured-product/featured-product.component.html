@@ -12,11 +12,11 @@
                     <a class="btn btn-outline-dark btn-square" [routerLink]="['/cart']" ><i class="fa fa-shopping-cart"></i></a>
                     <a class="btn btn-outline-dark btn-square" (click)="onFavoriteClick(index)" ><i class="fa fa-heart" [ngClass]="{'text-danger' : item.isFavorite}"></i></a>
                     <a class="btn btn-outline-dark btn-square" ><i class="fa fa-sync-alt"></i></a>
-                    <a class="btn btn-outline-dark btn-square" [routerLink]="['/shop-detail', item.id]" ><i class="fa fa-search"></i></a>
+                    <a class="btn btn-outline-dark btn-square" [routerLink]="['/shop-detail', item._id]" ><i class="fa fa-search"></i></a>
                 </div>
             </div>
             <div class="text-center py-4">
-                <a class="h6 text-decoration-none d-block text-truncate" [routerLink]="['/shop-detail', item.id]" >{{item.title}}</a>
+                <a class="h6 text-decoration-none d-block text-truncate" [routerLink]="['/shop-detail', item._id]" >{{item.title}}</a>
                 <div class="d-flex align-items-center justify-content-center mt-2">
                     <h5>{{item?.price * currencyInfo.currencyPrice  | currency : currencyInfo.currencyName}}</h5><h6 class="text-muted ml-2"><del>{{item?.price * currencyInfo.currencyPrice  | currency : currencyInfo.currencyName}}</del></h6>
                 </div>

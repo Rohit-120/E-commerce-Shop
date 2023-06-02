@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChildren, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { CommonService } from 'src/app/shared/services/common.service';
@@ -12,7 +12,7 @@ import { CommonService } from 'src/app/shared/services/common.service';
 export class NavbarComponent implements OnInit, OnDestroy {
 
   navCategories : any = []
-  favoriteItems!: number 
+  favoriteItemsLength!: number 
   totalCartLength! : number;
   isCollapsed : boolean = false;
   isNavActive : boolean = false;
@@ -62,7 +62,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getProductCategories()
-    this.getFavoriteItemsLen();
+    this.getFavoriteItemsLength();
     this.cartItemLength();
       
   }
@@ -73,11 +73,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
   getProductCategories(){
     let sub1 = this.apiCall.getTotalCategories({isCategoryList : true}).subscribe({
       next : (res:any) => {
+        console.log(res.data.categories, 'AAAAAAAAAAAAAA');
         
         this.navCategories = res.data.categories; 
         this.cdr.markForCheck();
-        console.log(this.navCategories, 'navabr comp');
-
         this.commonService.categories.next(this.navCategories);
       }
     });
@@ -87,9 +86,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
   /**
    * Function to get total favorite items length.
    */
-  getFavoriteItemsLen(){
-    let sub2 = this.commonService.FavoriteItemLength.subscribe((data:any) => {
-      this.favoriteItems = data.length;
+  getFavoriteItemsLength(){
+    let sub2 = this.commonService.FavoriteItemLength.subscribe((res:any) => {
+      console.log(res.length, 'total favorite items length');
+      
+      this.favoriteItemsLength = res.length;
       this.cdr.markForCheck();
     });
     this.subscription.push(sub2);
@@ -108,10 +109,15 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.subscription.push(sub3);
   }
   
-  categoryToggle(){
+  categoryToggle(event:any){
+    event.stopPropagation()
     this.isCollapsed = !this.isCollapsed;
     this.isNavActive = !this.isNavActive
 
+  }
+
+  @HostListener('document:click', ['$event']) onDocumentClick(event : any) {
+    this.isCollapsed = false
   }
 
   clickOutside(){}

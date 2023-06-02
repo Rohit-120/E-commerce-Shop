@@ -77,7 +77,7 @@ export class TopbarComponent implements OnInit {
   productSearchClick() {
     this.commonService.dataFromSearchInput.next(this.searchData);
 
-    this.router.navigate([`shop/${this.searchData}`]);
+    this.router.navigate([`/shop`]);
   }
 
   onCurrencyChange(item: any) {

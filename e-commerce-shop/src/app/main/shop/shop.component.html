@@ -92,9 +92,13 @@
                         <div class="product-item bg-light mb-4">
                             <div class="product-img position-relative overflow-hidden">
                                 <img class="img-fluid w-100" style="height:300px ;" src="{{item.image | image}}" alt="">
-                                <div class="product-action" *ngIf="productActionIcons" [routerLink]="['/shop-detail', item.id]">
-                                    <a *ngFor="let action of productActionIcons" class="btn btn-outline-dark btn-square" [routerLink]="action.route" ><i class="{{action.icon}}"></i></a>
+                                <div class="product-action">
+                                    <a class="btn btn-outline-dark btn-square" [routerLink]="['/cart']" ><i class="fa fa-shopping-cart"></i></a>
+                                    <a class="btn btn-outline-dark btn-square" [routerLink]="['/favorite']" ><i class="fa fa-heart" [ngClass]="{'text-danger' : item.isFavorite}"></i></a>
+                                    <a class="btn btn-outline-dark btn-square" ><i class="fa fa-sync-alt"></i></a>
+                                    <a class="btn btn-outline-dark btn-square" [routerLink]="['/shop-detail', item.id]" ><i class="fa fa-search"></i></a>
                                 </div>
+                                
                             </div>
                             <div class="text-center py-4">
                                 <a class="h6 text-decoration-none d-block text-truncate" [routerLink]="['/shop-detail', item.id]">{{item.title}}</a>

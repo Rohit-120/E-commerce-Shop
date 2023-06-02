@@ -29,13 +29,13 @@ const routes: Routes = [
         component : ShopComponent
       },
       {
-        path : 'shop/:userInput',
-        component : ShopComponent
-      },
-      {
         path : 'shop/:category',
         component : ShopComponent
       },
+      // {
+      //   path : 'shop/:userInput',
+      //   component : ShopComponent
+      // },
     
       {
         path : 'shop-detail',
