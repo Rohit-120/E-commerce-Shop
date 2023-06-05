@@ -51,7 +51,9 @@ export class ProductComponent implements OnInit, OnDestroy {
   }
 
   onShopDetail(item: any) {
-    this.router.navigate(['shop-detail', item.id]);
+    console.log(item._id, 'onShopDetail');
+    
+    this.router.navigate(['shop-detail', item._id]);
   }
 
   onFavoriteClick(index: any) {

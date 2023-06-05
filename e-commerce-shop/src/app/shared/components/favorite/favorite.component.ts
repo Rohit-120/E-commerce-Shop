@@ -31,7 +31,8 @@ export class FavoriteComponent implements OnInit, OnDestroy {
     this.apiCall.getAllProduct({filter: {isMarkedFavorite:true}}).subscribe({
       next : (res: any) => {
        this.favoriteItems =  res.data.products
-        this.cdr.markForCheck();
+       this.cdr.markForCheck();
+       this.commonService.FavoriteItemLength.next(this.favoriteItems.length);
       }
     })
   }

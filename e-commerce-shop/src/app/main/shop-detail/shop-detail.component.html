@@ -21,7 +21,7 @@
                     <!-- <small class="pt-1">({{singleProductDetails?.rating.count}})</small> -->
                 </div>
                 <h3 class="font-weight-semi-bold mb-4">{{singleProductDetails?.price * currencyInfo?.currencyPrice | currency : currencyInfo?.currencyName}}</h3>
-                <p class="mb-4">{{singleProductDetails?.description}}</p>
+                <p class="mb-4">{{singleProductDetails?.title}}</p>
                 <div class="d-flex mb-3">
                     <strong class="text-dark mr-3">Sizes:</strong>
                     <form>
@@ -120,7 +120,7 @@
                 <div class="tab-content">
                     <div class="tab-pane fade" [ngClass]="{'show active' : navbarToggle == 0}">
                         <h4 class="mb-3">Product Description</h4>
-                        <p>{{singleProductDetails?.description | json}}</p>
+                        <p>{{singleProductDetails?.description}}</p>
                     </div>
                     <div class="tab-pane fade" [ngClass]="{'show active' : navbarToggle == 1}">
                         <h4 class="mb-3">Additional Information</h4>
@@ -136,11 +136,7 @@
                                     <div class="media-body">
                                         <h6>{{reviewer.userName}}<small> - <i>{{reviewer.date | date}}</i></small></h6>
                                         <div class="text-primary mb-2">
-                                            <!-- <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star-half-alt"></i>
-                                            <i class="far fa-star"></i> -->
+                                            
                                             <app-rating [rating]="reviewer.rating" class="mb-2" ></app-rating>
                                         </div> 
                                         <p>{{reviewer.reviewMessage}}</p>
@@ -152,13 +148,7 @@
                                 <small>Your email address will not be published. Required fields are marked *</small>
                                 <div class="d-flex my-3">
                                     <p class="mb-0 mr-2">Your Rating * :</p>
-                                 <!-- <div class="text-primary">
-                                        <i class="far fa-star"></i>
-                                        <i class="far fa-star"></i>
-                                        <i class="far fa-star"></i>
-                                        <i class="far fa-star"></i>
-                                        <i class="far fa-star"></i>
-                                    </div> -->
+                                
                                 </div>
                                 <form [formGroup]="reviewForm" (ngSubmit)="onReviewSubmit()">
                                     <div class="form-group">

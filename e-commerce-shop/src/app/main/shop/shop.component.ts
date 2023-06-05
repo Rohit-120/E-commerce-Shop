@@ -8,10 +8,7 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import PRODUCT_ACTION_ICONS from 'src/app/shared/constant';
 import { BODY_FILTER } from 'src/app/shared/modals/interfaces';
-// import { BODY_FILTER } from 'src/app/shared/modals/interfaces';
-import { FilterPipe } from 'src/app/shared/pipes/filter.pipe';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { BreadcrumbService } from 'src/app/shared/services/breadcrumb.service';
 import { CommonService } from 'src/app/shared/services/common.service';
@@ -23,7 +20,6 @@ import { CommonService } from 'src/app/shared/services/common.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShopComponent implements OnInit, OnDestroy {
-  productActionIcons = PRODUCT_ACTION_ICONS;
   itemsByCategories: any;
   singleCategory: any = '';
   currencyInfo: any;
@@ -72,6 +68,7 @@ export class ShopComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.activateRouter.params.subscribe((params) => {
       if (params['category']) {
+        console.log(params, 'isCategoryShow..............');
         this.body.filter.category = params['category'];
       } else {
         delete this.body.filter.category;
@@ -82,13 +79,12 @@ export class ShopComponent implements OnInit, OnDestroy {
       if (this.body.filter.category) {
         this.isCategoryShow = true;
         this.getCategoriesWiseProduct();
-      } else if (params['userInput']) {
-        this.getDataOfSearchBar();
-      } else {  
+      } else {
         this.getProduct();
       }
       this.getCurrencyInfo();
       this.getFilterList();
+      this.getDataOfSearchBar();
     });
 
     // Breadcrumb Setup
@@ -113,12 +109,9 @@ export class ShopComponent implements OnInit, OnDestroy {
     if (this.isCategoryShow) {
       this.getCategoriesWiseProduct();
     } else {
-      console.log(this.body, 'ssssssssssssssssss');
-      
       let sub2 = this.apiCall.getAllProduct(this.body).subscribe({
         next: (res: any) => {
           this.totalProducts = res.totalProducts;
-          console.log(res.data.products, ' AAAAAAAAAAAAAAAA');
 
           this.itemsByCategories = res.data.products;
           this.cdr.markForCheck();
@@ -135,7 +128,9 @@ export class ShopComponent implements OnInit, OnDestroy {
           search: res,
         };
         this.cdr.markForCheck();
-        this.getProduct();
+        if (this.body.filter) {
+          this.getProduct();
+        }
       },
     });
   }
@@ -145,8 +140,12 @@ export class ShopComponent implements OnInit, OnDestroy {
     let sub1 = this.apiCall.getAllProduct(this.body).subscribe({
       next: (res) => {
         this.itemsByCategories = res.data.products;
-        this.totalProducts = this.itemsByCategories.length;
-
+        this.totalProducts = res.totalFilteredProducts;
+        console.log(
+          res.totalFilteredProducts,
+          'Total category products ====>',
+          res.data.products
+        );
         this.cdr.markForCheck();
       },
     });
@@ -181,7 +180,6 @@ export class ShopComponent implements OnInit, OnDestroy {
   }
 
   itemPerPage(item: any) {
-    // console.log(item, 'page per item');
     if (this.body.pagination.productsPerPage != item) {
       this.body.pagination.productsPerPage = item;
       this.perPageItems = item;
@@ -192,7 +190,6 @@ export class ShopComponent implements OnInit, OnDestroy {
 
   sorting(item: any) {
     this.currentSortLabel = item.label;
-    console.log(item, 'sorting');
 
     this.body.sort = {
       field: item.name,
@@ -205,7 +202,6 @@ export class ShopComponent implements OnInit, OnDestroy {
     if (this.isCategoryShow) {
       this.getCategoriesWiseProduct();
     } else {
-      console.log(this.body, 'ON sorting');
       this.getProduct();
     }
   }
@@ -222,30 +218,25 @@ export class ShopComponent implements OnInit, OnDestroy {
   }
 
   getFilterData(event: any, item: any, filterType: any) {
-    if (filterType === 'color') {
-      console.log(item, 'color filter');
-    }
-
     let field = item;
     if (field.totalProducts) {
       delete field.totalProducts;
     }
 
     if (event.target.checked) {
-      if (!(`${filterType}` in this.body.filter)) {
+      if (!(filterType in this.body.filter)) {
         this.body.filter[`${filterType}`] = [];
       }
 
       this.body.filter[`${filterType}`]?.push(field);
-      console.log('CHECK ======>', this.body);
       this.getProduct();
     } else {
-      console.log(this.body.filter[`${filterType}`]?.indexOf(field));
       let i: any = this.body.filter[`${filterType}`]?.indexOf(field);
-      console.log('indexxxx ======> ', i);
-
       this.body.filter[`${filterType}`].splice(i, 1);
-      console.log('UNCHECK ======>', this.body);
+
+      if (!this.body.filter[`${filterType}`].length) {
+        delete this.body.filter[`${filterType}`];
+      }
       this.getProduct();
     }
   }

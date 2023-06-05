@@ -9,6 +9,9 @@ import { ContactComponent } from './contact/contact.component';
 import { NotFoundComponent } from '../not-found/not-found.component';
 import { ShopDetailComponent } from './shop-detail/shop-detail.component';
 import { FavoriteComponent } from '../shared/components/favorite/favorite.component';
+import { LoginComponent } from '../auth/login/login.component';
+import { RegistrationComponent } from '../auth/registration/registration.component';
+import { AuthGuard } from '../shared/guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -29,14 +32,9 @@ const routes: Routes = [
         component : ShopComponent
       },
       {
-        path : 'shop/:userInput',
-        component : ShopComponent
-      },
-      {
         path : 'shop/:category',
         component : ShopComponent
       },
-    
       {
         path : 'shop-detail',
         component : ShopDetailComponent
@@ -47,7 +45,9 @@ const routes: Routes = [
       },
       {
         path : 'cart', 
-        component : CartComponent
+        component : CartComponent,
+        canActivate : [AuthGuard]
+
       },
       {
         path : 'checkout',
@@ -59,7 +59,12 @@ const routes: Routes = [
       },
       {
         path : 'favorite',
-        component : FavoriteComponent
+        component : FavoriteComponent,
+        canActivate : [AuthGuard]
+      },
+      {
+        path : 'auth',
+        loadChildren : () => import('../auth/auth.module').then(m => m.AuthModule)
       },
      
     ]

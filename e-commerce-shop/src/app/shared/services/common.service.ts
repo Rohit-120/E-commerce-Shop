@@ -8,7 +8,7 @@ import { ApiService } from './api.service';
 export class CommonService {
 
   favorite : BehaviorSubject<any> = new BehaviorSubject<any>('')
-  FavoriteItemLength : BehaviorSubject<any> = new BehaviorSubject('');
+  FavoriteItemLength = new BehaviorSubject<any>('');
   totalCartItems = new BehaviorSubject<any>('')
   favoriteItems = new Subject<number>();
   categories = new BehaviorSubject<any[]>([]);

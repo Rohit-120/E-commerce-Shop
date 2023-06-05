@@ -37,7 +37,7 @@ export class DashboardComponent implements OnInit {
     },
   ];
   carouselTabToggle: any = 0;
-  offerProduct: any[] = [];
+  offerProduct: any = [];
 
   constructor(
     private apiCall: ApiService,

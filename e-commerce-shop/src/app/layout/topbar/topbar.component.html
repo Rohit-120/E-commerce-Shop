@@ -12,10 +12,10 @@
         <div class="col-lg-6 text-center text-lg-right">
             <div class="d-inline-flex align-items-center">
                 <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">{{myAccount.title}}</button>
+                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">My Account</button>
                     <div class="dropdown-menu dropdown-menu-right">
-                        <button class="dropdown-item" type="button">{{myAccount.signIn}}</button>
-                        <button class="dropdown-item" type="button">{{myAccount.signUp}}</button>
+                        <button *ngIf="!isLogin" class="dropdown-item" type="button" [routerLink]="['/auth/login']" >Log In</button>
+                        <button *ngIf="isLogin" class="dropdown-item" type="button" (click)="logOut()" >Log Out</button>
                     </div>
                 </div>
                 <div class="btn-group mx-2" >
@@ -25,7 +25,7 @@
                     </div>
                 </div>
                 <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">{{'EN'}}</button>
+                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">{{languageLabel}}</button>
                     <div class="dropdown-menu dropdown-menu-right">
                         <button *ngFor="let item of languages" class="dropdown-item" type="button"  (click)="onLanguageChange(item)" >{{item.label}}</button>
                     </div>

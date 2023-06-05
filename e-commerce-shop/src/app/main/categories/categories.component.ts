@@ -28,8 +28,6 @@ export class CategoriesComponent implements OnInit {
   productCategory() {
     this.apiCall.getTotalCategories({isCategoryList : true}).subscribe({
       next: (res: any) => {
-        console.log(res.data.categories, 'categories',);
-        
         this.categories = res.data.categories;
         this.cdr.markForCheck();
       },
