@@ -73,8 +73,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
   getProductCategories(){
     let sub1 = this.apiCall.getTotalCategories({isCategoryList : true}).subscribe({
       next : (res:any) => {
-        console.log(res.data.categories, 'AAAAAAAAAAAAAA');
-        
         this.navCategories = res.data.categories; 
         this.cdr.markForCheck();
         this.commonService.categories.next(this.navCategories);
@@ -88,8 +86,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
    */
   getFavoriteItemsLength(){
     let sub2 = this.commonService.FavoriteItemLength.subscribe((res:any) => {
-      console.log(res.length, 'total favorite items length');
-      
       this.favoriteItemsLength = res.length;
       this.cdr.markForCheck();
     });
@@ -102,7 +98,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   cartItemLength(){
     let sub3 = this.apiCall.getCartItems().subscribe({
       next : (carts:any) => {
-        this.totalCartLength =  carts.products.length;
+        // this.totalCartLength =  carts.products.length;
         this.cdr.markForCheck();        
       }
     });

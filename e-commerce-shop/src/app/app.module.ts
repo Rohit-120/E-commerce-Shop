@@ -18,6 +18,7 @@ import { HttpClientModule } from '@angular/common/http'
 import { SharedModule } from './shared/shared.module';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { AuthModule } from './auth/auth.module';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
     DragScrollModule,
     HttpClientModule,
     NgSelectModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    AuthModule
   ],
   providers: [],
   bootstrap: [AppComponent],

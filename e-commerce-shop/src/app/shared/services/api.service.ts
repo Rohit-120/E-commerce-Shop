@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from './http.service';
 import { Observable } from 'rxjs';
-import { ADVERTISEMENTS, ALL_PRODUCTS, FILTERS, SIGNUP_FOOTER, VENDORS } from '../constants/apiEndPoint';
+import { ADVERTISEMENTS, ALL_PRODUCTS, FILTERS, SIGNUP_FOOTER, USER_LOGIN, USER_LOGOUT, USER_REGISTRATION, VENDORS } from '../constants/apiEndPoint';
 
 @Injectable({
   providedIn: 'root'
@@ -45,6 +45,19 @@ export class ApiService {
   getProductFilterList(): Observable<any> {
     return this.http.getRequest(FILTERS);
   }
+
+  userRegistration(body : any): Observable<any> {
+    return this.http.postRequest(USER_REGISTRATION , body);
+  }
+
+  userLogin(body : any): Observable<any> {
+    return this.http.postRequest(USER_LOGIN , body);
+  }
+
+  userLogout(): Observable<any> {
+    return this.http.getRequest(USER_LOGOUT);
+  }
+
 
   //Footer email Signup api
   emailSignUp(body : any): Observable<any> {

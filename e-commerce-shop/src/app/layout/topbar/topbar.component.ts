@@ -4,10 +4,12 @@ import {
   Component,
   OnInit,
 } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { ApiService } from 'src/app/shared/services/api.service';
+import { AuthService } from 'src/app/shared/services/auth.service';
 import { CommonService } from 'src/app/shared/services/common.service';
-import { CurrencyChangeService } from 'src/app/shared/services/currency-change.service';
+import { StorageService } from 'src/app/shared/services/storage.service';
 
 @Component({
   selector: 'app-topbar',
@@ -35,11 +37,7 @@ export class TopbarComponent implements OnInit {
     },
   ];
 
-  myAccount: any = {
-    title: 'My Account',
-    signIn: 'Sign In',
-    signUp: 'Sign Up',
-  };
+  isLogin: boolean = false;
 
   // object to select currency and Language
 
@@ -61,6 +59,8 @@ export class TopbarComponent implements OnInit {
     { label: 'FR', code: 'fr' },
     { label: 'AR', code: 'ar' },
     { label: 'RU', code: 'ru' },
+    { label: 'GU', code: 'gu' },
+
   ];
 
   searchData: string = '';
@@ -69,14 +69,28 @@ export class TopbarComponent implements OnInit {
     private commonService: CommonService,
     private cdr: ChangeDetectorRef,
     private router: Router,
-    private apiCall: ApiService
+    private authService: AuthService,
+    private apiCall: ApiService,
+    private storage: StorageService,
+    private toastService: ToastrService
+
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.checkLoginStatus();
+  }
+
+  checkLoginStatus(){
+    this.authService.isLoggedIn.subscribe({
+      next : (res) => {
+        this.isLogin = res;
+        this.cdr.markForCheck(); 
+      }
+    })
+  }
 
   productSearchClick() {
     this.commonService.dataFromSearchInput.next(this.searchData);
-
     this.router.navigate([`/shop`]);
   }
 
@@ -99,5 +113,24 @@ export class TopbarComponent implements OnInit {
     document.cookie = 'googtrans=' + `/en/${lanCode}`;
     // this.cdr.markForCheck()
     location.reload();
+  }
+
+  logOut(){
+    if(this.storage.get('token')){
+      this.apiCall.userLogout().subscribe({
+        next : (res) => {
+          console.log('user logout succesfully' , res);
+          if (res) {
+            this.storage.remove('token');
+            this.authService.isLoggedIn.next(false);
+            this.router.navigate(['/auth/login']);
+            this.toastService.warning(res.message, 'Logged out')
+            
+          }
+          
+        }
+      })
+    }
+
   }
 }

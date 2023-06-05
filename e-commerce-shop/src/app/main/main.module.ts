@@ -29,7 +29,6 @@ import { NgxPaginationModule } from 'ngx-pagination';
     VendorComponent,
     ShopDetailComponent,
     FeaturedProductComponent
-    
   ],
   imports: [
     CommonModule,

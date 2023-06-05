@@ -67,7 +67,7 @@ export class ShopComponent implements OnInit, OnDestroy {
   isCategoryShow: boolean = false;
   ngOnInit(): void {
     this.activateRouter.params.subscribe((params) => {
-      if (params['category']) {       
+      if (params['category']) {
         console.log(params, 'isCategoryShow..............');
         this.body.filter.category = params['category'];
       } else {
@@ -107,13 +107,10 @@ export class ShopComponent implements OnInit, OnDestroy {
   //API call for All products
   getProduct() {
     if (this.isCategoryShow) {
-      
       this.getCategoriesWiseProduct();
     } else {
-
       let sub2 = this.apiCall.getAllProduct(this.body).subscribe({
         next: (res: any) => {
-          
           this.totalProducts = res.totalProducts;
 
           this.itemsByCategories = res.data.products;
@@ -140,12 +137,15 @@ export class ShopComponent implements OnInit, OnDestroy {
 
   //API call for particular categories products if category available on activeRoute.
   getCategoriesWiseProduct() {
-    
     let sub1 = this.apiCall.getAllProduct(this.body).subscribe({
       next: (res) => {
         this.itemsByCategories = res.data.products;
         this.totalProducts = res.totalFilteredProducts;
-        console.log(res.totalFilteredProducts, 'Total category products ====>', res.data.products);
+        console.log(
+          res.totalFilteredProducts,
+          'Total category products ====>',
+          res.data.products
+        );
         this.cdr.markForCheck();
       },
     });

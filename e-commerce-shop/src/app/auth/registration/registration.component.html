@@ -1,0 +1,122 @@
+<section class="vh-100" style="background-color: #eee;">
+    <div class="container h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-lg-12 col-xl-11">
+          <div class="card text-black" style="border-radius: 25px;">
+            <div class="card-body p-md-5">
+              <div class="row justify-content-center">
+                <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+  
+                  <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
+  
+                  <form [formGroup]="registrationForm" class="mx-1 mx-md-4" (ngSubmit)="userRegistration()">
+  
+                    <div class="d-flex flex-row align-items-center mb-4">
+                      <i class="fas fa-user fa-lg me-3 mt-4 mr-2 fa-fw"></i>
+                      <div class="form-outline flex-fill mb-0">
+                          <label class="form-label" >Your Name</label>
+                        <input type="text"  formControlName="name" class="form-control" />
+                        <ul *ngIf="registrationForm.controls['name'].invalid && (registrationForm.controls['name'].dirty || registrationForm.controls['name'].touched)">
+                          <li *ngIf="registrationForm.controls['name'].hasError('required')" style="color: red;">
+                            Your name is required
+                          </li>
+                      </ul>
+                      </div>
+                    </div>
+  
+                    <div class="d-flex flex-row align-items-center mb-4">
+                      <i class="fas fa-envelope fa-lg me-3 mt-4 mr-2 fa-fw"></i>
+                      <div class="form-outline flex-fill mb-0">
+                          <label class="form-label" >Your Email</label>
+                        <input type="email"  formControlName="email" class="form-control" />
+                        <ul *ngIf="registrationForm.controls['email'].invalid && (registrationForm.controls['email'].dirty || registrationForm.controls['email'].touched)">
+                            <li *ngIf="registrationForm.controls['email'].hasError('required')" style="color: red;">
+                              Your Email is required
+                            </li>
+                            <li *ngIf="registrationForm.controls['email'].hasError('email')" style="color: red;">
+                                Please enter valid Email
+                              </li>
+                        </ul>
+                      </div>
+                    </div>
+  
+                    <div class="d-flex flex-row align-items-center mb-4">
+                      <i class="fas fa-lock fa-lg me-3 mt-4 mr-2 fa-fw"></i>
+                      <div class="form-outline flex-fill mb-0">
+                          <label class="form-label" >Password</label>
+                        <input type="password"  formControlName="password" class="form-control" />
+                        <ul *ngIf="registrationForm.controls['password'].invalid && (registrationForm.controls['password'].dirty || registrationForm.controls['password'].touched)">
+                            <li *ngIf="registrationForm.controls['password'].hasError('required')" style="color: red;">
+                              Password is required
+                            </li>
+                        </ul>
+                      </div>
+                    </div>
+  
+                    <div class="d-flex flex-row align-items-center mb-4">
+                      <i class="fas fa-globe fa-lg me-3 mt-4 mr-2 fa-fw"></i>
+                      <div class="form-outline flex-fill mb-0">
+                          <label class="form-label" >Your Country</label>
+                        <input  formControlName="country" class="form-control" />
+                        <ul *ngIf="registrationForm.controls['country'].invalid && (registrationForm.controls['country'].dirty || registrationForm.controls['country'].touched)">
+                            <li *ngIf="registrationForm.controls['country'].hasError('required')" style="color: red;">
+                              country is required
+                            </li>
+                        </ul>
+                      </div>
+                    </div>
+  
+
+                    <div class="d-flex flex-row align-items-center mb-4">
+                        <i class="fas fa-phone-alt fa-lg me-3 mt-4 mr-2 fa-fw"></i>
+                        <div class="form-outline flex-fill mb-0">
+                            <label class="form-label" >Phone No</label>
+                          <input type="tel" formControlName="mobile" class="form-control" />
+                          <ul *ngIf="registrationForm.controls['mobile'].invalid && (registrationForm.controls['mobile'].dirty || registrationForm.controls['mobile'].touched)">
+                            <li *ngIf="registrationForm.controls['mobile'].hasError('required')" style="color: red;">
+                              your phone number is required
+                            </li>
+                        </ul>
+                        </div>
+                      </div>
+
+
+                    <div class="d-flex flex-row align-items-center mb-4">
+                        <i class="fas fa-language fa-lg me-3 mt-4 mr-2 fa-fw"></i>
+                        <div class="form-outline flex-fill mb-0">
+                            <label class="form-label" >Language</label>
+                          <input type="" formControlName="language" class="form-control" />
+                          <ul *ngIf="registrationForm.controls['language'].invalid && (registrationForm.controls['language'].dirty || registrationForm.controls['language'].touched)">
+                            <li *ngIf="registrationForm.controls['language'].hasError('required')" style="color: red;">
+                              language is required
+                            </li>
+                        </ul>
+                        </div>
+                      </div>
+
+                    <div class="form-check d-flex justify-content-center mb-5">
+                      <label class="form-check-label" for="form2Example3">
+                        Already have an Account ?  <a [routerLink]="['/auth/login']">Login here</a>
+                      </label>
+                    </div>
+  
+                    <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                      <button type="submit" class="btn btn-primary btn-lg">Register</button>
+                    </div>
+  
+                  </form>
+  
+                </div>
+                <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
+  
+                  <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp"
+                    class="img-fluid" alt="Sample image">
+  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
