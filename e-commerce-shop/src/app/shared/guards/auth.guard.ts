@@ -11,7 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 export class AuthGuard implements CanActivate {
   constructor(
     private authService: AuthService,
-    private storage: StorageService,
+    private storageService: StorageService,
     private toast : ToastrService
   ){
 
@@ -21,7 +21,7 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
       
       // check if the user login token is available in the local storage
-      if (this.storage.get('token')) {
+      if (this.storageService.get('token')) {
         return true
       }else{
         this.toast.warning('you need to register or login first', 'Please login first')

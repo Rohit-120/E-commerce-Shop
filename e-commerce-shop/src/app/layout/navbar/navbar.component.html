@@ -1,5 +1,5 @@
 <!-- Navbar Start -->
-<div class="container-fluid bg-dark mb-30">
+<div class="container-fluid bg-dark mb-30" >
     <div class="row px-xl-5">
         <div class="col-lg-3 d-none d-lg-block">
             <a class="btn d-flex align-items-center justify-content-between bg-primary w-100" [ngClass]="{'collapsed' : !isCollapsed}" (click)="categoryToggle($event)" style="height: 65px; padding: 0 30px;">
@@ -19,13 +19,13 @@
                     <span class="h1 text-uppercase text-dark bg-light px-2">Multi</span>
                     <span class="h1 text-uppercase text-light bg-primary px-2 ml-n1">Shop</span>
                 </a>
-                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                <button (click)="categoryToggle($event)" type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                   <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
-                    <div class="navbar-nav mr-auto py-0">
+                <div class="collapse navbar-collapse justify-content-between" [ngClass]="{'show' : isNavActive}" id="navbarCollapse">
+                    <div class="navbar-nav mr-auto py-0 align-items-center">
                         <ng-container *ngFor="let item of mainNavItems; let first = first" >
-                            <a  [routerLink]="item.route" class="nav-item nav-link " [ngClass]="{'active' : isNavActive}" routerLinkActive="active">{{item.navItem}}</a>
+                            <a  [routerLink]="item.route" class="nav-item nav-link pt-3" [ngClass]="{'active' : isNavActive}" routerLinkActive="active">{{item.navItem}}</a>
                         </ng-container>
                     </div>
                     <div class="navbar-nav ml-auto py-0 d-none d-lg-block">

@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/shared/services/api.service';
+import { AuthService } from 'src/app/shared/services/auth.service';
 import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
@@ -16,6 +17,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
   totalCartLength! : number;
   isCollapsed : boolean = false;
   isNavActive : boolean = false;
+  isMobileNavActive : boolean = false;
+
   subscription: Subscription[] = [];
 
   // Object for main header navigation
@@ -54,6 +57,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   
   constructor(
     private apiCall: ApiService,
+    private authService : AuthService,
     private cdr : ChangeDetectorRef,
     public commonService: CommonService,
   ) { }
@@ -96,27 +100,30 @@ export class NavbarComponent implements OnInit, OnDestroy {
    * Function to get Cart length of users .
    */
   cartItemLength(){
-    let sub3 = this.apiCall.getCartItems().subscribe({
+    let sub3 = this.apiCall.getCartProducts().subscribe({
       next : (carts:any) => {
-        // this.totalCartLength =  carts.products.length;
+        this.totalCartLength = carts.data.totalProductsInCart;
+        this.commonService.totalCartItemsLength.next(this.totalCartLength);
         this.cdr.markForCheck();        
+
       }
     });
     this.subscription.push(sub3);
   }
-  
-  categoryToggle(event:any){
+
+  //function for toggle category.
+  categoryToggle(event?:any){
     event.stopPropagation()
     this.isCollapsed = !this.isCollapsed;
     this.isNavActive = !this.isNavActive
 
   }
 
+  // function to toggle navbar and category on outside Click..
   @HostListener('document:click', ['$event']) onDocumentClick(event : any) {
     this.isCollapsed = false
+    this.isNavActive = false
   }
-
-  clickOutside(){}
 
   ngOnDestroy(): void {
     this.subscription.forEach(sub => sub.unsubscribe());

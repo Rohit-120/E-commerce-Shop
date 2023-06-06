@@ -43,7 +43,7 @@ export class TopbarComponent implements OnInit {
 
   currencyChange: string = 'USD';
   languageLabel!: string;
-
+  totalCartLength!: number;
   currencies: any = [
     { name: 'USD', currencyPrice: 1 },
     { name: 'EUR', currencyPrice: 0.92 },
@@ -71,13 +71,14 @@ export class TopbarComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private apiCall: ApiService,
-    private storage: StorageService,
+    private storageService: StorageService,
     private toastService: ToastrService
 
   ) {}
 
   ngOnInit(): void {
     this.checkLoginStatus();
+    this.checkCartItemLength();
   }
 
   checkLoginStatus(){
@@ -85,6 +86,16 @@ export class TopbarComponent implements OnInit {
       next : (res) => {
         this.isLogin = res;
         this.cdr.markForCheck(); 
+      }
+    })
+  }
+
+  checkCartItemLength(){
+    this.commonService.totalCartItemsLength.subscribe({
+      next : (res) => {
+        this.totalCartLength = res;
+        this.cdr.markForCheck(); 
+
       }
     })
   }
@@ -116,12 +127,14 @@ export class TopbarComponent implements OnInit {
   }
 
   logOut(){
-    if(this.storage.get('token')){
-      this.apiCall.userLogout().subscribe({
+    if(this.storageService.get('token')){
+      console.log('logOut', this.storageService.get('token'),typeof  this.storageService.get('token'));
+      
+      this.authService.userLogout().subscribe({
         next : (res) => {
           console.log('user logout succesfully' , res);
           if (res) {
-            this.storage.remove('token');
+            this.storageService.remove('token');
             this.authService.isLoggedIn.next(false);
             this.router.navigate(['/auth/login']);
             this.toastService.warning(res.message, 'Logged out')

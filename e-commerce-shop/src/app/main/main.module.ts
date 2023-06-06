@@ -16,6 +16,8 @@ import { ShopDetailComponent } from './shop-detail/shop-detail.component';
 import { VendorComponent } from '../vendor/vendor.component';
 import { FeaturedProductComponent } from 'src/main/components/featured-product/featured-product.component';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TokenInterceptor } from '../shared/interceptors/token.interceptor';
 
 
 @NgModule({
@@ -39,6 +41,14 @@ import { NgxPaginationModule } from 'ngx-pagination';
     DragScrollModule,
     MainRoutingModule,
     NgxPaginationModule
+  ],
+  providers : [
+    {
+      provide : HTTP_INTERCEPTORS,
+      useClass : TokenInterceptor,
+      multi : true
+    }
+
   ]
 })
 export class MainModule { }

@@ -1,6 +1,7 @@
 <!-- Products Start -->
 
 <div class="row px-xl-5">
+    <img *ngIf="featuredProduct.length == 0" class="mx-auto" src="../../../assets/images/no-product-found.png" alt="">
     <div *ngFor="let item of featuredProduct; let index = index " class="col-lg-3 col-md-4 col-sm-6 pb-1">
         <div class="product-item bg-light mb-4">
             <div class="product-img position-relative overflow-hidden">

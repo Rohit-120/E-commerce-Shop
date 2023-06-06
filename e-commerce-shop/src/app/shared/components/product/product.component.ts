@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { StorageService } from '../../services/storage.service';
 import { CommonService } from '../../services/common.service';
 import { Subscription } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-product',
@@ -19,7 +20,7 @@ import { Subscription } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductComponent implements OnInit, OnDestroy {
-  products!: any[];
+  products: any[] = [];
   fav: boolean = false;
   favoriteProduct: any[] = [];
   currencyInfo: any;
@@ -30,7 +31,8 @@ export class ProductComponent implements OnInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     private router: Router,
     private storageService: StorageService,
-    public commonService: CommonService
+    public commonService: CommonService,
+    private toastService: ToastrService
   ) {}
 
   ngOnInit() {
@@ -51,19 +53,28 @@ export class ProductComponent implements OnInit, OnDestroy {
   }
 
   onShopDetail(item: any) {
-    console.log(item._id, 'onShopDetail');
-    
     this.router.navigate(['shop-detail', item._id]);
   }
 
-  onFavoriteClick(index: any) {
-    if (this.products[index].isFavorite) {
-      this.products[index].isFavorite = false;
-    } else {
-      this.products[index].isFavorite = true;
-    }
+  //function for add to cart a product
+  addToCartClick(id: any) {
+    this.apiCall.addToCart({ _product: id, quantity: 1 }).subscribe({
+      next: (res: any) => {
+        if (res.type === 'success') {
+          this.toastService.success(res.message, 'Added to cart');
+        }
+      },
+    });
+  }
 
-    this.commonService.favorite.next(this.products);
+  onFavoriteClick(_id: any) {
+    this.apiCall.addToFavorite({_product : _id}).subscribe({
+      next : (res: any) => {
+        if (res.type === 'success') {
+          this.toastService.success(res.message, 'Added to Favorite');
+        }
+      }
+    })
   }
 
   getCurrencyInfo() {
@@ -80,3 +91,11 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 }
+
+// if (this.products[index].isFavorite) {
+//   this.products[index].isFavorite = false;
+// } else {
+//   this.products[index].isFavorite = true;
+// }
+
+// this.commonService.favorite.next(this.products);

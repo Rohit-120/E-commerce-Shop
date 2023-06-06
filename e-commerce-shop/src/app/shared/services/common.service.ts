@@ -9,7 +9,7 @@ export class CommonService {
 
   favorite : BehaviorSubject<any> = new BehaviorSubject<any>('')
   FavoriteItemLength = new BehaviorSubject<any>('');
-  totalCartItems = new BehaviorSubject<any>('')
+  totalCartItemsLength = new BehaviorSubject<any>(null)
   favoriteItems = new Subject<number>();
   categories = new BehaviorSubject<any[]>([]);
 

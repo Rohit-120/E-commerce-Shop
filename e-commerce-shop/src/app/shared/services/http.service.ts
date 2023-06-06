@@ -19,4 +19,8 @@ export class HttpService {
     return this.http.post(url, body);
   }
 
+  deleteRequest(url : string, item : any) {
+    return this.http.delete(url, item);
+  }
+
 }

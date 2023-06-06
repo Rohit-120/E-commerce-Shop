@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnIni
 import { ApiService } from '../../services/api.service';
 import { CommonService } from '../../services/common.service';
 import { Subscription } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-favorite',
@@ -17,7 +18,8 @@ export class FavoriteComponent implements OnInit, OnDestroy {
   constructor(
     private apiCall: ApiService,
     private cdr: ChangeDetectorRef,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private toastService: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -35,6 +37,16 @@ export class FavoriteComponent implements OnInit, OnDestroy {
        this.commonService.FavoriteItemLength.next(this.favoriteItems.length);
       }
     })
+  }
+
+  removeFavorite(_id : any){
+      this.apiCall.removeFavoriteProduct({_product : _id}).subscribe({
+        next : (res: any) => {
+          if (res.type === 'success') {
+            this.toastService.show(res.message, 'Removed from favorites');
+          }
+        }
+      })
   }
 
   getCurrencyInfo() {

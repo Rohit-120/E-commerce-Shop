@@ -8,5 +8,13 @@ export const SIGNUP_FOOTER =  `${LOCAL_HOST}/subscribe`;
 export const USER_REGISTRATION = `${LOCAL_HOST}/register`
 export const USER_LOGIN = `${LOCAL_HOST}/login`;
 export const USER_LOGOUT = `${LOCAL_HOST}/logout`;
+export const CART_PRODUCTS = `${LOCAL_HOST}/cart`;
+export const REMOVE_CART = `${LOCAL_HOST}/cart/remove`;
+export const ADD_TO_CART = `${LOCAL_HOST}/cart/add`;
+export const ADD_TO_FAVORITE = `${LOCAL_HOST}/favorite/add`;
+export const REMOVE_FAVORITE = `${LOCAL_HOST}/favorite/remove`;
+
+
+
 
 

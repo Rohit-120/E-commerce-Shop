@@ -188,6 +188,9 @@ export class ShopComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * @param item to take input to sort price and rating based on ascending and descending order..   
+   */
   sorting(item: any) {
     this.currentSortLabel = item.label;
 
@@ -195,9 +198,6 @@ export class ShopComponent implements OnInit, OnDestroy {
       field: item.name,
       order: item.order,
     };
-
-    // this.body.sort.field = item.name;
-    // this.body.sort.order = item.order;
 
     if (this.isCategoryShow) {
       this.getCategoriesWiseProduct();
@@ -217,6 +217,12 @@ export class ShopComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   *
+   * @param event to check whether checkbox is checked otr not
+   * @param item product will be filtered based on item object.
+   * @param filterType different types of filter on products (1) Price, or (2) Color, or (3) Size.
+   */
   getFilterData(event: any, item: any, filterType: any) {
     let field = item;
     if (field.totalProducts) {

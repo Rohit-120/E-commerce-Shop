@@ -5,6 +5,7 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
+import { Toast, ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { BreadcrumbService } from 'src/app/shared/services/breadcrumb.service';
@@ -17,19 +18,20 @@ import { CommonService } from 'src/app/shared/services/common.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CartComponent implements OnInit, OnDestroy {
-  CartItems: any[] = [];
+  cartItems: any[] = [];
   quantity: number = 1;
   subTotal: number = 0;
   shipping: number = 10;
   selectedIndex: any = null;
-  currencyInfo:any;
+  currencyInfo: any;
   subscriptions: Subscription[] = [];
 
   constructor(
     private breadcrumbService: BreadcrumbService,
     private apiCall: ApiService,
     private cdr: ChangeDetectorRef,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private toastService: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -54,22 +56,10 @@ export class CartComponent implements OnInit, OnDestroy {
 
   //To get Cart Item details using ApiService
   getCartDetails() {
-   let sub1 = this.apiCall.getCartItems().subscribe({
+    let sub1 = this.apiCall.getCartProducts().subscribe({
       next: (res: any) => {
-        for (const product of res.products) {
-          let sub2 = this.apiCall.getSingleProduct(product.productId).subscribe({
-            next: (result: any) => {
-              result['quantity'] = product.quantity;
-              result['total'] = this.subTotal =
-              parseInt(result.price) * parseInt(result.quantity);
-              this.CartItems.push(result);
-              this.commonService.totalCartItems.next(this.CartItems.length);
-              this.getAllTotal();
-              this.cdr.markForCheck();
-            },
-          });
-          this.subscriptions.push(sub2)
-        }
+        this.cartItems = res.data.products;
+        this.cdr.markForCheck();
       },
     });
     this.subscriptions.push(sub1);
@@ -80,10 +70,10 @@ export class CartComponent implements OnInit, OnDestroy {
    * Increase the Cart Quantity
    */
   increase(index: number) {
-    if (this.CartItems[index].quantity < 7) {
-      this.CartItems[index].quantity++;
-      this.CartItems[index].total =
-        this.CartItems[index].price * this.CartItems[index].quantity;
+    if (this.cartItems[index].quantity < 7) {
+      this.cartItems[index].quantity++;
+      this.cartItems[index].total =
+        this.cartItems[index].product.price * this.cartItems[index].quantity;
     }
     this.getAllTotal();
   }
@@ -93,10 +83,10 @@ export class CartComponent implements OnInit, OnDestroy {
    * Decrease the Cart Quantity
    */
   decrease(index: number) {
-    if (this.CartItems[index].quantity > 0) {
-      this.CartItems[index].quantity--;
-      this.CartItems[index].total =
-        this.CartItems[index].price * this.CartItems[index].quantity;
+    if (this.cartItems[index].quantity > 0) {
+      this.cartItems[index].quantity--;
+      this.cartItems[index].total =
+        this.cartItems[index].product.price * this.cartItems[index].quantity;
     }
     this.getAllTotal();
   }
@@ -105,7 +95,7 @@ export class CartComponent implements OnInit, OnDestroy {
   getAllTotal() {
     let tempTotal: number = 0;
 
-    for (const item of this.CartItems) {
+    for (const item of this.cartItems) {
       tempTotal += item.total;
     }
     this.subTotal = tempTotal;
@@ -113,10 +103,17 @@ export class CartComponent implements OnInit, OnDestroy {
     this.subTotal <= 0 ? (this.shipping = 0) : (this.shipping = 10);
   }
 
-  removeCart(index: number) {
-    this.CartItems.splice(index, 1);
-    this.commonService.totalCartItems.next(this.CartItems.length);
-    this.getAllTotal();
+  removeCart(_id: number) {
+    this.apiCall.removeCartProduct({ _cart: _id }).subscribe({
+      next: (res) => {
+        if (res.type === 'success') {
+          this.toastService.show(res.message, 'product removed')
+        }
+      },
+    });
+    // this.cartItems.splice(_id, 1);
+    // this.commonService.totalCartItems.next(this.cartItems.length);
+    // this.getAllTotal();
   }
 
   getCurrencyInfo() {

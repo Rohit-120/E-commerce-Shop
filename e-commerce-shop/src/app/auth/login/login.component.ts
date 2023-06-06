@@ -25,31 +25,27 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private storage : StorageService,
+    private storageService: StorageService,
     private apiCall: ApiService,
     private authService: AuthService,
     private toastService: ToastrService,
-    private router : Router,
+    private router: Router
   ) {}
 
   ngOnInit(): void {}
 
   userLogin() {
-    console.log(this.loginForm.value);
     if (this.loginForm.valid) {
-      let sub1 = this.apiCall.userLogin(this.loginForm.value).subscribe({
+      let sub1 = this.authService.userLogin(this.loginForm.value).subscribe({
         next: (res) => {
-          console.log('loginnnnnnnnnnnnnnnn', res);
-          if (res) {
             if (res.type === 'success') {
-              this.authService.isLoggedIn.next(true)
-              this.storage.set('token', res.token);
+              this.authService.isLoggedIn.next(true);
+              this.storageService.set('token', res.token);
               this.toastService.success(res.message, 'Logged in');
               this.router.navigate(['/dashboard']);
             } else {
               this.toastService.error(res.message, 'Login Error');
             }
-          }
         },
       });
       this.subscription.push(sub1);

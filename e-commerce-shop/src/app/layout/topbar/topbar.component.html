@@ -25,7 +25,7 @@
                     </div>
                 </div>
                 <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">{{languageLabel}}</button>
+                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Select language</button>
                     <div class="dropdown-menu dropdown-menu-right">
                         <button *ngFor="let item of languages" class="dropdown-item" type="button"  (click)="onLanguageChange(item)" >{{item.label}}</button>
                     </div>
@@ -36,9 +36,9 @@
                     <i class="fas fa-heart text-dark"></i>
                     <span class="badge text-dark border border-dark rounded-circle" style="padding-bottom: 2px;">0</span>
                 </a>
-                <a href="" class="btn px-0 ml-2">
+                <a [routerLink]="['/cart']" class="btn px-0 ml-2">
                     <i class="fas fa-shopping-cart text-dark"></i>
-                    <span class="badge text-dark border border-dark rounded-circle" style="padding-bottom: 2px;">0</span>
+                    <span  class="badge text-dark border border-dark rounded-circle" style="padding-bottom: 2px;">{{totalCartLength}}</span>
                 </a>
             </div>
         </div>

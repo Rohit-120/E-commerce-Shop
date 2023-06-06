@@ -1,6 +1,7 @@
 <!-- Products Start -->
 
     <div class="row px-xl-5">
+        <img *ngIf="products.length == 0" class="mx-auto" src="../../../assets/images/no-product-found.png" alt="">
         <div *ngFor="let item of products; let index = index " class="col-lg-3 col-md-4 col-sm-6 pb-1">
             <div class="product-item bg-light mb-4">
                 <div class="product-img position-relative overflow-hidden">
@@ -9,8 +10,8 @@
                         <a *ngFor="let action of productActionIcon" class="btn btn-outline-dark btn-square" [routerLink]="action?.route" ><i (click)="onFavoriteClick(action, item)" class="{{action.icon}}"></i></a>
                     </div> -->
                     <div class="product-action">
-                        <a class="btn btn-outline-dark btn-square" [routerLink]="['/cart']" ><i class="fa fa-shopping-cart"></i></a>
-                        <a class="btn btn-outline-dark btn-square" (click)="onFavoriteClick(index)" ><i class="fa fa-heart" [ngClass]="{'text-danger' : item.isFavorite}"></i></a>
+                        <a class="btn btn-outline-dark btn-square" [routerLink]="['/cart']" (click)="addToCartClick(item._id)" ><i class="fa fa-shopping-cart"></i></a>
+                        <a class="btn btn-outline-dark btn-square" (click)="onFavoriteClick(item._id)" ><i class="fa fa-heart" [ngClass]="{'text-danger' : item.isFavorite}"></i></a>
                         <a class="btn btn-outline-dark btn-square" ><i class="fa fa-sync-alt"></i></a>
                         <a class="btn btn-outline-dark btn-square" (click)="onShopDetail(item)" ><i class="fa fa-search"></i></a>
                     </div>

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/shared/services/api.service';
+import { AuthService } from 'src/app/shared/services/auth.service';
 
 @Component({
   selector: 'app-registration',
@@ -28,7 +29,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private router : Router,
-    private apiCall: ApiService,
+    private authService: AuthService,
     private toastService: ToastrService
   ) {}
 
@@ -36,7 +37,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
 
   userRegistration() {
     if (this.registrationForm.valid) {
-      let sub1 = this.apiCall.userRegistration(this.registrationForm.value).subscribe({
+      let sub1 = this.authService.userRegistration(this.registrationForm.value).subscribe({
         next: (res) => {
           if (res.type === 'success') {
             this.toastService.success(res.message);

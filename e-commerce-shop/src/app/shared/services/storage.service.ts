@@ -9,13 +9,12 @@ export class StorageService {
   constructor() { }
 
   set(key:string, data:any){
-    localStorage.setItem(key, JSON.stringify(data));
-    
+    localStorage.setItem(key, JSON.stringify(data));  
   }
 
   get(key:string){
-   return  localStorage.getItem(key);
-    
+    const data : any = localStorage.getItem(key); 
+    return data   
   } 
 
   remove(key:string){

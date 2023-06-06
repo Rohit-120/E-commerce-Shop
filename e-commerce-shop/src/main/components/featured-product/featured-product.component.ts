@@ -32,13 +32,14 @@ export class FeaturedProductComponent implements OnInit, OnDestroy {
   }
 
   getFeaturesProduct() {
-    
-    let sub1 = this.apiCall.getAllProduct({filter : {isFeatured : true}}).subscribe({
-      next: (res) => {
-        this.featuredProduct = res.data.products;
-        this.cdr.markForCheck();
-      },
-    });
+    let sub1 = this.apiCall
+      .getAllProduct({ filter: { isFeatured: true } })
+      .subscribe({
+        next: (res) => {
+          this.featuredProduct = res.data.products;
+          this.cdr.markForCheck();
+        },
+      });
     this.subscriptions.push(sub1);
   }
 
