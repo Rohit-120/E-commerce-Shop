@@ -9,7 +9,7 @@ export class StorageService {
   constructor() { }
 
   set(key:string, data:any){
-    localStorage.setItem(key, JSON.stringify(data));  
+    localStorage.setItem(key, data);  
   }
 
   get(key:string){

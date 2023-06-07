@@ -25,6 +25,10 @@ export class CartComponent implements OnInit, OnDestroy {
   selectedIndex: any = null;
   currencyInfo: any;
   subscriptions: Subscription[] = [];
+  body : any = {
+    productId : '',
+    quantity : null
+  }
 
   constructor(
     private breadcrumbService: BreadcrumbService,
@@ -58,35 +62,47 @@ export class CartComponent implements OnInit, OnDestroy {
   getCartDetails() {
     let sub1 = this.apiCall.getCartProducts().subscribe({
       next: (res: any) => {
+        console.log(res.data, ';;;;;;;;;;;;;;;;');
         this.cartItems = res.data.products;
+        this.commonService.totalCartItemsLength.next(this.cartItems.length);
         this.cdr.markForCheck();
+        this.getAllTotal();
       },
     });
     this.subscriptions.push(sub1);
+  }
+
+  changeQuantity(){
+    this.apiCall.changeCartQuantity(this.body).subscribe({
+      next : (res: any) => {
+        console.log('Attempting to change ====>', res);
+        
+      }
+    })
   }
 
   /**
    * @param index number of the Cart object
    * Increase the Cart Quantity
    */
-  increase(index: number) {
-    if (this.cartItems[index].quantity < 7) {
-      this.cartItems[index].quantity++;
-      this.cartItems[index].total =
-        this.cartItems[index].product.price * this.cartItems[index].quantity;
-    }
-    this.getAllTotal();
+  increase(index: number, id : any) {
+      this.body.quantity = this.cartItems[index].quantity++;
+      this.body.productId = id;
+      this.cartItems[index].total = this.cartItems[index].product.price * this.cartItems[index].quantity;
+      this.changeQuantity()
+      this.getAllTotal();
   }
 
   /**
    * @param index number of the Cart object
    * Decrease the Cart Quantity
    */
-  decrease(index: number) {
+  decrease(index: number, id : any) {
     if (this.cartItems[index].quantity > 0) {
-      this.cartItems[index].quantity--;
-      this.cartItems[index].total =
-        this.cartItems[index].product.price * this.cartItems[index].quantity;
+       this.body.quantity = this.cartItems[index].quantity--;
+       this.body.productId = id;
+      this.cartItems[index].total = this.cartItems[index].product.price * this.cartItems[index].quantity;
+      this.changeQuantity()
     }
     this.getAllTotal();
   }
@@ -103,19 +119,27 @@ export class CartComponent implements OnInit, OnDestroy {
     this.subTotal <= 0 ? (this.shipping = 0) : (this.shipping = 10);
   }
 
-  removeCart(_id: number) {
-    this.apiCall.removeCartProduct({ _cart: _id }).subscribe({
+  /**
+   * function to remove the particular cart product
+   * @param _id unique id of the cart product.
+   * @param index index of the cart product.
+   */
+  removeCart(_id: number, index: number) {
+    let removeItemTitle = this.cartItems[index].product.title;
+    this.apiCall.removeCartProduct(_id).subscribe({
       next: (res) => {
         if (res.type === 'success') {
-          this.toastService.show(res.message, 'product removed')
+          this.cartItems.splice(index, 1);
+          this.commonService.totalCartItemsLength.next(this.cartItems.length);
+          this.getAllTotal();
+          this.toastService.show(res.message, `${removeItemTitle}`);
+          this.cdr.markForCheck();
         }
       },
     });
-    // this.cartItems.splice(_id, 1);
-    // this.commonService.totalCartItems.next(this.cartItems.length);
-    // this.getAllTotal();
   }
 
+  //to get different currency of products
   getCurrencyInfo() {
     let sub3 = this.commonService.currencyChanges.subscribe({
       next: (res) => {

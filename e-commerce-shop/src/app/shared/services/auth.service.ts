@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpService } from './http.service';
 import { USER_LOGIN, USER_LOGOUT, USER_REGISTRATION } from '../constants/apiEndPoint';
+import jwtDecode from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -26,5 +27,10 @@ export class AuthService {
   
   userLogout(): Observable<any> {
     return this.http.getRequest(USER_LOGOUT);
+  }
+
+  decodeToken(): Observable<any> {
+        let token : any = localStorage.getItem('token')
+    return jwtDecode(token);
   }
 }

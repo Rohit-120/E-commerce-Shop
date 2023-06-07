@@ -25,9 +25,10 @@ export class ShopDetailComponent implements OnInit, OnDestroy {
   singleProductDetails: any;
   currencyInfo: any;
   subscriptions: Subscription[] = [];
-  detailNavbar: any[] = ['Description', 'Information', 'Reviews']
+  detailNavbar: any[] = ['Description', 'Information', 'Reviews'];
   navbarToggle: any = 0;
-  
+  // productQuantity: any = 1;
+
   // User Review Form..
   reviewForm: FormGroup = this.fb.group({
     rating: ['5', [Validators.required, Validators.max(5), Validators.min(1)]],
@@ -49,6 +50,10 @@ export class ShopDetailComponent implements OnInit, OnDestroy {
     },
   ];
 
+  body: any = {
+    productId: '',
+    quantity: 1,
+  };
 
   constructor(
     private fb: FormBuilder,
@@ -56,7 +61,7 @@ export class ShopDetailComponent implements OnInit, OnDestroy {
     private apiCall: ApiService,
     private activeRouter: ActivatedRoute,
     private cdr: ChangeDetectorRef,
-    private toast: ToastrService,
+    private toastService: ToastrService,
     public commonService: CommonService
   ) {
     // activeRouter.params.subscribe(params => {
@@ -90,14 +95,57 @@ export class ShopDetailComponent implements OnInit, OnDestroy {
   }
 
   getSingleProductDetails() {
-    
     let sub1 = this.apiCall.getSingleProduct(this.singleProductId).subscribe({
       next: (res) => {
         this.singleProductDetails = res.data.products[0];
         this.cdr.markForCheck();
+        console.log(this.singleProductDetails, 'single product details');
       },
     });
     this.subscriptions.push(sub1);
+  }
+
+  addToCart() {
+    this.body.productId = this.singleProductId
+    console.log('add cart ====> ', typeof this.body.quantity,  this.body.productId);
+    this.apiCall
+      .addToCart(this.body)
+      .subscribe({
+        next: (res) => {
+          if (res.type === 'success') {
+            this.toastService.success(res.message, 'Added to cart');
+          }
+        },
+      });
+      this.body.quantity = 1;
+  }
+
+  changeQuantity() {
+    this.apiCall.changeCartQuantity(this.body).subscribe({
+      next: (res) => {
+        console.log(res);
+      },
+    });
+  }
+
+  /**
+   * @param index number of the Cart object
+   * Increase the Cart Quantity
+   */
+  increase() {
+    this.body.quantity++;
+    this.changeQuantity();
+  }
+
+  /**
+   * @param index number of the Cart object
+   * Decrease the Cart Quantity
+   */
+  decrease() {
+    if (this.body.quantity > 0) {
+      this.body.quantity--;
+      this.changeQuantity();
+    }
   }
 
   onReviewSubmit() {
@@ -109,7 +157,7 @@ export class ShopDetailComponent implements OnInit, OnDestroy {
       });
       this.reviewForm.reset();
     } else {
-      this.toast.error('Enter valid information');
+      this.toastService.error('Enter valid information');
     }
   }
 
@@ -123,11 +171,11 @@ export class ShopDetailComponent implements OnInit, OnDestroy {
     this.subscriptions.push(sub2);
   }
 
-  navbarClick(index:number){
+  navbarClick(index: number) {
     this.navbarToggle = index;
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => sub.unsubscribe());    
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 }

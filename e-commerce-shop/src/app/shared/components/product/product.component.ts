@@ -2,7 +2,6 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  Input,
   OnDestroy,
   OnInit,
 } from '@angular/core';
@@ -58,7 +57,7 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   //function for add to cart a product
   addToCartClick(id: any) {
-    this.apiCall.addToCart({ _product: id, quantity: 1 }).subscribe({
+    this.apiCall.addToCart({ productId: id, quantity: 1 }).subscribe({
       next: (res: any) => {
         if (res.type === 'success') {
           this.toastService.success(res.message, 'Added to cart');

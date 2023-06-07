@@ -60,10 +60,10 @@ export class TopbarComponent implements OnInit {
     { label: 'AR', code: 'ar' },
     { label: 'RU', code: 'ru' },
     { label: 'GU', code: 'gu' },
-
   ];
 
   searchData: string = '';
+  userDetails:any;
 
   constructor(
     private commonService: CommonService,
@@ -73,31 +73,30 @@ export class TopbarComponent implements OnInit {
     private apiCall: ApiService,
     private storageService: StorageService,
     private toastService: ToastrService
-
   ) {}
 
   ngOnInit(): void {
     this.checkLoginStatus();
     this.checkCartItemLength();
+    this.getUserName();
   }
 
-  checkLoginStatus(){
+  checkLoginStatus() {
     this.authService.isLoggedIn.subscribe({
-      next : (res) => {
+      next: (res) => {
         this.isLogin = res;
-        this.cdr.markForCheck(); 
-      }
-    })
+        this.cdr.markForCheck();
+      },
+    });
   }
 
-  checkCartItemLength(){
+  checkCartItemLength() {
     this.commonService.totalCartItemsLength.subscribe({
-      next : (res) => {
+      next: (res) => {
         this.totalCartLength = res;
-        this.cdr.markForCheck(); 
-
-      }
-    })
+        this.cdr.markForCheck();
+      },
+    });
   }
 
   productSearchClick() {
@@ -126,24 +125,30 @@ export class TopbarComponent implements OnInit {
     location.reload();
   }
 
-  logOut(){
-    if(this.storageService.get('token')){
-      console.log('logOut', this.storageService.get('token'),typeof  this.storageService.get('token'));
-      
+  getUserName() {
+    this.userDetails =  this.authService.decodeToken()
+    this.cdr.markForCheck();
+  }
+
+  logOut() {
+    if (this.storageService.get('token')) {
+      console.log(
+        'logOut',
+        this.storageService.get('token'),
+        typeof this.storageService.get('token')
+      );
+
       this.authService.userLogout().subscribe({
-        next : (res) => {
-          console.log('user logout succesfully' , res);
+        next: (res) => {
+          console.log('user logout succesfully', res);
           if (res) {
             this.storageService.remove('token');
             this.authService.isLoggedIn.next(false);
             this.router.navigate(['/auth/login']);
-            this.toastService.warning(res.message, 'Logged out')
-            
+            this.toastService.warning(res.message, 'Logged out');
           }
-          
-        }
-      })
+        },
+      });
     }
-
   }
 }

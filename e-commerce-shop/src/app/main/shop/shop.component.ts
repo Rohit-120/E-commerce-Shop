@@ -7,6 +7,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { BODY_FILTER } from 'src/app/shared/modals/interfaces';
 import { ApiService } from 'src/app/shared/services/api.service';
@@ -62,7 +63,8 @@ export class ShopComponent implements OnInit, OnDestroy {
     private apiCall: ApiService,
     private cdr: ChangeDetectorRef,
     private activateRouter: ActivatedRoute,
-    public commonService: CommonService
+    public commonService: CommonService,
+    private toastService: ToastrService
   ) {}
   isCategoryShow: boolean = false;
   ngOnInit(): void {
@@ -130,6 +132,16 @@ export class ShopComponent implements OnInit, OnDestroy {
         this.cdr.markForCheck();
         if (this.body.filter) {
           this.getProduct();
+        }
+      },
+    });
+  }
+
+  addToCartClick(id: any) {
+    this.apiCall.addToCart({ productId: id, quantity: 1 }).subscribe({
+      next: (res: any) => {
+        if (res.type === 'success') {
+          this.toastService.success(res.message, 'Added to cart');
         }
       },
     });

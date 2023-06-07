@@ -1,5 +1,5 @@
 
-
+<div class="custome-div">
 <div *ngFor="let item of offerProduct " class="product-offer mb-30" style="height: 200px;">
     <img class="img-fluid" src="{{item.image | image}}" alt="">
     <div class="offer-text">
@@ -7,4 +7,4 @@
         <h3 class="text-white mb-3">{{item.type}}</h3>
         <a [routerLink]="['/shop']" class="btn btn-primary">{{item.btnName}}</a>
     </div>
-</div>
+</div></div>

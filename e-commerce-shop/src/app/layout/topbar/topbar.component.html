@@ -15,6 +15,7 @@
                     <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">My Account</button>
                     <div class="dropdown-menu dropdown-menu-right">
                         <button *ngIf="!isLogin" class="dropdown-item" type="button" [routerLink]="['/auth/login']" >Log In</button>
+                        <button *ngIf="isLogin" class="dropdown-item" type="button" [routerLink]="['/auth/login']" >{{userDetails.name}}</button>
                         <button *ngIf="isLogin" class="dropdown-item" type="button" (click)="logOut()" >Log Out</button>
                     </div>
                 </div>

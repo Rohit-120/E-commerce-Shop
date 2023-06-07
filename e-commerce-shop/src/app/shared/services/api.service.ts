@@ -51,7 +51,9 @@ export class ApiService {
   }
 
   removeCartProduct(_id:any): Observable<any> {
-    return this.http.deleteRequest(REMOVE_CART, _id)    
+    console.log(REMOVE_CART+"/"+_id, '...........');
+    
+    return this.http.deleteRequest(REMOVE_CART+"/"+_id)    
   }
 
   addToFavorite(body:any): Observable<any> {
@@ -61,6 +63,10 @@ export class ApiService {
 
   removeFavoriteProduct(_id:any): Observable<any> {
     return this.http.deleteRequest(REMOVE_FAVORITE, _id)    
+  }
+
+  changeCartQuantity(body:any): Observable<any>{
+    return this.http.postRequest(ADD_TO_CART, body);
   }
   
   //Footer email Signup api
