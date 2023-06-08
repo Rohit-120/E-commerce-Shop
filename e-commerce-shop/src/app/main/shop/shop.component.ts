@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -21,7 +20,7 @@ import { CommonService } from 'src/app/shared/services/common.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShopComponent implements OnInit, OnDestroy {
-  itemsByCategories: any;
+  itemsByCategories: any[] = [];
   singleCategory: any = '';
   currencyInfo: any;
   subscriptions: Subscription[] = [];
@@ -39,22 +38,10 @@ export class ShopComponent implements OnInit, OnDestroy {
 
   filterProducts: any = {};
 
-  body: BODY_FILTER = {
-    filter: {
-      // // ---------------filter-----------
-      // filterByPrice:[],
-      // filterByColor: ['Black', 'Red'],
-      // FilterBySize: ['S', 'M',  'XXL'],
-      // isFeatured: true,
-      // isMarkedFavorite: true,
-      // // ----------------sort-------------
-    },
-    // sort: {
-    //   field: '', // fieldName
-    //   order: '', // asc or desc
-    // },
-    // // ------------- skip,limit---------
+  productViewFormat: string = 'grid';
 
+  body: BODY_FILTER = {
+    filter: {},
     pagination: { page: this.currPage, productsPerPage: this.perPageItems },
   };
 
@@ -111,7 +98,7 @@ export class ShopComponent implements OnInit, OnDestroy {
     if (this.isCategoryShow) {
       this.getCategoriesWiseProduct();
     } else {
-      let sub2 = this.apiCall.getAllProduct(this.body).subscribe({
+      let sub1 = this.apiCall.getAllProduct(this.body).subscribe({
         next: (res: any) => {
           this.totalProducts = res.totalProducts;
 
@@ -119,12 +106,12 @@ export class ShopComponent implements OnInit, OnDestroy {
           this.cdr.markForCheck();
         },
       });
-      this.subscriptions.push(sub2);
+      this.subscriptions.push(sub1);
     }
   }
 
   getDataOfSearchBar() {
-    this.commonService.dataFromSearchInput.subscribe({
+    let sub2 = this.commonService.dataFromSearchInput.subscribe({
       next: (res: any) => {
         this.body.filter = {
           search: res,
@@ -135,21 +122,38 @@ export class ShopComponent implements OnInit, OnDestroy {
         }
       },
     });
+    this.subscriptions.push(sub2);
   }
 
   addToCartClick(id: any) {
-    this.apiCall.addToCart({ productId: id, quantity: 1 }).subscribe({
-      next: (res: any) => {
+    console.log('addToCart =====>  ', id);
+
+    let sub3 = this.apiCall
+      .addToCart({ isAddedFromShop: true, productId: id, quantity: 1 })
+      .subscribe({
+        next: (res: any) => {
+          if (res.type === 'success') {
+            this.toastService.success(res.message, 'Added to cart');
+          }
+        },
+      });
+      this.subscriptions.push(sub3);
+  }
+
+  addToFavorite(productId: any) {
+    let sub4 = this.apiCall.addToFavorite(productId).subscribe({
+      next: (res) => {
         if (res.type === 'success') {
-          this.toastService.success(res.message, 'Added to cart');
+          this.toastService.success(res.message, 'Added to Favorites');
         }
       },
     });
+    this.subscriptions.push(sub4);
   }
 
   //API call for particular categories products if category available on activeRoute.
   getCategoriesWiseProduct() {
-    let sub1 = this.apiCall.getAllProduct(this.body).subscribe({
+    let sub5 = this.apiCall.getAllProduct(this.body).subscribe({
       next: (res) => {
         this.itemsByCategories = res.data.products;
         this.totalProducts = res.totalFilteredProducts;
@@ -161,17 +165,17 @@ export class ShopComponent implements OnInit, OnDestroy {
         this.cdr.markForCheck();
       },
     });
-    this.subscriptions.push(sub1);
+    this.subscriptions.push(sub5);
   }
 
   getCurrencyInfo() {
-    let sub3 = this.commonService.currencyChanges.subscribe({
+    let sub6 = this.commonService.currencyChanges.subscribe({
       next: (res) => {
         this.currencyInfo = res;
         this.cdr.markForCheck();
       },
     });
-    this.subscriptions.push(sub3);
+    this.subscriptions.push(sub6);
   }
 
   pageChange(currPage: number) {
@@ -181,13 +185,14 @@ export class ShopComponent implements OnInit, OnDestroy {
       this.body.pagination.page = currPage;
       this.body.pagination.productsPerPage = this.perPageItems;
 
-      this.apiCall.getAllProduct(this.body).subscribe({
+      let sub7 = this.apiCall.getAllProduct(this.body).subscribe({
         next: (res) => {
           this.totalProducts = res.totalProducts;
           this.itemsByCategories = res.data.products;
           this.cdr.markForCheck();
         },
       });
+      this.subscriptions.push(sub7);
     }
   }
 
@@ -200,8 +205,13 @@ export class ShopComponent implements OnInit, OnDestroy {
     }
   }
 
+  //Function to toggle view of products in List or Grid format.
+  viewToggle(view: any) {
+    this.productViewFormat = view;
+  }
+
   /**
-   * @param item to take input to sort price and rating based on ascending and descending order..   
+   * @param item to take input to sort price and rating based on ascending or descending order..
    */
   sorting(item: any) {
     this.currentSortLabel = item.label;
@@ -219,7 +229,7 @@ export class ShopComponent implements OnInit, OnDestroy {
   }
 
   getFilterList() {
-    this.apiCall.getProductFilterList().subscribe({
+    let sub8 = this.apiCall.getProductFilterList().subscribe({
       next: (res) => {
         this.filterProducts.filterByPrice = res.data.priceRanges;
         this.filterProducts.filterByColor = res.data.colors;
@@ -227,6 +237,7 @@ export class ShopComponent implements OnInit, OnDestroy {
         this.cdr.markForCheck();
       },
     });
+    this.subscriptions.push(sub8);
   }
 
   /**

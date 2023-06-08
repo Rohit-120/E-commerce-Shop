@@ -5,6 +5,7 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { CommonService } from 'src/app/shared/services/common.service';
@@ -23,7 +24,8 @@ export class FeaturedProductComponent implements OnInit, OnDestroy {
   constructor(
     private apiCall: ApiService,
     private cdr: ChangeDetectorRef,
-    public commonService: CommonService
+    public commonService: CommonService,
+    private toastService: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -43,6 +45,17 @@ export class FeaturedProductComponent implements OnInit, OnDestroy {
     this.subscriptions.push(sub1);
   }
 
+  //function for add to cart a product
+  addToCartClick(id: any) {
+    this.apiCall.addToCart({ isAddedFromShop : true,  productId: id, quantity: 1 }).subscribe({
+      next: (res: any) => {
+        if (res.type === 'success') {
+          this.toastService.success(res.message, 'Added to cart');
+        }
+      },
+    });
+  }
+
   getCurrencyInfo() {
     let sub2 = this.commonService.currencyChanges.subscribe({
       next: (res) => {
@@ -56,13 +69,14 @@ export class FeaturedProductComponent implements OnInit, OnDestroy {
     this.subscriptions.push(sub2);
   }
 
-  onFavoriteClick(index: any) {
-    if (this.featuredProduct[index].isFavorite) {
-      this.featuredProduct[index].isFavorite = false;
-    } else {
-      this.featuredProduct[index].isFavorite = true;
-    }
-    this.commonService.favorite.next(this.featuredProduct);
+  onFavoriteClick(productId: any) {
+    this.apiCall.addToFavorite(productId).subscribe({
+      next : (res: any) => {
+        if (res.type === 'success') {
+          this.toastService.success(res.message, 'Added to Favorite');
+        }
+      }
+    })
   }
 
   ngOnDestroy(): void {

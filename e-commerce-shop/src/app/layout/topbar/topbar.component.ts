@@ -84,7 +84,11 @@ export class TopbarComponent implements OnInit {
   checkLoginStatus() {
     this.authService.isLoggedIn.subscribe({
       next: (res) => {
-        this.isLogin = res;
+        if (res) {
+          this.isLogin = res;
+        }else if(this.storageService.get('token')){
+          this.isLogin = true;
+        }
         this.cdr.markForCheck();
       },
     });

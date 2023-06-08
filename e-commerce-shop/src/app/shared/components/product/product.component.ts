@@ -66,8 +66,8 @@ export class ProductComponent implements OnInit, OnDestroy {
     });
   }
 
-  onFavoriteClick(_id: any) {
-    this.apiCall.addToFavorite({_product : _id}).subscribe({
+  onFavoriteClick(productId: any) {
+    this.apiCall.addToFavorite(productId).subscribe({
       next : (res: any) => {
         if (res.type === 'success') {
           this.toastService.success(res.message, 'Added to Favorite');

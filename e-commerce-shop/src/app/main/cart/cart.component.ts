@@ -62,7 +62,6 @@ export class CartComponent implements OnInit, OnDestroy {
   getCartDetails() {
     let sub1 = this.apiCall.getCartProducts().subscribe({
       next: (res: any) => {
-        console.log(res.data, ';;;;;;;;;;;;;;;;');
         this.cartItems = res.data.products;
         this.commonService.totalCartItemsLength.next(this.cartItems.length);
         this.cdr.markForCheck();
@@ -74,9 +73,8 @@ export class CartComponent implements OnInit, OnDestroy {
 
   changeQuantity(){
     this.apiCall.changeCartQuantity(this.body).subscribe({
-      next : (res: any) => {
+      next : (res : any) => {
         console.log('Attempting to change ====>', res);
-        
       }
     })
   }
@@ -86,7 +84,7 @@ export class CartComponent implements OnInit, OnDestroy {
    * Increase the Cart Quantity
    */
   increase(index: number, id : any) {
-      this.body.quantity = this.cartItems[index].quantity++;
+      this.body.quantity = ++this.cartItems[index].quantity;
       this.body.productId = id;
       this.cartItems[index].total = this.cartItems[index].product.price * this.cartItems[index].quantity;
       this.changeQuantity()
@@ -98,8 +96,8 @@ export class CartComponent implements OnInit, OnDestroy {
    * Decrease the Cart Quantity
    */
   decrease(index: number, id : any) {
-    if (this.cartItems[index].quantity > 0) {
-       this.body.quantity = this.cartItems[index].quantity--;
+    if (this.cartItems[index].quantity > 1) {
+       this.body.quantity = --this.cartItems[index].quantity;
        this.body.productId = id;
       this.cartItems[index].total = this.cartItems[index].product.price * this.cartItems[index].quantity;
       this.changeQuantity()

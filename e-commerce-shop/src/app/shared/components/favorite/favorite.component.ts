@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { CommonService } from '../../services/common.service';
 import { Subscription } from 'rxjs';
@@ -8,7 +14,7 @@ import { ToastrService } from 'ngx-toastr';
   selector: 'app-favorite',
   templateUrl: './favorite.component.html',
   styleUrls: ['./favorite.component.scss'],
-  changeDetection : ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FavoriteComponent implements OnInit, OnDestroy {
   favoriteItems: any[] = [];
@@ -23,30 +29,31 @@ export class FavoriteComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-
     this.getFavoriteItems();
     this.getCurrencyInfo();
-  
   }
 
-  getFavoriteItems(){
-    this.apiCall.getAllProduct({filter: {isMarkedFavorite:true}}).subscribe({
-      next : (res: any) => {
-       this.favoriteItems =  res.data.products
-       this.cdr.markForCheck();
-       this.commonService.FavoriteItemLength.next(this.favoriteItems.length);
-      }
-    })
+  getFavoriteItems() {
+    this.apiCall.getFavoriteProduct().subscribe({
+      next: (res: any) => {
+        console.log(res.data);
+
+        this.favoriteItems = res.data.products;
+        this.cdr.markForCheck();
+        this.commonService.FavoriteItemLength.next(this.favoriteItems.length);
+      },
+    });
   }
 
-  removeFavorite(_id : any){
-      this.apiCall.removeFavoriteProduct({_product : _id}).subscribe({
-        next : (res: any) => {
-          if (res.type === 'success') {
-            this.toastService.show(res.message, 'Removed from favorites');
-          }
+  removeFavorite(productId: any) {  
+    this.apiCall.removeFavoriteProduct(productId).subscribe({
+      next: (res: any) => {
+        console.log(res, 'removed');
+        if (res.type === 'success') {
+          this.toastService.show(res.message, 'Removed from favorites');
         }
-      })
+      },
+    });
   }
 
   getCurrencyInfo() {

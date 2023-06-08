@@ -10,8 +10,8 @@
                     <a *ngFor="let action of productActionIcon" class="btn btn-outline-dark btn-square" [routerLink]="action?.route" ><i (click)="onFavoriteClick(action, item)" class="{{action.icon}}"></i></a>
                 </div> -->
                 <div class="product-action">
-                    <a class="btn btn-outline-dark btn-square" [routerLink]="['/cart']" ><i class="fa fa-shopping-cart"></i></a>
-                    <a class="btn btn-outline-dark btn-square" (click)="onFavoriteClick(index)" ><i class="fa fa-heart" [ngClass]="{'text-danger' : item.isFavorite}"></i></a>
+                    <a class="btn btn-outline-dark btn-square" (click)="addToCartClick(item._id)" ><i class="fa fa-shopping-cart"></i></a>
+                    <a class="btn btn-outline-dark btn-square" (click)="onFavoriteClick(item._id)" ><i class="fa fa-heart" [ngClass]="{'text-danger' : item.isFavorite}"></i></a>
                     <a class="btn btn-outline-dark btn-square" ><i class="fa fa-sync-alt"></i></a>
                     <a class="btn btn-outline-dark btn-square" [routerLink]="['/shop-detail', item._id]" ><i class="fa fa-search"></i></a>
                 </div>

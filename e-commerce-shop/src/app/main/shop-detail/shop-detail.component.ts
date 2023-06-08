@@ -73,7 +73,7 @@ export class ShopDetailComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.activeRouter.params.subscribe((param) => {
       this.singleProductId = param['id'];
-      this.cdr.detectChanges();
+      this.cdr.markForCheck();
     });
     this.breadcrumbService.breadcrumb.next([
       {
@@ -95,37 +95,36 @@ export class ShopDetailComponent implements OnInit, OnDestroy {
   }
 
   getSingleProductDetails() {
+  
     let sub1 = this.apiCall.getSingleProduct(this.singleProductId).subscribe({
       next: (res) => {
         this.singleProductDetails = res.data.products[0];
         this.cdr.markForCheck();
-        console.log(this.singleProductDetails, 'single product details');
       },
     });
     this.subscriptions.push(sub1);
   }
 
   addToCart() {
-    this.body.productId = this.singleProductId
-    console.log('add cart ====> ', typeof this.body.quantity,  this.body.productId);
-    this.apiCall
-      .addToCart(this.body)
-      .subscribe({
-        next: (res) => {
-          if (res.type === 'success') {
-            this.toastService.success(res.message, 'Added to cart');
-          }
-        },
-      });
-      this.body.quantity = 1;
+    this.body.productId = this.singleProductId;
+     let sub2 = this.apiCall.addToCart(this.body).subscribe({
+      next: (res) => {
+        if (res.type === 'success') {
+          this.toastService.success(res.message, 'Added to cart');
+        }
+      },
+    });
+    this.body.quantity = 1;
+    this.subscriptions.push(sub2);
   }
 
   changeQuantity() {
-    this.apiCall.changeCartQuantity(this.body).subscribe({
+    let sub3 = this.apiCall.changeCartQuantity(this.body).subscribe({
       next: (res) => {
         console.log(res);
       },
     });
+    this.subscriptions.push(sub3);
   }
 
   /**
@@ -150,11 +149,18 @@ export class ShopDetailComponent implements OnInit, OnDestroy {
 
   onReviewSubmit() {
     if (this.reviewForm.valid) {
-      this.userReviews.push({
-        ...this.reviewForm.value,
-        userName: this.reviewForm.value.name,
-        date: new Date(),
-      });
+      this.body.productId = this.singleProductId;
+      this.body.rating = this.reviewForm.value.rating;
+      this.body.review = this.reviewForm.value.reviewMessage;
+
+      let sub4 = this.apiCall.addReview(this.body).subscribe({
+        next : (res) => {
+          if(res){
+            this.toastService.success(res.message, 'Review Submitted')
+          }
+        }
+      })
+      this.subscriptions.push(sub4);
       this.reviewForm.reset();
     } else {
       this.toastService.error('Enter valid information');
@@ -162,13 +168,13 @@ export class ShopDetailComponent implements OnInit, OnDestroy {
   }
 
   getCurrencyInfo() {
-    let sub2 = this.commonService.currencyChanges.subscribe({
+    let sub5 = this.commonService.currencyChanges.subscribe({
       next: (res) => {
         this.currencyInfo = res;
         this.cdr.markForCheck();
       },
     });
-    this.subscriptions.push(sub2);
+    this.subscriptions.push(sub5);
   }
 
   navbarClick(index: number) {
@@ -179,3 +185,16 @@ export class ShopDetailComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 }
+
+// review submit data//
+
+// if (this.reviewForm.valid) {
+//   this.userReviews.push({
+//     ...this.reviewForm.value,
+//     userName: this.reviewForm.value.name,
+//     date: new Date(),
+//   });
+//   this.reviewForm.reset();
+// } else {
+//   this.toastService.error('Enter valid information');
+// }

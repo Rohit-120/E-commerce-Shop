@@ -18,7 +18,7 @@ import { CommonService } from 'src/app/shared/services/common.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavbarComponent implements OnInit, OnDestroy {
-  navCategories: any = [];
+  navCategories: any[] = [];
   favoriteItemsLength!: number;
   totalCartLength!: number;
   isCollapsed: boolean = false;
@@ -59,6 +59,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       .getTotalCategories({ isCategoryList: true })
       .subscribe({
         next: (res: any) => {
+          console.log(res.data.categories)
           this.navCategories = res.data.categories;
           this.cdr.markForCheck();
           this.commonService.categories.next(this.navCategories);

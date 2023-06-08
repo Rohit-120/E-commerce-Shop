@@ -8,11 +8,6 @@
                 <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by price</span></h5>
                 <div class="bg-light p-4 mb-30">
                     <form>
-                        <!-- <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" checked id="price-all">
-                            <label class="custom-control-label" for="price-all">All Price</label>
-                            <span class="badge border font-weight-normal">1000</span>
-                        </div> -->
                         <div *ngFor="let item of filterProducts.filterByPrice; let index = index" class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                             <input type="checkbox" class="custom-control-input" id="price-{{index + 1}}" (click)="getFilterData($event, item, 'price')" >
                             <label class="custom-control-label" for="price-{{index + 1}}">{{item.min}}-{{item.max}}</label>
@@ -26,11 +21,6 @@
                 <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by color</span></h5>
                 <div class="bg-light p-4 mb-30">
                     <form>
-                        <!-- <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" checked id="color-all">
-                            <label class="custom-control-label" for="color-all">All Color</label>
-                            <span class="badge border font-weight-normal">1000</span>
-                        </div> -->
                         <div *ngFor="let item of filterProducts.filterByColor; let index = index" class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                             <input type="checkbox" class="custom-control-input" id="color-{{index}}" (click)="getFilterData($event, item.color, 'color')">
                             <label class="custom-control-label" for="color-{{index}}">{{item.color}}</label>
@@ -44,11 +34,6 @@
                 <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by size</span></h5>
                 <div class="bg-light p-4 mb-30">
                     <form>
-                        <!-- <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" checked id="size-all">
-                            <label class="custom-control-label" for="size-all">All Size</label>
-                            <span class="badge border font-weight-normal">1000</span>
-                        </div> -->
                         <div *ngFor="let item of filterProducts.filterBySize; let index = index" class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                             <input type="checkbox" class="custom-control-input" id="size-{{index}}" (click)="getFilterData($event, item.size, 'size')">
                             <label class="custom-control-label" for="size-{{index}}">{{item.size}}</label>
@@ -68,8 +53,8 @@
                     <div class="col-12 pb-1">
                         <div class="d-flex align-items-center justify-content-between mb-4">
                             <div>
-                                <button class="btn btn-sm btn-light"><i class="fa fa-th-large"></i></button>
-                                <button class="btn btn-sm btn-light ml-2"><i class="fa fa-bars"></i></button>
+                                <button class="btn btn-sm btn-light" (click)="viewToggle('grid')"><i class="fa fa-th-large" ></i></button>
+                                <button class="btn btn-sm btn-light ml-2" (click)="viewToggle('list')"><i class="fa fa-bars"></i></button>
                             </div>
                             <div class="ml-2">
                                 <div class="btn-group">
@@ -87,32 +72,79 @@
                             </div>
                         </div>
                     </div>
-                
-                    <div *ngFor="let item of itemsByCategories | paginate : { itemsPerPage : perPageItems, currentPage : currPage, totalItems : totalProducts}" class="col-lg-4 col-md-6 col-sm-6 pb-1">
+
+                    <!-- Grid view of product start -->
+                <ng-container *ngIf="productViewFormat === 'grid'" >
+                <img *ngIf="itemsByCategories.length == 0" class="mx-auto" src="../../../assets/images/no-product-found.png" alt="">
+
+                <div *ngFor="let item of itemsByCategories | paginate : { itemsPerPage : perPageItems, currentPage : currPage, totalItems : totalProducts}" class="col-lg-4 col-md-6 col-sm-6 pb-1">
                         <div class="product-item bg-light mb-4">
                             <div class="product-img position-relative overflow-hidden">
                                 <img class="img-fluid w-100" style="height:300px ;" src="{{item.image | image}}" alt="">
                                 <div class="product-action">
-                                    <a class="btn btn-outline-dark btn-square" (click)="addToCartClick(item._id)" ><i class="fa fa-shopping-cart"></i></a>
-                                    <a class="btn btn-outline-dark btn-square" [routerLink]="['/favorite']" ><i class="fa fa-heart" [ngClass]="{'text-danger' : item.isFavorite}"></i></a>
+                                    <a class="btn btn-outline-dark btn-square" (click)="addToCartClick(item._id)"><i class="fa fa-shopping-cart"></i></a>
+                                    <a class="btn btn-outline-dark btn-square" (click)="addToFavorite(item._id)"><i class="fa fa-heart" [ngClass]="{'text-danger' : item.isFavorite}"></i></a>
                                     <a class="btn btn-outline-dark btn-square" ><i class="fa fa-sync-alt"></i></a>
+                                    
                                     <a class="btn btn-outline-dark btn-square" [routerLink]="['/shop-detail', item._id]" ><i class="fa fa-search"></i></a>
                                 </div>
                                 
                             </div>
                             <div class="text-center py-4">
-                                <a class="h6 text-decoration-none d-block text-truncate" [routerLink]="['/shop-detail', item.id]">{{item.title}}</a>
+                                <a class="h6 text-decoration-none d-block text-truncate" style="cursor: pointer;" [routerLink]="['/shop-detail', item._id]">{{item.title}}</a>
                                 <div class="d-flex align-items-center justify-content-center mt-2">
                                     <h5>{{item.price * currencyInfo.currencyPrice | currency : currencyInfo.currencyName}}</h5><h6 class="text-muted ml-2"><del>{{item.price * currencyInfo.currencyPrice | currency : currencyInfo.currencyName}}</del></h6>
                                 </div>
                                 <div *ngIf="item.rating.rate" class="d-flex align-items-center justify-content-center mb-1 text-primary">
-                                    <!-- Star Rating Component -->
                                     <app-rating [rating]="item.rating.rate" [ratingCount]="item.rating.count" ></app-rating>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-12">
+                </ng-container>
+                        
+                    <!-- grid view of product end -->
+
+
+                    <!-- List view of product start -->
+                <ng-container *ngIf="productViewFormat === 'list'" >
+                <img *ngIf="itemsByCategories.length == 0" class="mx-auto" src="../../../assets/images/no-product-found.png" alt="">
+                    <div *ngFor="let item of itemsByCategories | paginate : { itemsPerPage : perPageItems, currentPage : currPage, totalItems : totalProducts}" class="card m-2 shadow-0 border rounded-3 w-100 ">
+                        <div class="card-body">
+                            <div class="row">
+                            <div class="col-md-3 col-lg-3 col-xl-3 mb-4 mb-lg-0">
+                              <div class="bg-image rounded card">
+                                <img src="{{item.image | image}}"
+                                  class="w-100 img " style="height: 180px !important; width: 150px;" />
+                                </div>
+                            </div>
+                            <td class="col-md-3 col-lg-6 col-xl-6 mt-5 pt-2">
+                              <h5>{{item.title}}</h5>
+                              <app-rating [rating]="item.rating.rate" [ratingCount]="item.rating.count" ></app-rating>
+                            </td>
+                            
+                            <div class="col-md-3 col-lg-3 col-xl-3 ">
+                                <td class="d-flex flex-column justify-content-center align-items-center text-center mt-5 pt-2">
+                                    <h4 class="mb-1 me-1 d-block">{{item.price * currencyInfo.currencyPrice | currency : currencyInfo.currencyName}}</h4>
+                                    <h6 class="text-danger"><s>{{item.price * currencyInfo.currencyPrice | currency : currencyInfo.currencyName}}</s></h6>
+                                </td>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-item">
+                      <div class="product-action">
+                          <a class="btn btn-outline-dark btn-square" (click)="addToCartClick(item._id)" ><i class="fa fa-shopping-cart"></i></a>
+                          <a class="btn btn-outline-dark btn-square" [routerLink]="['/favorite']" ><i class="fa fa-heart" [ngClass]="{'text-danger' : item.isFavorite}"></i></a>
+                          <a class="btn btn-outline-dark btn-square" ><i class="fa fa-sync-alt"></i></a>
+                          <a class="btn btn-outline-dark btn-square" [routerLink]="['/shop-detail', item._id]" ><i class="fa fa-search"></i></a>
+                      </div>
+                    </div>
+                      </div>
+                      </ng-container>
+                    <!-- List view of product end -->
+
+                    <div class="col-12 d-flex align-items-center justify-content-center">
                         <pagination-controls (pageChange)="pageChange(currPage = $event)"></pagination-controls>
                     </div>
                 </div>
@@ -121,82 +153,3 @@
         </div>
     </div>
     <!-- Shop End -->
-
-<!-- <div class="container">
-    <div id="demo" class="carousel slide" data-ride="carousel">
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <div class="card cardd">
-                    <div class="path">HOME / FACE <a>/ CLEANSERS</a> </div>
-                    <div class="row">
-                        <div class="col-md-6 text-center align-self-center"> <img class="img-fluid"
-                                src="https://i.imgur.com/7a9V4yw.png"> </div>
-                        <div class="col-md-6 info">
-                            <div class="row title">
-                                <div class="col">
-                                    <h2>Herbalism</h2>
-                                </div>
-                                <div class="col text-right"><a href="#"><i class="fa fa-heart-o"></i></a></div>
-                            </div>
-                            <p>Natural herbal wash</p> <span class="fa fa-star checked"></span> <span
-                                class="fa fa-star checked"></span> <span class="fa fa-star checked"></span> <span
-                                class="fa fa-star checked"></span> <span class="fa fa-star-half-full"></span> <span
-                                id="reviews">1590 Reviews</span>
-                            <div class="row price"> <label class="radio"> <input type="radio" name="size1" value="small"
-                                        checked> <span>
-                                        <div class="row"><b>1.5 oz.</b></div>
-                                        <div class="row">$12.95</div>
-                                    </span> </label> <label class="radio"> <input type="radio" name="size1"
-                                        value="large"> <span>
-                                        <div class="row"><b>4.4 oz.</b></div>
-                                        <div class="row">$21.95</div>
-                                    </span> </label> </div>
-                        </div>
-                    </div>
-                    <div class="row lower">
-                        <div class="col"> <a class="carousel-control-prev" href="#demo" data-slide="prev"><i
-                                    class="fa fa-arrow-left"></i></a> <a class="carousel-control-next" href="#demo"
-                                data-slide="next"><i class="fa fa-arrow-right"></i></a> </div>
-                        <div class="col text-right align-self-center"> <button class="btn">Add to cart</button> </div>
-                    </div>
-                </div>
-            </div>
-            <div class="carousel-item">
-                <div class="card cardd">
-                    <div class="path">HOME / FACE <a>/ CLEANSERS</a> </div>
-                    <div class="row">
-                        <div class="col-md-6 text-center align-self-center"> <img class="img-fluid"
-                                src="https://i.imgur.com/7a9V4yw.png"> </div>
-                        <div class="col-md-6 info">
-                            <div class="row title">
-                                <div class="col">
-                                    <h2>Herbalism 2</h2>
-                                </div>
-                                <div class="col text-right"><a href="#"><i class="fa fa-heart-o"></i></a></div>
-                            </div>
-                            <p>Natural herbal wash pro</p> <span class="fa fa-star checked"></span> <span
-                                class="fa fa-star checked"></span> <span class="fa fa-star checked"></span> <span
-                                class="fa fa-star checked"></span> <span class="fa fa-star-half-full"></span> <span
-                                id="reviews">1590 Reviews</span>
-                            <div class="row price"> <label class="radio"> <input type="radio" name="size2"
-                                        value="small"> <span>
-                                        <div class="row"><b>13.5 oz.</b></div>
-                                        <div class="row">$36.95</div>
-                                    </span> </label> <label class="radio"> <input type="radio" name="size2"
-                                        value="large" checked> <span>
-                                        <div class="row"><b>18.4 oz.</b></div>
-                                        <div class="row">$61.95</div>
-                                    </span> </label> </div>
-                        </div>
-                    </div>
-                    <div class="row lower">
-                        <div class="col"> <a class="carousel-control-prev" href="#demo" data-slide="prev"><i
-                                    class="fa fa-arrow-left"></i></a> <a class="carousel-control-next" href="#demo"
-                                data-slide="next"><i class="fa fa-arrow-right"></i></a> </div>
-                        <div class="col text-right align-self-center"> <button class="btn">Add to cart</button> </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> -->
