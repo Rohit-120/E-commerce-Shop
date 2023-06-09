@@ -29,5 +29,7 @@ export const REMOVE_FAVORITE = `${LOCAL_HOST}/products/favorite/remove`;
 // API for reviews
 export const ADD_REVIEW = `${LOCAL_HOST}/products/review`;
 
+//API for user Address 
+export const ADD_ADDRESS = `${LOCAL_HOST}/address/add`;
 
 

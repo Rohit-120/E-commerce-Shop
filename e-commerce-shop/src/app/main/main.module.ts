@@ -13,11 +13,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxUsefulSwiperModule } from 'ngx-useful-swiper';
 import { DragScrollModule } from 'ngx-drag-scroll';
 import { ShopDetailComponent } from './shop-detail/shop-detail.component';
-import { VendorComponent } from '../vendor/vendor.component';
 import { FeaturedProductComponent } from 'src/main/components/featured-product/featured-product.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from '../shared/interceptors/token.interceptor';
+import { VendorComponent } from 'src/main/components/vendor/vendor.component';
 
 
 @NgModule({
@@ -40,7 +40,7 @@ import { TokenInterceptor } from '../shared/interceptors/token.interceptor';
     NgxUsefulSwiperModule,
     DragScrollModule,
     MainRoutingModule,
-    NgxPaginationModule
+    NgxPaginationModule,
   ],
   providers : [
     {

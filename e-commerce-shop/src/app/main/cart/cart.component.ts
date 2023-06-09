@@ -62,8 +62,10 @@ export class CartComponent implements OnInit, OnDestroy {
   getCartDetails() {
     let sub1 = this.apiCall.getCartProducts().subscribe({
       next: (res: any) => {
+        console.log(res, 'cart products');
+        
         this.cartItems = res.data.products;
-        this.commonService.totalCartItemsLength.next(this.cartItems.length);
+        this.commonService.CartItemsLength.next(this.cartItems.length);
         this.cdr.markForCheck();
         this.getAllTotal();
       },
@@ -128,7 +130,7 @@ export class CartComponent implements OnInit, OnDestroy {
       next: (res) => {
         if (res.type === 'success') {
           this.cartItems.splice(index, 1);
-          this.commonService.totalCartItemsLength.next(this.cartItems.length);
+          this.commonService.CartItemsLength.next(this.cartItems.length);
           this.getAllTotal();
           this.toastService.show(res.message, `${removeItemTitle}`);
           this.cdr.markForCheck();

@@ -48,8 +48,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getProductCategories();
+    this.getCartItemsLength();
     this.getFavoriteItemsLength();
-    }
+  }
 
   /**
    * Function to get product category
@@ -59,22 +60,42 @@ export class NavbarComponent implements OnInit, OnDestroy {
       .getTotalCategories({ isCategoryList: true })
       .subscribe({
         next: (res: any) => {
-          console.log(res.data.categories)
-          this.navCategories = res.data.categories;
-          this.cdr.markForCheck();
-          this.commonService.categories.next(this.navCategories);
+          if (res.type === 'success') {
+            this.navCategories = res.data.categories;
+            this.cdr.markForCheck();
+            this.commonService.categories.next(this.navCategories);
+          }
         },
       });
     this.subscription.push(sub1);
+  }
+
+  getCartItemsLength() {
+    let sub3 = this.apiCall.getCartProducts().subscribe({
+      next: (res) => {
+        if (res.type === 'success') {
+          this.totalCartLength = res.data.products.length;
+          this.commonService.CartItemsLength.next(res.data.products.length);
+
+          this.cdr.markForCheck();
+        }
+      },
+    });
+    this.subscription.push(sub3);
   }
 
   /**
    * Function to get total favorite items length.
    */
   getFavoriteItemsLength() {
-    let sub2 = this.commonService.FavoriteItemLength.subscribe((res: any) => {
-      this.favoriteItemsLength = res.length;
-      this.cdr.markForCheck();
+    let sub2 = this.apiCall.getFavoriteProduct().subscribe({
+      next: (res: any) => {
+        if (res.type === 'success') {
+          this.favoriteItemsLength = res.data.products.length;
+          this.commonService.FavoriteItemLength.next(res.data.products.length);
+          this.cdr.markForCheck();
+        }
+      },
     });
     this.subscription.push(sub2);
   }

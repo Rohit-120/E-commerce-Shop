@@ -6,6 +6,7 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { Subscription, subscribeOn } from 'rxjs';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { CommonService } from 'src/app/shared/services/common.service';
@@ -44,6 +45,8 @@ export class TopbarComponent implements OnInit {
   currencyChange: string = 'USD';
   languageLabel!: string;
   totalCartLength!: number;
+  totalFavoriteLength!: number;
+
   currencies: any = [
     { name: 'USD', currencyPrice: 1 },
     { name: 'EUR', currencyPrice: 0.92 },
@@ -63,8 +66,8 @@ export class TopbarComponent implements OnInit {
   ];
 
   searchData: string = '';
-  userDetails:any;
-
+  userDetails: any;
+  subscriptions: Subscription[] = [];
   constructor(
     private commonService: CommonService,
     private cdr: ChangeDetectorRef,
@@ -78,29 +81,42 @@ export class TopbarComponent implements OnInit {
   ngOnInit(): void {
     this.checkLoginStatus();
     this.checkCartItemLength();
+    this.checkFavoriteItemLength();
     this.getUserName();
   }
 
   checkLoginStatus() {
-    this.authService.isLoggedIn.subscribe({
+    let sub1 = this.authService.isLoggedIn.subscribe({
       next: (res) => {
         if (res) {
           this.isLogin = res;
-        }else if(this.storageService.get('token')){
+        } else if (this.storageService.get('token')) {
           this.isLogin = true;
         }
         this.cdr.markForCheck();
       },
     });
+    this.subscriptions.push(sub1);
+  }
+
+  checkFavoriteItemLength(){
+    let sub2 = this.commonService.FavoriteItemLength.subscribe({
+      next: (res) => {
+        this.totalFavoriteLength = res;
+        this.cdr.markForCheck();
+      },
+    });
+    this.subscriptions.push(sub2);
   }
 
   checkCartItemLength() {
-    this.commonService.totalCartItemsLength.subscribe({
+    let sub2 = this.commonService.CartItemsLength.subscribe({
       next: (res) => {
         this.totalCartLength = res;
         this.cdr.markForCheck();
       },
     });
+    this.subscriptions.push(sub2);
   }
 
   productSearchClick() {
@@ -130,7 +146,7 @@ export class TopbarComponent implements OnInit {
   }
 
   getUserName() {
-    this.userDetails =  this.authService.decodeToken()
+    this.userDetails = this.authService.decodeToken();
     this.cdr.markForCheck();
   }
 

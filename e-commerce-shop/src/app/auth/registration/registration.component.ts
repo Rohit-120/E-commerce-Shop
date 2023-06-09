@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { EmailValidator, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -10,18 +10,19 @@ import { AuthService } from 'src/app/shared/services/auth.service';
   selector: 'app-registration',
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.scss'],
+  changeDetection : ChangeDetectionStrategy.OnPush
 })
 export class RegistrationComponent implements OnInit, OnDestroy {
   subscription: Subscription[] =[]
   registrationForm = this.fb.group({
-    name: ['rohit', Validators.required],
+    name: ['rahul', Validators.required],
     email: [
-      'rohit.p@webcodegenie.com',
+      'rahul.p@webcodegenie.com',
       [Validators.required, Validators.email],
     ],
     password: ['rohit', Validators.required],
     country: ['india', Validators.required],
-    mobile: ['+919865625548', Validators.required],
+    mobile: ['+919865625550', Validators.required],
     timezone: ['UTC+05:30'],
     language: ['English', Validators.required],
   });

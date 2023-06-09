@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -11,13 +11,14 @@ import { StorageService } from 'src/app/shared/services/storage.service';
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
+  changeDetection : ChangeDetectionStrategy.OnPush
 })
 export class LoginComponent implements OnInit, OnDestroy {
   subscription: Subscription[] = [];
 
   loginForm = this.fb.group({
     email: [
-      'rohit.p@webcodegenie.com',
+      'rahul.p@webcodegenie.com',
       [Validators.required, Validators.email],
     ],
     password: ['rohit', Validators.required],

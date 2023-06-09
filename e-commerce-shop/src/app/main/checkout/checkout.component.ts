@@ -1,53 +1,78 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { ApiService } from 'src/app/shared/services/api.service';
 import { BreadcrumbService } from 'src/app/shared/services/breadcrumb.service';
 
 @Component({
   selector: 'app-checkout',
   templateUrl: './checkout.component.html',
-  styleUrls: ['./checkout.component.scss']
+  styleUrls: ['./checkout.component.scss'],
+  changeDetection : ChangeDetectionStrategy.OnPush
 })
 export class CheckoutComponent implements OnInit {
 
-  countries : string[] = ['United States', 'Afghanistan', 'Albania', 'Algeria'];
+  countries : string[] = ['India', 'United States', 'Afghanistan', 'Albania', 'Algeria'];
   isShippingAddressEnabled = false;
+
+  body : any = {
+    // "title":"Home",
+    // "name":"test testify",
+    // "mobileNo":"+911234557890",
+    // "addressLineOne":"Ganesh meredian Block-c",
+    // "addressLineTwo":"Room No. 901",
+    // "landmark":"Kargil Petrol Pump",
+    // "country":"India",
+    // "state":"Gujarat",
+    // "city":"Ahmedabad",
+    // "pincode":"387341",
+
+    // addressLine1: "A12, street 1",
+    // addressLine2: "street 2",
+    // city: "Ahmedabad",
+    // country: "India",
+    // email:"rahul@gmail.com",
+    // firstName: "rahul",
+    // landMark: "sola",
+    // lastName: "patel",
+    // phone: "6546565845",
+    // state: "gujarat",
+    // title: "Office",
+    // zipCode: "365685",
+ }
+ 
   
 
   addressBillingForm : FormGroup = new FormGroup({
-    fullName : new FormGroup({
-      firstName : new FormControl('rohit', Validators.required),
-      lastName :new FormControl('rohit', Validators.required),
-    }),
-    email :new FormControl('rohit@ss.com', [Validators.required, Validators.email])  ,
-    phone : new FormControl('65465', Validators.required),
-    address : new FormGroup({
-      line1 : new FormControl('rohit', Validators.required),
-      line2 :new FormControl('rohit', Validators.required),
-    }),
-    country : new FormControl('rohit', Validators.required),
-    city : new FormControl('rohit', Validators.required),
-    state : new FormControl('rohit', Validators.required),
-    zipcode : new FormControl('12', Validators.required),
+    title : new FormControl('Office', Validators.required),
+    firstName : new FormControl('rahul', Validators.required),
+    lastName :new FormControl('patel', Validators.required),
+    email :new FormControl('rahul@gmail.com', [Validators.required, Validators.email])  ,
+    phone : new FormControl('6546565845', Validators.required),
+    addressLine1 : new FormControl('A12, street 1', Validators.required),
+    addressLine2 :new FormControl('street 2', Validators.required),
+    landMark :new FormControl('sola', Validators.required),
+    country : new FormControl('India', Validators.required),
+    city : new FormControl('Ahmedabad', Validators.required),
+    state : new FormControl('gujarat', Validators.required),
+    zipCode : new FormControl('365685', Validators.required),
   })
 
 
-  addressShippingForm : FormGroup = new FormGroup({
-    fullName : new FormGroup({
-      firstName : new FormControl('lav', Validators.required),
-      lastName :new FormControl('lav', Validators.required),
-    }),
-    email :new FormControl('lav@ss.com', [Validators.required, Validators.email])  ,
-    phone : new FormControl('12533534', Validators.required),
-    address : new FormGroup({
-      line1 : new FormControl('lav', Validators.required),
-      line2 :new FormControl('lav', Validators.required),
-    }),
-    country : new FormControl('lav', Validators.required),
-    city : new FormControl('lav', Validators.required),
-    state : new FormControl('lav', Validators.required),
-    zipcode : new FormControl('1221', Validators.required),
+  shippingAddressForm : FormGroup = new FormGroup({
+    title : new FormControl('Home', Validators.required),
+    firstName : new FormControl('lav', Validators.required),
+    lastName :new FormControl('rana', Validators.required),
+    email :new FormControl('lav12@gmail.com', [Validators.required, Validators.email])  ,
+    phone : new FormControl('9875463284', Validators.required),
+    addressLine1 : new FormControl('A one Apartment', Validators.required),
+    addressLine2 :new FormControl('32 street', Validators.required),
+    landMark :new FormControl('gota', Validators.required),
+    country : new FormControl('India', Validators.required),
+    city : new FormControl('Ahmedabad', Validators.required),
+    state : new FormControl('Gujarat', Validators.required),
+    zipCode : new FormControl('389865', Validators.required),
 
   })
 
@@ -55,7 +80,8 @@ export class CheckoutComponent implements OnInit {
     private breadcrumbService: BreadcrumbService,
     private fb : FormBuilder,
     private toast: ToastrService,
-    private router: Router
+    private router: Router,
+    private apiCall : ApiService
   ) { }
 
  
@@ -80,11 +106,40 @@ export class CheckoutComponent implements OnInit {
   }
   
   onAddressSubmit(){
-    if (this.addressBillingForm.valid && this.addressShippingForm.valid) {
-      // console.log(this.addressBillingForm.value, 'address form');
-      // console.log(this.addressShippingForm.value, ' Shipping address ');
-      this.toast.success('your order has been placed successfully');
-      this.router.navigate(['dashboard'])
+    if (this.addressBillingForm.valid) {
+      let data = this.addressBillingForm.value
+      console.log(this.addressBillingForm.value, 'address form')
+
+      this.body.title = data.title,
+      this.body.name = data.firstName + " " + data.lastName,
+      this.body.mobileNo = data.phone ,
+      this.body.addressLineOne = data.addressLine1,
+      this.body.addressLineTwo = data.addressLine2,
+      this.body.landmark = data.landMark ,
+      this.body.country = data.country,
+      this.body.state = data.state,
+      this.body.city = data.city,
+      this.body.pincode = data.zipCode
     }
-  } 
+    console.log(this.body, 'address form.......neww');
+    this.apiCall.addAddress(this.body).subscribe({
+      next : (res) => {
+        if(res.type === 'success'){
+          this.toast.success(res.message, 'Successful')
+        }
+        
+      }
+    })    
+  }
+  
+  shippingAddress(event : any){
+    if(event.target.checked){
+      console.log('tttt');
+      this.isShippingAddressEnabled = true;
+    }else{
+      this.isShippingAddressEnabled = false;
+    }
+        
+  }
+  
 }

@@ -36,8 +36,6 @@ export class FavoriteComponent implements OnInit, OnDestroy {
   getFavoriteItems() {
     this.apiCall.getFavoriteProduct().subscribe({
       next: (res: any) => {
-        console.log(res.data);
-
         this.favoriteItems = res.data.products;
         this.cdr.markForCheck();
         this.commonService.FavoriteItemLength.next(this.favoriteItems.length);
@@ -45,12 +43,14 @@ export class FavoriteComponent implements OnInit, OnDestroy {
     });
   }
 
-  removeFavorite(productId: any) {  
+  removeFavorite(productId: any, index: number) {
     this.apiCall.removeFavoriteProduct(productId).subscribe({
       next: (res: any) => {
-        console.log(res, 'removed');
         if (res.type === 'success') {
+          this.favoriteItems.splice(index, 1);
           this.toastService.show(res.message, 'Removed from favorites');
+          this.cdr.markForCheck();
+          this.commonService.FavoriteItemLength.next(this.favoriteItems.length);
         }
       },
     });

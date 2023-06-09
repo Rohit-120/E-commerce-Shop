@@ -20,6 +20,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { AuthModule } from './auth/auth.module';
 import { TokenInterceptor } from './shared/interceptors/token.interceptor';
+import { VendorComponent } from 'src/main/components/vendor/vendor.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,6 @@ import { TokenInterceptor } from './shared/interceptors/token.interceptor';
     BreadcrumbComponent,
     FullComponent,
     NavbarComponent,
-    TopbarComponent,
     NotFoundComponent,
     
   ],
@@ -46,7 +46,8 @@ import { TokenInterceptor } from './shared/interceptors/token.interceptor';
     HttpClientModule,
     NgSelectModule,
     NgxPaginationModule,
-    AuthModule
+    AuthModule,
+    // VendorComponent
   ],
   providers: [
     {

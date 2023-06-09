@@ -141,12 +141,23 @@ export class ShopComponent implements OnInit, OnDestroy {
   }
 
   addToFavorite(productId: any) {
+
     let sub4 = this.apiCall.addToFavorite(productId).subscribe({
       next: (res) => {
         if (res.type === 'success') {
           this.toastService.success(res.message, 'Added to Favorites');
         }
+        else if(res.type === 'error') {
+          console.log('error***********', res.message);
+        }
       },
+      error : (error) => {
+        if(error.status == 409 ){
+          console.log(error.error.message);
+          this.toastService.success(error.error.message, 'Favorites');
+        }
+
+      }
     });
     this.subscriptions.push(sub4);
   }
