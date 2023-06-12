@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { ApiService } from './api.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,28 @@ export class CommonService {
 
   constructor(
     private apiService: ApiService,
+    private toastService:ToastrService
   ) { }
+
+
+  // addToCartClick(isAddedFrom:boolean,id: any,qty: number) {
+  //   console.log('addToCart =====>  ', id);
+  //  this.apiService
+  //     .addToCart({ isAddedFromShop: isAddedFrom, productId: id, quantity: qty })
+  //     .subscribe({
+  //       next: (res: any) => {
+  //         if (res.type === 'success') {
+  //           this.toastService.success(res.message, 'Added to cart');
+  //         }
+  //       },
+  //     });
+  // }
+  addToCartClick(id: any,qty: number, isAddedFrom?:boolean,):Observable<any>{
+    console.log({ isAddedFromShop: isAddedFrom, productId: id, quantity: qty });
+    
+    return this.apiService.addToCart({ isAddedFromShop: isAddedFrom, productId: id, quantity: qty })
+  }
+
 
   
 }

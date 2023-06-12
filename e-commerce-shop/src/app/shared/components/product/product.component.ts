@@ -57,23 +57,29 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   //function for add to cart a product
   addToCartClick(id: any) {
-    this.apiCall.addToCart({ productId: id, quantity: 1 }).subscribe({
+    console.log('addToCart =====>  ', id);
+
+    let sub3 = this.commonService.addToCartClick(id, 1, true).subscribe({
       next: (res: any) => {
         if (res.type === 'success') {
           this.toastService.success(res.message, 'Added to cart');
+        } else {
+          this.toastService.error(res.message, 'Error while add to cart');
         }
       },
+      error: (err: any) => {},
     });
+    this.subscriptions.push(sub3);
   }
 
   onFavoriteClick(productId: any) {
     this.apiCall.addToFavorite(productId).subscribe({
-      next : (res: any) => {
+      next: (res: any) => {
         if (res.type === 'success') {
           this.toastService.success(res.message, 'Added to Favorite');
         }
-      }
-    })
+      },
+    });
   }
 
   getCurrencyInfo() {

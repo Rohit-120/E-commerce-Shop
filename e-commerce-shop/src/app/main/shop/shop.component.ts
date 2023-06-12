@@ -128,36 +128,39 @@ export class ShopComponent implements OnInit, OnDestroy {
   addToCartClick(id: any) {
     console.log('addToCart =====>  ', id);
 
-    let sub3 = this.apiCall
-      .addToCart({ isAddedFromShop: true, productId: id, quantity: 1 })
-      .subscribe({
-        next: (res: any) => {
-          if (res.type === 'success') {
-            this.toastService.success(res.message, 'Added to cart');
-          }
-        },
-      });
-      this.subscriptions.push(sub3);
+    let sub3 = this.commonService.addToCartClick(id, 1, true).subscribe({
+      next: (res: any) => {
+        if (res.type === 'success') {
+          this.toastService.success(res.message, 'Added to cart');
+        } else {
+          this.toastService.error(res.message, 'Error while add to cart');
+        }
+      },
+      error: (err: any) => {
+        if (err.type === 'error') {
+          
+        }
+      },
+    });
+
+    this.subscriptions.push(sub3);
   }
 
   addToFavorite(productId: any) {
-
     let sub4 = this.apiCall.addToFavorite(productId).subscribe({
       next: (res) => {
         if (res.type === 'success') {
           this.toastService.success(res.message, 'Added to Favorites');
-        }
-        else if(res.type === 'error') {
+        } else if (res.type === 'error') {
           console.log('error***********', res.message);
         }
       },
-      error : (error) => {
-        if(error.status == 409 ){
+      error: (error) => {
+        if (error.status == 409) {
           console.log(error.error.message);
           this.toastService.success(error.error.message, 'Favorites');
         }
-
-      }
+      },
     });
     this.subscriptions.push(sub4);
   }

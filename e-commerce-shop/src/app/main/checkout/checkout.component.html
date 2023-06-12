@@ -1,5 +1,26 @@
   <!-- Checkout Start -->
   <div class="container-fluid">
+    
+    <div class="row mb-3">
+            <div *ngFor="let item of userAddressList let index = index" class="d-grid align-items-center justify-content-center mx-auto mb-2 ">
+                <div class="card">
+                    <div class="card-header">
+                        <input class="form-check-input mx-auto" type="radio" name="address" [checked]="item.title === 'Home' || item.title === 'home'" (change)="onAddressChange(item)" >
+                        <label class="form-check-label mx-4">{{item.title}}</label>
+                    </div>
+                    <div class="card-body text-center" style="line-height: 1;">
+                      <p><b>{{item.name}}</b></p>
+                      <p>{{item.mobileNo}}</p>
+                      <p>{{item.addressLineOne}}</p>
+                      <p>{{item.addressLineTwo}}</p>
+                      <p>{{item.landmark}}, {{item.city}}, {{item.state}}, {{item.country}}</p>
+                      <p>{{item.pincode}}</p>
+                      <a class="btn btn-outline-primary mx-1"> <i class="fas fa-edit"></i></a>
+                      <a class="btn btn-outline-danger mx-1" (click)="removeAddress(item.addressId, index)"><i class="fas fa-trash-alt"></i></a>
+                    </div>
+                  </div>
+            </div>
+    </div>
     <div class="row px-xl-5">
         <div class="col-lg-8">
             <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Billing Address</span></h5>
@@ -18,75 +39,52 @@
                             </ul>
                         </div>
                             <div class="col-md-6 form-group">
-                                <label>First Name</label>
-                                <input  formControlName="firstName" class="form-control" type="text" placeholder="John">
-                                <!-- firstName Validation -->
-                                <ul *ngIf="addressBillingForm.controls['firstName'].invalid && (addressBillingForm.controls['firstName'].dirty || addressBillingForm.controls['firstName'].touched)">
-                                    <li *ngIf="addressBillingForm.controls['firstName'].hasError('required')" style="color: red;">
-                                      Your firstname is required
+                                <label>Name</label>
+                                <input  formControlName="name" class="form-control" type="text" placeholder="John deo">
+                                <!-- name Validation -->
+                                <ul *ngIf="addressBillingForm.controls['name'].invalid && (addressBillingForm.controls['name'].dirty || addressBillingForm.controls['name'].touched)">
+                                    <li *ngIf="addressBillingForm.controls['name'].hasError('required')" style="color: red;">
+                                      Your name is required
                                     </li>
                                 </ul>
                             </div>
-                            <div class="col-md-6 form-group">
-                                <label>Last Name</label>
-                                <input formControlName="lastName" class="form-control" type="text" placeholder="Doe">
-                                <!-- lastName Validation -->
-                                <ul *ngIf="addressBillingForm.controls['lastName']">
-                                    <li *ngIf="addressBillingForm.controls['lastName'].hasError('required')" style="color: red;">
-                                      Your lastname is required
-                                    </li>
-                                </ul>
-                            </div>
-                        <div class="col-md-6 form-group">
-                            <label>E-mail</label>
-                            <input   formControlName="email" class="form-control" type="text" placeholder="example@email.com">
-                            <!-- email Validation -->
-                            <ul *ngIf="addressBillingForm.controls['email'].invalid && (addressBillingForm.controls['email'].dirty || addressBillingForm.controls['email'].touched)">
-                                <li *ngIf="addressBillingForm.controls['email'].hasError('required')" style="color: red;">
-                                  Your Email is required
-                                </li>
-                                <li *ngIf="addressBillingForm.controls['email'].hasError('email')" style="color: red;">
-                                    Please enter valid Email
-                                  </li>
-                            </ul>
-                        </div>
                         <div class="col-md-6 form-group">
                             <label>Mobile No</label>
-                            <input formControlName="phone" class="form-control" type="tel" placeholder="+123 456 789">
-                            <!-- phone number Validation -->
-                            <ul *ngIf="addressBillingForm.controls['phone'].invalid && (addressBillingForm.controls['phone'].dirty || addressBillingForm.controls['phone'].touched)">
-                                <li *ngIf="addressBillingForm.controls['phone'].hasError('required')" style="color: red;">
-                                  Your phone Number is required
+                            <input formControlName="mobileNo" class="form-control" type="tel" placeholder="+123 456 789">
+                            <!-- mobileNo number Validation -->
+                            <ul *ngIf="addressBillingForm.controls['mobileNo'].invalid && (addressBillingForm.controls['mobileNo'].dirty || addressBillingForm.controls['mobileNo'].touched)">
+                                <li *ngIf="addressBillingForm.controls['mobileNo'].hasError('required')" style="color: red;">
+                                  Your mobileNo Number is required
                                 </li>
                             </ul>
                         </div>
                             <div class="col-md-6 form-group">
                                 <label>Address Line 1</label>
-                                <input formControlName="addressLine1" class="form-control" type="text" placeholder="123 Street">
+                                <input formControlName="addressLineOne" class="form-control" type="text" placeholder="123 Street">
                                 <!-- Address Line 1 Validation -->
-                                <ul *ngIf="addressBillingForm.controls['addressLine1'].invalid && (addressBillingForm.controls['addressLine1'].dirty || addressBillingForm.controls['addressLine1'].touched)">
-                                    <li *ngIf="addressBillingForm.controls['addressLine1'].hasError('required')" style="color: red;">
+                                <ul *ngIf="addressBillingForm.controls['addressLineOne'].invalid && (addressBillingForm.controls['addressLineOne'].dirty || addressBillingForm.controls['addressLineOne'].touched)">
+                                    <li *ngIf="addressBillingForm.controls['addressLineOne'].hasError('required')" style="color: red;">
                                       Your address is required
                                     </li>
                                 </ul>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label>Address Line 2</label>
-                                <input formControlName="addressLine2" class="form-control" type="text" placeholder="123 Street">
+                                <input formControlName="addressLineTwo" class="form-control" type="text" placeholder="123 Street">
                                 <!-- Address Line 2 Validation -->
-                                <ul *ngIf="addressBillingForm.controls['addressLine2'].invalid && (addressBillingForm.controls['addressLine2'].dirty || addressBillingForm.controls['addressLine2'].touched)">
-                                    <li *ngIf="addressBillingForm.controls['addressLine2'].hasError('required')" style="color: red;">
+                                <ul *ngIf="addressBillingForm.controls['addressLineTwo'].invalid && (addressBillingForm.controls['addressLineTwo'].dirty || addressBillingForm.controls['addressLineTwo'].touched)">
+                                    <li *ngIf="addressBillingForm.controls['addressLineTwo'].hasError('required')" style="color: red;">
                                       Your address is required
                                     </li>
                                 </ul>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label>LandMark</label>
-                                <input formControlName="landMark" class="form-control" type="text" placeholder="shop, mall or some known place">
+                                <input formControlName="landmark" class="form-control" type="text" placeholder="shop, mall or some known place">
                                 <!-- LandMark Validation -->
-                                <ul *ngIf="addressBillingForm.controls['landMark'].invalid && (addressBillingForm.controls['landMark'].dirty || addressBillingForm.controls['landMark'].touched)">
-                                    <li *ngIf="addressBillingForm.controls['landMark'].hasError('required')" style="color: red;">
-                                      landMark is required
+                                <ul *ngIf="addressBillingForm.controls['landmark'].invalid && (addressBillingForm.controls['landmark'].dirty || addressBillingForm.controls['landmark'].touched)">
+                                    <li *ngIf="addressBillingForm.controls['landmark'].hasError('required')" style="color: red;">
+                                      landmark is required
                                     </li>
                                 </ul>
                             </div>
@@ -125,11 +123,11 @@
                         </div>
                         <div class="col-md-6 form-group">
                             <label>ZIP Code</label>
-                            <input formControlName="zipCode" class="form-control" type="number" placeholder="123">
+                            <input formControlName="pincode" class="form-control" type="number" placeholder="123">
                             <!-- ZipCode Validation -->
-                            <ul *ngIf="addressBillingForm.controls['zipCode'].invalid && (addressBillingForm.controls['zipCode'].dirty || addressBillingForm.controls['zipCode'].touched)">
-                                <li *ngIf="addressBillingForm.controls['zipCode'].hasError('required')" style="color: red;">
-                                  Your zipCode is required
+                            <ul *ngIf="addressBillingForm.controls['pincode'].invalid && (addressBillingForm.controls['pincode'].dirty || addressBillingForm.controls['pincode'].touched)">
+                                <li *ngIf="addressBillingForm.controls['pincode'].hasError('required')" style="color: red;">
+                                  Your pincode is required
                                 </li>
                             </ul>
                         </div>
@@ -166,64 +164,41 @@
                             </ul>
                         </div>
                             <div class="col-md-6 form-group">
-                                <label>First Name</label>
-                                <input  formControlName="firstName" class="form-control" type="text" placeholder="John">
-                                <!-- firstName Validation -->
-                                <ul *ngIf="shippingAddressForm.controls['firstName'].invalid && (shippingAddressForm.controls['firstName'].dirty || shippingAddressForm.controls['firstName'].touched)">
-                                    <li *ngIf="shippingAddressForm.controls['firstName'].hasError('required')" style="color: red;">
+                                <label>Full Name</label>
+                                <input  formControlName="name" class="form-control" type="text" placeholder="John deo">
+                                <!-- name Validation -->
+                                <ul *ngIf="shippingAddressForm.controls['name'].invalid && (shippingAddressForm.controls['name'].dirty || shippingAddressForm.controls['name'].touched)">
+                                    <li *ngIf="shippingAddressForm.controls['name'].hasError('required')" style="color: red;">
                                       Your firstname is required
                                     </li>
                                 </ul>
                             </div>
-                            <div class="col-md-6 form-group">
-                                <label>Last Name</label>
-                                <input formControlName="lastName" class="form-control" type="text" placeholder="Doe">
-                                <!-- lastName Validation -->
-                                <ul *ngIf="shippingAddressForm.controls['lastName']">
-                                    <li *ngIf="shippingAddressForm.controls['lastName'].hasError('required')" style="color: red;">
-                                      Your lastname is required
-                                    </li>
-                                </ul>
-                            </div>
-                        <div class="col-md-6 form-group">
-                            <label>E-mail</label>
-                            <input   formControlName="email" class="form-control" type="text" placeholder="example@email.com">
-                            <!-- email Validation -->
-                            <ul *ngIf="shippingAddressForm.controls['email'].invalid && (shippingAddressForm.controls['email'].dirty || shippingAddressForm.controls['email'].touched)">
-                                <li *ngIf="shippingAddressForm.controls['email'].hasError('required')" style="color: red;">
-                                  Your Email is required
-                                </li>
-                                <li *ngIf="shippingAddressForm.controls['email'].hasError('email')" style="color: red;">
-                                    Please enter valid Email
-                                  </li>
-                            </ul>
-                        </div>
                         <div class="col-md-6 form-group">
                             <label>Mobile No</label>
-                            <input formControlName="phone" class="form-control" type="tel" placeholder="+123 456 789">
-                            <!-- phone number Validation -->
-                            <ul *ngIf="shippingAddressForm.controls['phone'].invalid && (shippingAddressForm.controls['phone'].dirty || shippingAddressForm.controls['phone'].touched)">
-                                <li *ngIf="shippingAddressForm.controls['phone'].hasError('required')" style="color: red;">
-                                  Your phone Number is required
+                            <input formControlName="mobileNo" class="form-control" type="tel" placeholder="+123 456 789">
+                            <!-- mobileNo number Validation -->
+                            <ul *ngIf="shippingAddressForm.controls['mobileNo'].invalid && (shippingAddressForm.controls['mobileNo'].dirty || shippingAddressForm.controls['mobileNo'].touched)">
+                                <li *ngIf="shippingAddressForm.controls['mobileNo'].hasError('required')" style="color: red;">
+                                  Your mobileNo Number is required
                                 </li>
                             </ul>
                         </div>
                             <div class="col-md-6 form-group">
                                 <label>Address Line 1</label>
-                                <input formControlName="addressLine1" class="form-control" type="text" placeholder="123 Street">
+                                <input formControlName="addressLineOne" class="form-control" type="text" placeholder="123 Street">
                                 <!-- Address Line 1 Validation -->
-                                <ul *ngIf="shippingAddressForm.controls['addressLine1'].invalid && (shippingAddressForm.controls['addressLine1'].dirty || shippingAddressForm.controls['addressLine1'].touched)">
-                                    <li *ngIf="shippingAddressForm.controls['addressLine1'].hasError('required')" style="color: red;">
+                                <ul *ngIf="shippingAddressForm.controls['addressLineOne'].invalid && (shippingAddressForm.controls['addressLineOne'].dirty || shippingAddressForm.controls['addressLineOne'].touched)">
+                                    <li *ngIf="shippingAddressForm.controls['addressLineOne'].hasError('required')" style="color: red;">
                                       Your address is required
                                     </li>
                                 </ul>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label>Address Line 2</label>
-                                <input formControlName="addressLine2" class="form-control" type="text" placeholder="123 Street">
+                                <input formControlName="addressLineTwo" class="form-control" type="text" placeholder="123 Street">
                                 <!-- Address Line 2 Validation -->
-                                <ul *ngIf="shippingAddressForm.controls['addressLine2'].invalid && (shippingAddressForm.controls['addressLine2'].dirty || shippingAddressForm.controls['addressLine2'].touched)">
-                                    <li *ngIf="shippingAddressForm.controls['addressLine2'].hasError('required')" style="color: red;">
+                                <ul *ngIf="shippingAddressForm.controls['addressLineTwo'].invalid && (shippingAddressForm.controls['addressLineTwo'].dirty || shippingAddressForm.controls['addressLineTwo'].touched)">
+                                    <li *ngIf="shippingAddressForm.controls['addressLineTwo'].hasError('required')" style="color: red;">
                                       Your address is required
                                     </li>
                                 </ul>
@@ -232,9 +207,9 @@
                                 <label>LandMark</label>
                                 <input formControlName="landMark" class="form-control" type="text" placeholder="shop, mall or some known place">
                                 <!-- LandMark Validation -->
-                                <ul *ngIf="shippingAddressForm.controls['landMark'].invalid && (shippingAddressForm.controls['landMark'].dirty || shippingAddressForm.controls['landMark'].touched)">
-                                    <li *ngIf="shippingAddressForm.controls['landMark'].hasError('required')" style="color: red;">
-                                      landMark is required
+                                <ul *ngIf="shippingAddressForm.controls['landmark'].invalid && (shippingAddressForm.controls['landmark'].dirty || shippingAddressForm.controls['landmark'].touched)">
+                                    <li *ngIf="shippingAddressForm.controls['landmark'].hasError('required')" style="color: red;">
+                                      landmark is required
                                     </li>
                                 </ul>
                             </div>
@@ -273,11 +248,11 @@
                         </div>
                         <div class="col-md-6 form-group">
                             <label>ZIP Code</label>
-                            <input formControlName="zipCode" class="form-control" type="number" placeholder="123">
+                            <input formControlName="pincode" class="form-control" type="number" placeholder="123">
                             <!-- ZipCode Validation -->
-                            <ul *ngIf="shippingAddressForm.controls['zipCode'].invalid && (shippingAddressForm.controls['zipCode'].dirty || shippingAddressForm.controls['zipCode'].touched)">
-                                <li *ngIf="shippingAddressForm.controls['zipCode'].hasError('required')" style="color: red;">
-                                  Your zipCode is required
+                            <ul *ngIf="shippingAddressForm.controls['pincode'].invalid && (shippingAddressForm.controls['pincode'].dirty || shippingAddressForm.controls['pincode'].touched)">
+                                <li *ngIf="shippingAddressForm.controls['pincode'].hasError('required')" style="color: red;">
+                                  Your pincode is required
                                 </li>
                             </ul>
                         </div>

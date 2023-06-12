@@ -30,6 +30,8 @@ export const REMOVE_FAVORITE = `${LOCAL_HOST}/products/favorite/remove`;
 export const ADD_REVIEW = `${LOCAL_HOST}/products/review`;
 
 //API for user Address 
-export const ADD_ADDRESS = `${LOCAL_HOST}/address/add`;
 
+export const ADDRESS_LIST = `${LOCAL_HOST}/address`;
+export const ADD_ADDRESS = `${LOCAL_HOST}/address/add`;
+export const REMOVE_ADDRESS = `${LOCAL_HOST}/address/remove`;
 

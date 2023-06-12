@@ -35,7 +35,7 @@
                         </a>
                         <a class="btn px-0 ml-3" routerLink='/cart'>
                             <i class="fas fa-shopping-cart text-primary"></i>
-                            <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">{{totalCartLength || (commonService.CartItemsLength | async)}}</span>
+                            <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">{{(commonService.CartItemsLength | async)}}</span>
                         </a>
                     </div>
                 </div>

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpService } from './http.service';
 import { Observable } from 'rxjs';
 import {
+  ADDRESS_LIST,
   ADD_ADDRESS,
   ADD_REVIEW,
   ADD_TO_CART,
@@ -11,6 +12,7 @@ import {
   CART_PRODUCTS,
   FAVORITE_PRODUCTS,
   FILTERS,
+  REMOVE_ADDRESS,
   REMOVE_CART,
   REMOVE_FAVORITE,
   SIGNUP_FOOTER,
@@ -64,7 +66,7 @@ export class ApiService {
   }
 
   removeCartProduct(_id: any): Observable<any> {
-    console.log(REMOVE_CART + '/' + _id, '...........');
+    console.log( _id);
 
     return this.http.deleteRequest(REMOVE_CART + '/' + _id);
   }
@@ -78,6 +80,8 @@ export class ApiService {
   }
 
   removeFavoriteProduct(_id: any): Observable<any> {
+    console.log(_id, ';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;');
+    
     return this.http.deleteRequest(REMOVE_FAVORITE + '/' + _id);
   }
 
@@ -89,8 +93,17 @@ export class ApiService {
     return this.http.postRequest(ADD_REVIEW, body);
   }
 
+  //api for user Addresses
   addAddress(body: any): Observable<any> {
     return this.http.postRequest(ADD_ADDRESS, body);
+  }
+
+  getAddressList(): Observable<any> {
+    return this.http.getRequest(ADDRESS_LIST);
+  }
+
+  removeAddress(addressId: string):Observable<any>{
+    return this.http.deleteRequest(REMOVE_ADDRESS+"/"+addressId)
   }
 
   //Footer email Signup api

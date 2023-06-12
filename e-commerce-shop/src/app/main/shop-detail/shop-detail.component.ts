@@ -27,7 +27,7 @@ export class ShopDetailComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
   detailNavbar: any[] = ['Description', 'Information', 'Reviews'];
   navbarToggle: any = 0;
-  // productQuantity: any = 1;
+  productReviews: any[] = [];
 
   // User Review Form..
   reviewForm: FormGroup = this.fb.group({
@@ -51,7 +51,6 @@ export class ShopDetailComponent implements OnInit, OnDestroy {
   ];
 
   body: any = {
-    productId: '',
     quantity: 1,
   };
 
@@ -95,35 +94,48 @@ export class ShopDetailComponent implements OnInit, OnDestroy {
   }
 
   getSingleProductDetails() {
-  
     let sub1 = this.apiCall.getSingleProduct(this.singleProductId).subscribe({
       next: (res) => {
+        
         this.singleProductDetails = res.data.products[0];
+        
+        //Incase if there is review added to product details.
+        if (res.data.products[0].reviews.length) {
+          this.productReviews = res.data.products[0].reviews;
+        }
         this.cdr.markForCheck();
       },
     });
     this.subscriptions.push(sub1);
   }
-
+  //TODO:
   addToCart() {
-    this.body.productId = this.singleProductId;
-     let sub2 = this.apiCall.addToCart(this.body).subscribe({
-      next: (res) => {
-        if (res.type === 'success') {
-          this.toastService.success(res.message, 'Added to cart');
-        }
-      },
-    });
+    let sub2 = this.commonService
+      .addToCartClick(this.singleProductId, this.body.quantity, false)
+      .subscribe({
+        next: (res) => {
+          if (res.type === 'success') {
+            this.toastService.success(res.message, 'Added to cart');
+          } else {
+            this.toastService.error(res.message, 'Error while add to cart');
+          }
+        },
+      });
     this.body.quantity = 1;
     this.subscriptions.push(sub2);
   }
 
   changeQuantity() {
-    let sub3 = this.apiCall.changeCartQuantity(this.body).subscribe({
-      next: (res) => {
-        console.log(res);
-      },
-    });
+    let sub3 = this.apiCall
+      .changeCartQuantity({
+        productId: this.singleProductId,
+        quantity: this.body.quantity,
+      })
+      .subscribe({
+        next: (res) => {
+          console.log(res);
+        },
+      });
     this.subscriptions.push(sub3);
   }
 
@@ -154,12 +166,12 @@ export class ShopDetailComponent implements OnInit, OnDestroy {
       this.body.review = this.reviewForm.value.reviewMessage;
 
       let sub4 = this.apiCall.addReview(this.body).subscribe({
-        next : (res) => {
-          if(res){
-            this.toastService.success(res.message, 'Review Submitted')
+        next: (res) => {
+          if (res) {
+            this.toastService.success(res.message, 'Review Submitted');
           }
-        }
-      })
+        },
+      });
       this.subscriptions.push(sub4);
       this.reviewForm.reset();
     } else {
