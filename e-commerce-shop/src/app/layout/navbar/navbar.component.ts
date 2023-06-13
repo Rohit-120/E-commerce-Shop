@@ -71,24 +71,23 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   getCartItemsLength() {
-    let sub3 = this.apiCall.getCartProducts().subscribe({
+    let sub2 = this.apiCall.getCartProducts().subscribe({
       next: (res) => {
         if (res.type === 'success') {
           this.totalCartLength = res.data.products.length;
           this.commonService.CartItemsLength.next(res.data.products.length);
-
           this.cdr.markForCheck();
         }
       },
     });
-    this.subscription.push(sub3);
+    this.subscription.push(sub2);
   }
 
   /**
    * Function to get total favorite items length.
    */
   getFavoriteItemsLength() {
-    let sub2 = this.apiCall.getFavoriteProduct().subscribe({
+    let sub3 = this.apiCall.getFavoriteProduct().subscribe({
       next: (res: any) => {
         if (res.type === 'success') {
           this.favoriteItemsLength = res.data.products.length;
@@ -97,7 +96,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
         }
       },
     });
-    this.subscription.push(sub2);
+    this.subscription.push(sub3);
   }
 
   //function for toggle category.

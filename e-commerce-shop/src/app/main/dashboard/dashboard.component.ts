@@ -2,8 +2,10 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  OnDestroy,
   OnInit,
 } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { BreadcrumbService } from 'src/app/shared/services/breadcrumb.service';
 import { CommonService } from 'src/app/shared/services/common.service';
@@ -14,10 +16,10 @@ import { CommonService } from 'src/app/shared/services/common.service';
   styleUrls: ['./dashboard.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   // Object for Home carousel Section
   homeCarouselItem: any = [];
-  featureProd:boolean=true;
+  featureProd: boolean = true;
   features = [
     {
       feature: 'Quality Product',
@@ -38,6 +40,7 @@ export class DashboardComponent implements OnInit {
   ];
   carouselTabToggle: any = 0;
   offerProduct: any = [];
+  subscriptions: Subscription[] = [];
 
   constructor(
     private apiCall: ApiService,
@@ -45,30 +48,31 @@ export class DashboardComponent implements OnInit {
     private cdr: ChangeDetectorRef
   ) {}
 
-
   ngOnInit(): void {
     this.heroPosterDetails();
     this.bulletButtonClick(this.carouselTabToggle);
-
   }
 
-  // Api call for hero 
+  // Api call for hero
   heroPosterDetails() {
-    this.apiCall.getHeroPosterDetail().subscribe({
+    let sub1 = this.apiCall.getHeroPosterDetail().subscribe({
       next: (res: any) => {
         this.homeCarouselItem = res.data.carousels;
-        this.offerProduct = res.data.offers
+        this.offerProduct = res.data.offers;
         this.cdr.markForCheck();
       },
     });
+    this.subscriptions.push(sub1);
   }
-
-  
 
   /**
    * @param index index of clicked list of bullet button of hero carousel..
    */
   bulletButtonClick(index: number) {
     this.carouselTabToggle = index;
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subs) => subs.unsubscribe());
   }
 }

@@ -12,10 +12,12 @@ import {
   CART_PRODUCTS,
   FAVORITE_PRODUCTS,
   FILTERS,
+  PLACE_ORDER,
   REMOVE_ADDRESS,
   REMOVE_CART,
   REMOVE_FAVORITE,
   SIGNUP_FOOTER,
+  UPDATE_ADDRESS,
   USER_LOGIN,
   USER_LOGOUT,
   USER_REGISTRATION,
@@ -105,6 +107,16 @@ export class ApiService {
   removeAddress(addressId: string):Observable<any>{
     return this.http.deleteRequest(REMOVE_ADDRESS+"/"+addressId)
   }
+
+  updateAddress(addressId: string, body : any):Observable<any>{
+    return this.http.putRequest(UPDATE_ADDRESS+"/"+addressId, body)
+  }
+
+  //API for Orders
+  placeOrder(body : any):Observable<any>{
+    return this.http.postRequest(PLACE_ORDER, body)
+  }
+
 
   //Footer email Signup api
   emailSignUp(body: any): Observable<any> {

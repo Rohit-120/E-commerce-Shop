@@ -1,5 +1,6 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { CommonService } from 'src/app/shared/services/common.service';
 
@@ -8,9 +9,10 @@ import { CommonService } from 'src/app/shared/services/common.service';
   templateUrl: './categories.component.html',
   styleUrls: ['./categories.component.scss']
 })
-export class CategoriesComponent implements OnInit {
+export class CategoriesComponent implements OnInit, OnDestroy {
 
   categories : any = [];
+  subscriptions : Subscription[] = [];
 
 
 
@@ -26,16 +28,21 @@ export class CategoriesComponent implements OnInit {
   }
 
   productCategory() {
-    this.apiCall.getTotalCategories({isCategoryList : true}).subscribe({
+    let sub1 = this.apiCall.getTotalCategories({isCategoryList : true}).subscribe({
       next: (res: any) => {
         this.categories = res.data.categories;
         this.cdr.markForCheck();
       },
     });
+    this.subscriptions.push(sub1)
   }
 
   categoryClick(item : any){
       this.router.navigate([`/shop/${item.title}`])
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(subs => subs.unsubscribe());
   }
 
 }

@@ -2,16 +2,12 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  OnDestroy,
   OnInit,
 } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { BreadcrumbService } from 'src/app/shared/services/breadcrumb.service';
 
@@ -21,7 +17,9 @@ import { BreadcrumbService } from 'src/app/shared/services/breadcrumb.service';
   styleUrls: ['./checkout.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CheckoutComponent implements OnInit {
+export class CheckoutComponent implements OnInit, OnDestroy {
+  subscription: Subscription[] = [];
+  title: string = 'Billing Address';
   countries: string[] = [
     'India',
     'United States',
@@ -31,6 +29,9 @@ export class CheckoutComponent implements OnInit {
   ];
   isShippingAddressEnabled = false;
   userAddressList: any[] = [];
+
+  isAddressId!: string;
+  userDefaultAddress: any;
 
   body: any = {
     // "title":"Home",
@@ -56,18 +57,18 @@ export class CheckoutComponent implements OnInit {
   };
 
   addressBillingForm = this.fb.group({
-    title: new FormControl('Office', Validators.required),
-    name: new FormControl('rahul', Validators.required),
+    title: new FormControl('', Validators.required),
+    name: new FormControl('', Validators.required),
     // lastName :new FormControl('patel', Validators.required),
     // email :new FormControl('rahul@gmail.com', [Validators.required, Validators.email])  ,
-    mobileNo: new FormControl('6546565845', Validators.required),
-    addressLineOne: new FormControl('A12, street 1', Validators.required),
-    addressLineTwo: new FormControl('street 2', Validators.required),
-    landmark: new FormControl('sola', Validators.required),
-    country: new FormControl('India', Validators.required),
-    city: new FormControl('Ahmedabad', Validators.required),
-    state: new FormControl('gujarat', Validators.required),
-    pincode: new FormControl('365685', Validators.required),
+    mobileNo: new FormControl('', Validators.required),
+    addressLineOne: new FormControl('', Validators.required),
+    addressLineTwo: new FormControl('', Validators.required),
+    landmark: new FormControl('', Validators.required),
+    country: new FormControl('', Validators.required),
+    city: new FormControl('', Validators.required),
+    state: new FormControl('', Validators.required),
+    pincode: new FormControl('', Validators.required),
   });
 
   shippingAddressForm = this.fb.group({
@@ -85,12 +86,19 @@ export class CheckoutComponent implements OnInit {
     pincode: new FormControl('389865', Validators.required),
   });
 
+  orderBody: any = {
+    shipToDifferentAddress: false,
+    billingId: '647f2eacd46ac8d233e186d4',
+    totalAmount: 500,
+    shippingAmount: 100,
+    paymentMethod: 'Cash on delivery',
+  };
+
   constructor(
     private breadcrumbService: BreadcrumbService,
     private fb: FormBuilder,
     private toast: ToastrService,
     private cdr: ChangeDetectorRef,
-    private router: Router,
     private apiCall: ApiService
   ) {}
 
@@ -113,17 +121,20 @@ export class CheckoutComponent implements OnInit {
     this.getAddressList();
   }
 
-  onAddressSubmit() {
-    if (this.addressBillingForm.valid) {
-      let data = this.addressBillingForm.value;
-    }
-    this.apiCall.addAddress(this.addressBillingForm.value).subscribe({
-      next: (res) => {
-        if (res.type === 'success') {
-          this.toast.success(res.message, 'Successful');
+  placeOrder() {
+    this.apiCall.placeOrder(this.orderBody).subscribe({
+      next : (res) => {
+        if(res.type === 'success') {
+        this.toast.success(res.message, 'Order Placed');
         }
-      },
-    });
+      }
+    })
+
+    // this.apiCall.addAddress(this.addressBillingForm.value).subscribe({
+    //   next: (res) => {
+    //     console.log(res.address, 'place order');
+    //   },
+    // });
   }
 
   shippingAddress(event: any) {
@@ -136,34 +147,73 @@ export class CheckoutComponent implements OnInit {
   }
 
   getAddressList() {
-    this.apiCall.getAddressList().subscribe({
+    let sub2 = this.apiCall.getAddressList().subscribe({
       next: (res) => {
-        console.log(res, 'addressBook');
-        
-        this.userAddressList = res.data.addressBook;
-        this.cdr.markForCheck();
+        if (res.type === 'success') {
+          this.userAddressList = res.data.addressBook;
+          this.cdr.markForCheck();
+          if (this.userAddressList) {
+            this.userAddressList.find((address) => {
+              if (address.title === 'Home') {
+                this.addressBillingForm.patchValue(address);
+                this.userDefaultAddress = address;
+                this.cdr.markForCheck();
+              }
+            });
+          }
+        }
       },
     });
+
+    this.subscription.push(sub2);
   }
 
-  onAddressChange(address: any) {
+  editAddress(address: any, action?: string, index?: any) {
+    this.isAddressId = address.addressId;
+    this.userDefaultAddress = address;
     console.log(address, 'addressChanged');
-    this.addressBillingForm.patchValue(address)
+
+    if (action === 'change') {
+      this.title = 'Update Address';
+      this.addressBillingForm.patchValue(address);
+    } else if (action === 'patch') {
+      this.title = 'Billing Address';
+      this.addressBillingForm.patchValue(address);
+    }
   }
 
-  removeAddress(addressId: string, index : number) {
+  updateAddress() {
+    let sub3 = this.apiCall
+      .updateAddress(this.isAddressId, this.addressBillingForm.value)
+      .subscribe({
+        next: (res) => {
+          if (res.type === 'success') {
+            this.toast.success(res.message, 'Updated');
+          } else {
+            this.toast.error(res.message, 'something went wrong!');
+          }
+        },
+      });
+    this.subscription.push(sub3);
+  }
+
+  removeAddress(addressId: string, index: number) {
     console.log(addressId, 'removeAddress');
-    this.apiCall.removeAddress(addressId).subscribe({
-      next : (res) => {
-        if(res.type === 'success') {
-          this.userAddressList.splice(index , 1)
-          this.toast.show(res.message, 'Address Removed')
+    let sub4 = this.apiCall.removeAddress(addressId).subscribe({
+      next: (res) => {
+        if (res.type === 'success') {
+          this.userAddressList.splice(index, 1);
+          this.toast.show(res.message, 'Address Removed');
           this.cdr.markForCheck();
         } else {
-          this.toast.error(res.message,'Some error occurred')
+          this.toast.error(res.message, 'Some error occurred');
         }
-        
-      }
-    })
+      },
+    });
+    this.subscription.push(sub4);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.forEach((sub) => sub.unsubscribe());
   }
 }

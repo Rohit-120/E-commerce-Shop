@@ -59,7 +59,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   addToCartClick(id: any) {
     console.log('addToCart =====>  ', id);
 
-    let sub3 = this.commonService.addToCartClick(id, 1, true).subscribe({
+    let sub2 = this.commonService.addToCartClick(id, 1, true).subscribe({
       next: (res: any) => {
         if (res.type === 'success') {
           this.toastService.success(res.message, 'Added to cart');
@@ -69,27 +69,28 @@ export class ProductComponent implements OnInit, OnDestroy {
       },
       error: (err: any) => {},
     });
-    this.subscriptions.push(sub3);
+    this.subscriptions.push(sub2);
   }
 
   onFavoriteClick(productId: any) {
-    this.apiCall.addToFavorite(productId).subscribe({
+    let sub3 = this.apiCall.addToFavorite(productId).subscribe({
       next: (res: any) => {
         if (res.type === 'success') {
           this.toastService.success(res.message, 'Added to Favorite');
         }
       },
     });
+    this.subscriptions.push(sub3);
   }
 
   getCurrencyInfo() {
-    let sub2 = this.commonService.currencyChanges.subscribe({
+    let sub4 = this.commonService.currencyChanges.subscribe({
       next: (res) => {
         this.currencyInfo = res;
         this.cdr.markForCheck();
       },
     });
-    this.subscriptions.push(sub2);
+    this.subscriptions.push(sub4);
   }
 
   ngOnDestroy(): void {

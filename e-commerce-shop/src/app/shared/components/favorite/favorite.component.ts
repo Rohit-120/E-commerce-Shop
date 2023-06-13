@@ -34,17 +34,19 @@ export class FavoriteComponent implements OnInit, OnDestroy {
   }
 
   getFavoriteItems() {
-    this.apiCall.getFavoriteProduct().subscribe({
+    let sub1 = this.apiCall.getFavoriteProduct().subscribe({
       next: (res: any) => {
         this.favoriteItems = res.data.products;
         this.cdr.markForCheck();
         this.commonService.FavoriteItemLength.next(this.favoriteItems.length);
       },
     });
+    this.subscriptions.push(sub1);
+
   }
 
   removeFavorite(productId: any, index: number) {
-    this.apiCall.removeFavoriteProduct(productId).subscribe({
+    let sub2 = this.apiCall.removeFavoriteProduct(productId).subscribe({
       next: (res: any) => {
         if (res.type === 'success') {
           this.favoriteItems.splice(index, 1);
@@ -54,16 +56,18 @@ export class FavoriteComponent implements OnInit, OnDestroy {
         }
       },
     });
+        this.subscriptions.push(sub2);
+
   }
 
   getCurrencyInfo() {
-    let sub2 = this.commonService.currencyChanges.subscribe({
+    let sub3 = this.commonService.currencyChanges.subscribe({
       next: (res) => {
         this.currencyInfo = res;
         this.cdr.markForCheck();
       },
     });
-    this.subscriptions.push(sub2);
+    this.subscriptions.push(sub3);
   }
 
   ngOnDestroy(): void {

@@ -23,4 +23,9 @@ export class HttpService {
     return this.http.delete(url, item);
   }
 
+
+  putRequest(url : string, item? : any) {
+    return this.http.put(url, item);
+  }
+
 }

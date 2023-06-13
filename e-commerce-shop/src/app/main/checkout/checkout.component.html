@@ -4,26 +4,28 @@
     <div class="row mb-3">
             <div *ngFor="let item of userAddressList let index = index" class="d-grid align-items-center justify-content-center mx-auto mb-2 ">
                 <div class="card">
-                    <div class="card-header">
-                        <input class="form-check-input mx-auto" type="radio" name="address" [checked]="item.title === 'Home' || item.title === 'home'" (change)="onAddressChange(item)" >
-                        <label class="form-check-label mx-4">{{item.title}}</label>
+                    <div class="card-header bg-primary">
+                        <input class="radio-btn mx-auto" type="radio" name="address" [checked]="item.title === 'Home' || item.title === 'home'" (change)="editAddress(item, 'patch')" >
+                        <label class="form-check-label mx-4 "> <strong>{{item.title}}</strong></label>
                     </div>
-                    <div class="card-body text-center" style="line-height: 1;">
+                    <div class="card-body" style="line-height: 1;">
                       <p><b>{{item.name}}</b></p>
                       <p>{{item.mobileNo}}</p>
                       <p>{{item.addressLineOne}}</p>
                       <p>{{item.addressLineTwo}}</p>
                       <p>{{item.landmark}}, {{item.city}}, {{item.state}}, {{item.country}}</p>
                       <p>{{item.pincode}}</p>
-                      <a class="btn btn-outline-primary mx-1"> <i class="fas fa-edit"></i></a>
-                      <a class="btn btn-outline-danger mx-1" (click)="removeAddress(item.addressId, index)"><i class="fas fa-trash-alt"></i></a>
                     </div>
-                  </div>
+                    <div class="card-footer text-center">
+                    <a class="btn btn-outline-primary px-4 mx-1" (click)="editAddress(item, 'change', index)" > <i class="fas fa-edit"></i></a>
+                    <a class="btn btn-outline-danger px-4 mx-1" (click)="removeAddress(item.addressId, index)"><i class="fas fa-trash-alt"></i></a>
+                </div>  
+                </div>
             </div>
     </div>
     <div class="row px-xl-5">
         <div class="col-lg-8">
-            <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Billing Address</span></h5>
+            <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">{{title}}</span></h5>
             <div class="bg-light p-30 mb-5">
                 <!-- billing-form -->
                 <form [formGroup]="addressBillingForm">
@@ -131,7 +133,12 @@
                                 </li>
                             </ul>
                         </div>
-                       
+
+                        <div *ngIf="title === 'Update Address'" class="col-md-12 mb-2 ">
+                            <div class=" text-center">
+                                <button class="btn btn-outline-primary" (click)="updateAddress()" >Update</button>
+                            </div>
+                        </div>
                         <div class="col-md-12 form-group">
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="newaccount">
@@ -205,7 +212,7 @@
                             </div>
                             <div class="col-md-6 form-group">
                                 <label>LandMark</label>
-                                <input formControlName="landMark" class="form-control" type="text" placeholder="shop, mall or some known place">
+                                <input formControlName="landmark" class="form-control" type="text" placeholder="shop, mall or some known place">
                                 <!-- LandMark Validation -->
                                 <ul *ngIf="shippingAddressForm.controls['landmark'].invalid && (shippingAddressForm.controls['landmark'].dirty || shippingAddressForm.controls['landmark'].touched)">
                                     <li *ngIf="shippingAddressForm.controls['landmark'].hasError('required')" style="color: red;">
@@ -317,7 +324,7 @@
                             <label class="custom-control-label" for="banktransfer">Bank Transfer</label>
                         </div>
                     </div> 
-                    <button (click)="onAddressSubmit()" class="btn btn-block btn-primary font-weight-bold py-3" >Place Order</button>
+                    <button (click)="placeOrder()" class="btn btn-block btn-primary font-weight-bold py-3" >Place Order</button>
                 </div>
             </div>
         </div>

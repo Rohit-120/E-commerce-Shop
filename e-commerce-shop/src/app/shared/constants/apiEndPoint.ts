@@ -34,4 +34,9 @@ export const ADD_REVIEW = `${LOCAL_HOST}/products/review`;
 export const ADDRESS_LIST = `${LOCAL_HOST}/address`;
 export const ADD_ADDRESS = `${LOCAL_HOST}/address/add`;
 export const REMOVE_ADDRESS = `${LOCAL_HOST}/address/remove`;
+export const UPDATE_ADDRESS = `${LOCAL_HOST}/address/update`;
+
+//api for Orders
+export const PLACE_ORDER = `${LOCAL_HOST}/orders`;
+
 

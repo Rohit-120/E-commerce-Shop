@@ -12,7 +12,6 @@ import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { BreadcrumbService } from 'src/app/shared/services/breadcrumb.service';
 import { CommonService } from 'src/app/shared/services/common.service';
-import { CurrencyChangeService } from 'src/app/shared/services/currency-change.service';
 
 @Component({
   selector: 'app-shop-detail',
@@ -145,7 +144,7 @@ export class ShopDetailComponent implements OnInit, OnDestroy {
    */
   increase() {
     this.body.quantity++;
-    this.changeQuantity();
+    // this.changeQuantity();
   }
 
   /**
@@ -155,7 +154,7 @@ export class ShopDetailComponent implements OnInit, OnDestroy {
   decrease() {
     if (this.body.quantity > 0) {
       this.body.quantity--;
-      this.changeQuantity();
+      // this.changeQuantity();
     }
   }
 

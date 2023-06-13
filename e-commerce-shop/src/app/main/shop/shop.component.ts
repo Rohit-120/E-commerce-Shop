@@ -131,6 +131,7 @@ export class ShopComponent implements OnInit, OnDestroy {
     let sub3 = this.commonService.addToCartClick(id, 1, true).subscribe({
       next: (res: any) => {
         if (res.type === 'success') {
+          // this.commonService.CartItemsLength.next()
           this.toastService.success(res.message, 'Added to cart');
         } else {
           this.toastService.error(res.message, 'Error while add to cart');
@@ -140,7 +141,7 @@ export class ShopComponent implements OnInit, OnDestroy {
         if (err.type === 'error') {
           
         }
-      },
+      },  
     });
 
     this.subscriptions.push(sub3);
