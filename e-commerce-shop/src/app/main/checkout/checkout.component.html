@@ -2,9 +2,9 @@
   <div class="container-fluid">
     
     <div class="row mb-3">
-            <div *ngFor="let item of userAddressList let index = index" class="d-grid align-items-center justify-content-center mx-auto mb-2 ">
+            <div *ngFor="let item of userAddressList let index = index" class="d-grid align-items-center justify-content-center mx-auto mb-2">
                 <div class="card">
-                    <div class="card-header bg-primary">
+                    <div class="card-header bg-primary ">
                         <input class="radio-btn mx-auto" type="radio" name="address" [checked]="item.title === 'Home' || item.title === 'home'" (change)="editAddress(item, 'patch')" >
                         <label class="form-check-label mx-4 "> <strong>{{item.title}}</strong></label>
                     </div>
@@ -224,7 +224,7 @@
                             <label>Country</label>
                             <select formControlName="country" class="custom-select" placeholder="Choose Country">
                                 <option selected>Choose Country</option>
-                                <option *ngFor="let item of countries" >{{item}}</option>
+                                <option *ngFor="let item of countries" value="{{item}}" >{{item}}</option>
                             </select>
                             <!-- country Validation -->
                                 <ul *ngIf="shippingAddressForm.controls['country'].invalid && (shippingAddressForm.controls['country'].dirty || shippingAddressForm.controls['country'].touched)">
@@ -273,33 +273,25 @@
             <div class="bg-light p-30 mb-5">
                 <div class="border-bottom">
                     <h6 class="mb-3">Products</h6>
-                    <div class="d-flex justify-content-between">
-                        <p>Product Name 1</p>
-                        <p>$150</p>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                        <p>Product Name 2</p>
-                        <p>$150</p>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                        <p>Product Name 3</p>
-                        <p>$150</p>
+                    <div *ngFor="let item of totalProductToOrder; let index = index" class="custom-control d-flex align-items-center justify-content-between pl-0 mb-3">
+                        <label class="col-9">{{item.product.title}}</label>
+                        <span class="col-3 badge border font-weight-normal">{{(item.product.price * item.quantity) * currencyInfo.currencyPrice  | currency : currencyInfo.currencyName}}</span>
                     </div>
                 </div>
                 <div class="border-bottom pt-3 pb-2">
                     <div class="d-flex justify-content-between mb-3">
                         <h6>Subtotal</h6>
-                        <h6>$150</h6>
+                        <h6>{{totalAmountOfProducts.total * currencyInfo.currencyPrice  | currency : currencyInfo.currencyName}}</h6>
                     </div>
                     <div class="d-flex justify-content-between">
                         <h6 class="font-weight-medium">Shipping</h6>
-                        <h6 class="font-weight-medium">$10</h6>
+                        <h6 class="font-weight-medium">{{totalAmountOfProducts.shipping * currencyInfo.currencyPrice  | currency : currencyInfo.currencyName}}</h6>
                     </div>
                 </div>
                 <div class="pt-2">
                     <div class="d-flex justify-content-between mt-2">
                         <h5>Total</h5>
-                        <h5>$160</h5>
+                        <h5>{{(totalAmountOfProducts.total + totalAmountOfProducts.shipping) * currencyInfo.currencyPrice  | currency : currencyInfo.currencyName}}</h5>
                     </div>
                 </div>
             </div>

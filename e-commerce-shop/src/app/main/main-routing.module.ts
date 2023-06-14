@@ -12,6 +12,7 @@ import { FavoriteComponent } from '../shared/components/favorite/favorite.compon
 import { LoginComponent } from '../auth/login/login.component';
 import { RegistrationComponent } from '../auth/registration/registration.component';
 import { AuthGuard } from '../shared/guards/auth.guard';
+import { MyOrdersComponent } from './my-orders/my-orders.component';
 
 const routes: Routes = [
   {
@@ -47,11 +48,14 @@ const routes: Routes = [
         path : 'cart', 
         component : CartComponent,
         canActivate : [AuthGuard]
-
       },
       {
         path : 'checkout',
         component : CheckoutComponent
+      },
+      {
+        path : 'my-orders',
+        component : MyOrdersComponent
       },
       {
         path : 'contact',

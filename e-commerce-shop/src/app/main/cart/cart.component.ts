@@ -22,13 +22,12 @@ export class CartComponent implements OnInit, OnDestroy {
   quantity: number = 1;
   subTotal: number = 0;
   shipping: number = 10;
-  selectedIndex: any = null;
   currencyInfo: any;
   subscriptions: Subscription[] = [];
-  body : any = {
-    productId : '',
-    quantity : null
-  }
+  body: any = {
+    productId: '',
+    quantity: null,
+  };
 
   constructor(
     private breadcrumbService: BreadcrumbService,
@@ -62,47 +61,53 @@ export class CartComponent implements OnInit, OnDestroy {
   getCartDetails() {
     let sub1 = this.apiCall.getCartProducts().subscribe({
       next: (res: any) => {
-        console.log(res, 'cart products');
-        
-        this.cartItems = res.data.products;
-        this.commonService.CartItemsLength.next(this.cartItems.length);
-        this.cdr.markForCheck();
-        this.getAllTotal();
+        if (res.type === 'success') {
+          this.cartItems = res.data.products;
+          this.commonService.CartItemsLength.next(this.cartItems.length);
+          this.commonService.totalCartItems.next(res.data.products);
+          this.getAllTotal();
+          this.commonService.cartTotalAmount.next({total : this.subTotal, shipping: this.shipping});
+          this.cdr.markForCheck();
+        }else{
+          this.toastService.error(res.message, 'Something went wrong');
+        }
       },
     });
     this.subscriptions.push(sub1);
   }
 
-  changeQuantity(){
+  changeQuantity() {
     this.apiCall.changeCartQuantity(this.body).subscribe({
-      next : (res : any) => {
+      next: (res: any) => {
         console.log('Attempting to change ====>', res);
-      }
-    })
+      },
+    });
   }
 
   /**
    * @param index number of the Cart object
    * Increase the Cart Quantity
    */
-  increase(index: number, id : any) {
-      this.body.quantity = ++this.cartItems[index].quantity;
-      this.body.productId = id;
-      this.cartItems[index].total = this.cartItems[index].product.price * this.cartItems[index].quantity;
-      this.changeQuantity()
-      this.getAllTotal();
+  increase(index: number, id: any) {
+    this.body.quantity = ++this.cartItems[index].quantity;
+    this.body.productId = id;
+    this.cartItems[index].total =
+      this.cartItems[index].product.price * this.cartItems[index].quantity;
+    this.changeQuantity();
+    this.getAllTotal();
   }
 
   /**
    * @param index number of the Cart object
    * Decrease the Cart Quantity
    */
-  decrease(index: number, id : any) {
+  decrease(index: number, id: any) {
     if (this.cartItems[index].quantity > 1) {
-       this.body.quantity = --this.cartItems[index].quantity;
-       this.body.productId = id;
-      this.cartItems[index].total = this.cartItems[index].product.price * this.cartItems[index].quantity;
-      this.changeQuantity()
+      this.body.quantity = --this.cartItems[index].quantity;
+      this.body.productId = id;
+      this.cartItems[index].total =
+        this.cartItems[index].product.price * this.cartItems[index].quantity;
+      this.changeQuantity();
     }
     this.getAllTotal();
   }

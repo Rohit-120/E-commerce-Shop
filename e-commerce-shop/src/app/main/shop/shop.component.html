@@ -10,7 +10,7 @@
                     <form>
                         <div *ngFor="let item of filterProducts.filterByPrice; let index = index" class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                             <input type="checkbox" class="custom-control-input" id="price-{{index + 1}}" (click)="getFilterData($event, item, 'price')" >
-                            <label class="custom-control-label" for="price-{{index + 1}}">{{item.min}}-{{item.max}}</label>
+                            <label class="custom-control-label" for="price-{{index + 1}}">{{item.min  * currencyInfo.currencyPrice  | currency : currencyInfo.currencyName}}-{{item.max  * currencyInfo.currencyPrice  | currency : currencyInfo.currencyName}}</label>
                             <span class="badge border font-weight-normal">{{item.totalProducts}}</span>
                         </div>
                     </form>

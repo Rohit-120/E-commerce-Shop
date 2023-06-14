@@ -18,6 +18,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from '../shared/interceptors/token.interceptor';
 import { VendorComponent } from 'src/main/components/vendor/vendor.component';
+import { MyOrdersComponent } from './my-orders/my-orders.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { VendorComponent } from 'src/main/components/vendor/vendor.component';
     CategoriesComponent,
     VendorComponent,
     ShopDetailComponent,
-    FeaturedProductComponent
+    FeaturedProductComponent,
+    MyOrdersComponent
   ],
   imports: [
     CommonModule,

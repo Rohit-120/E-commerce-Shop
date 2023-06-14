@@ -10,13 +10,17 @@ export class CommonService {
   favorite : BehaviorSubject<any> = new BehaviorSubject<any>('')
   FavoriteItemLength = new BehaviorSubject<any>('');
   CartItemsLength = new BehaviorSubject<any>(null)
-  favoriteItems = new Subject<number>();
+  // favoriteItems = new Subject<number>();
   categories = new BehaviorSubject<any[]>([]);
 
   currencyChanges  = new BehaviorSubject<any>({currencyName : 'USD', currencyPrice : 1});
 
   //user search input fields of products.
   dataFromSearchInput = new BehaviorSubject<any>('')
+
+  totalCartItems = new BehaviorSubject<any[]>([]);
+  cartTotalAmount = new BehaviorSubject<any>({});
+   
 
   constructor(
     private apiService: ApiService,

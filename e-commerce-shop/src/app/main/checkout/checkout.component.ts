@@ -10,6 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { BreadcrumbService } from 'src/app/shared/services/breadcrumb.service';
+import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
   selector: 'app-checkout',
@@ -18,7 +19,7 @@ import { BreadcrumbService } from 'src/app/shared/services/breadcrumb.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CheckoutComponent implements OnInit, OnDestroy {
-  subscription: Subscription[] = [];
+  subscriptions: Subscription[] = [];
   title: string = 'Billing Address';
   countries: string[] = [
     'India',
@@ -29,38 +30,14 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   ];
   isShippingAddressEnabled = false;
   userAddressList: any[] = [];
-
+  totalAmount!: number;
   isAddressId!: string;
   userDefaultAddress: any;
-
-  body: any = {
-    // "title":"Home",
-    // "name":"test testify",
-    // "mobileNo":"+911234557890",
-    // "addressLineOne":"Ganesh meredian Block-c",
-    // "addressLineTwo":"Room No. 901",
-    // "landmark":"Kargil Petrol Pump",
-    // "country":"India",
-    // "state":"Gujarat",
-    // "city":"Ahmedabad",
-    // "pincode":"387341",
-    // addressLineOne : "A12, street 1"
-    // addressLineTwo : "street 2"
-    // city : "Ahmedabad"
-    // country : "India"
-    // landmark : "sola"
-    // mobileNo : "6546565845"
-    // name : "rahul"
-    // state : "gujarat"
-    // title : "Office"
-    // zipcode : "365685"
-  };
+  currencyInfo: any;
 
   addressBillingForm = this.fb.group({
     title: new FormControl('', Validators.required),
     name: new FormControl('', Validators.required),
-    // lastName :new FormControl('patel', Validators.required),
-    // email :new FormControl('rahul@gmail.com', [Validators.required, Validators.email])  ,
     mobileNo: new FormControl('', Validators.required),
     addressLineOne: new FormControl('', Validators.required),
     addressLineTwo: new FormControl('', Validators.required),
@@ -74,8 +51,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   shippingAddressForm = this.fb.group({
     title: new FormControl('Home', Validators.required),
     name: new FormControl('lav', Validators.required),
-    // lastName :new FormControl('rana', Validators.required),
-    // email :new FormControl('lav12@gmail.com', [Validators.required, Validators.email])  ,
     mobileNo: new FormControl('9875463284', Validators.required),
     addressLineOne: new FormControl('A one Apartment', Validators.required),
     addressLineTwo: new FormControl('32 street', Validators.required),
@@ -86,9 +61,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     pincode: new FormControl('389865', Validators.required),
   });
 
+  totalProductToOrder: any;
+  totalAmountOfProducts: any;
   orderBody: any = {
     shipToDifferentAddress: false,
-    billingId: '647f2eacd46ac8d233e186d4',
+    billingId: '',
     totalAmount: 500,
     shippingAmount: 100,
     paymentMethod: 'Cash on delivery',
@@ -97,9 +74,10 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   constructor(
     private breadcrumbService: BreadcrumbService,
     private fb: FormBuilder,
-    private toast: ToastrService,
+    private toastService: ToastrService,
     private cdr: ChangeDetectorRef,
-    private apiCall: ApiService
+    private apiCall: ApiService,
+    private commonService: CommonService
   ) {}
 
   ngOnInit(): void {
@@ -119,27 +97,90 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     ]);
 
     this.getAddressList();
+    this.getCartDetails();
+    this.getCurrencyInfo()
+  }
+
+  //To get Cart Item details using ApiService
+  getCartDetails() {
+    console.log('Get Cart Item Details called');
+    
+    let sub1 = this.commonService.totalCartItems.subscribe({
+      next: (res: any) => {
+        console.log(res, 'cart details in checkout comp');
+          this.totalProductToOrder = res;
+          this.cdr.markForCheck();
+      },
+    });
+    this.subscriptions.push(sub1);
+
+    if (this.totalProductToOrder) {
+      this.commonService.cartTotalAmount.subscribe({
+        next : (res: any) => {
+         this.totalAmountOfProducts = res
+         this.cdr.markForCheck();
+        }
+      })
+    }
+  }
+
+
+  getCurrencyInfo() {
+    let sub4 = this.commonService.currencyChanges.subscribe({
+      next: (res) => {
+        console.log(res, 'currentCurrency');
+        
+        this.currencyInfo = res;
+        this.cdr.markForCheck();
+      },
+    });
+    this.subscriptions.push(sub4);
   }
 
   placeOrder() {
-    this.apiCall.placeOrder(this.orderBody).subscribe({
-      next : (res) => {
-        if(res.type === 'success') {
-        this.toast.success(res.message, 'Order Placed');
-        }
-      }
-    })
+    //if billing and shipping address are same
+    if (!this.isShippingAddressEnabled) {
+      this.orderBody.billingId = this.userDefaultAddress.addressId;
+      this.apiCall.placeOrder(this.orderBody).subscribe({
+        next: (res) => {
+          if (res.type === 'success') {
+            this.toastService.success(res.message, 'Order Placed');
+          }
+        },
+      });
+    } //if billing and shipping address are different
+    else {
+      if (this.shippingAddressForm.valid) {
+        //to add shipping address to user address list
+        this.apiCall.addAddress(this.shippingAddressForm.value).subscribe({
+          next: (res) => {
+            console.log(res.addedAddressId, 'place order');
+            //if shipping address is added to user list place order with different address
+            if (res.addedAddressId) {
+              this.orderBody.billingId = this.userDefaultAddress.addressId;
+              this.orderBody.deliveryId = res.addedAddressId;
+              this.orderBody.shipToDifferentAddress = true;
 
-    // this.apiCall.addAddress(this.addressBillingForm.value).subscribe({
-    //   next: (res) => {
-    //     console.log(res.address, 'place order');
-    //   },
-    // });
+              this.apiCall.placeOrder(this.orderBody).subscribe({
+                next: (res) => {
+                  console.log(res, 'Place Order with shipping address');
+
+                  if (res.type === 'success') {
+                    this.toastService.success(res.message, 'Order Placed');
+                  }
+                },
+              });
+            }
+          },
+        });
+      } else {
+        this.toastService.info('Please enter valid information !');
+      }
+    }
   }
 
   shippingAddress(event: any) {
     if (event.target.checked) {
-      console.log('tttt');
       this.isShippingAddressEnabled = true;
     } else {
       this.isShippingAddressEnabled = false;
@@ -149,6 +190,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   getAddressList() {
     let sub2 = this.apiCall.getAddressList().subscribe({
       next: (res) => {
+        console.log("Res",res)
         if (res.type === 'success') {
           this.userAddressList = res.data.addressBook;
           this.cdr.markForCheck();
@@ -165,7 +207,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       },
     });
 
-    this.subscription.push(sub2);
+    this.subscriptions.push(sub2);
   }
 
   editAddress(address: any, action?: string, index?: any) {
@@ -188,13 +230,13 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (res) => {
           if (res.type === 'success') {
-            this.toast.success(res.message, 'Updated');
+            this.toastService.success(res.message, 'Updated');
           } else {
-            this.toast.error(res.message, 'something went wrong!');
+            this.toastService.error(res.message, 'something went wrong!');
           }
         },
       });
-    this.subscription.push(sub3);
+    this.subscriptions.push(sub3);
   }
 
   removeAddress(addressId: string, index: number) {
@@ -203,17 +245,17 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       next: (res) => {
         if (res.type === 'success') {
           this.userAddressList.splice(index, 1);
-          this.toast.show(res.message, 'Address Removed');
+          this.toastService.show(res.message, 'Address Removed');
           this.cdr.markForCheck();
         } else {
-          this.toast.error(res.message, 'Some error occurred');
+          this.toastService.error(res.message, 'Some error occurred');
         }
       },
     });
-    this.subscription.push(sub4);
+    this.subscriptions.push(sub4);
   }
 
   ngOnDestroy(): void {
-    this.subscription.forEach((sub) => sub.unsubscribe());
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 }

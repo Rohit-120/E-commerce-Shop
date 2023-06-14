@@ -37,6 +37,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
       navItem: 'Shop',
       route: '/shop',
     },
+    {
+      navItem: 'My Orders',
+      route: '/my-orders',
+    },
   ];
 
   constructor(
