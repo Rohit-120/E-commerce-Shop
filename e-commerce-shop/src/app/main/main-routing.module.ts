@@ -9,8 +9,6 @@ import { ContactComponent } from './contact/contact.component';
 import { NotFoundComponent } from '../not-found/not-found.component';
 import { ShopDetailComponent } from './shop-detail/shop-detail.component';
 import { FavoriteComponent } from '../shared/components/favorite/favorite.component';
-import { LoginComponent } from '../auth/login/login.component';
-import { RegistrationComponent } from '../auth/registration/registration.component';
 import { AuthGuard } from '../shared/guards/auth.guard';
 import { MyOrdersComponent } from './my-orders/my-orders.component';
 

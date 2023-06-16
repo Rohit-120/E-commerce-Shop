@@ -179,7 +179,7 @@ export class ShopDetailComponent implements OnInit, OnDestroy {
   }
 
   getCurrencyInfo() {
-    let sub5 = this.commonService.currencyChanges.subscribe({
+    let sub5 = this.commonService.currencyChanges$.subscribe({
       next: (res) => {
         this.currencyInfo = res;
         this.cdr.markForCheck();

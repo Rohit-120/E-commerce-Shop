@@ -111,7 +111,7 @@ export class ShopComponent implements OnInit, OnDestroy {
   }
 
   getDataOfSearchBar() {
-    let sub2 = this.commonService.dataFromSearchInput.subscribe({
+    let sub2 = this.commonService.dataFromSearchInput$.subscribe({
       next: (res: any) => {
         this.body.filter = {
           search: res,
@@ -184,7 +184,7 @@ export class ShopComponent implements OnInit, OnDestroy {
   }
 
   getCurrencyInfo() {
-    let sub6 = this.commonService.currencyChanges.subscribe({
+    let sub6 = this.commonService.currencyChanges$.subscribe({
       next: (res) => {
         this.currencyInfo = res;
         this.cdr.markForCheck();

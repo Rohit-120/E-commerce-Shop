@@ -36,9 +36,13 @@ export class FavoriteComponent implements OnInit, OnDestroy {
   getFavoriteItems() {
     let sub1 = this.apiCall.getFavoriteProduct().subscribe({
       next: (res: any) => {
-        this.favoriteItems = res.data.products;
-        this.cdr.markForCheck();
-        this.commonService.FavoriteItemLength.next(this.favoriteItems.length);
+        if (res.type === 'success') { 
+          this.favoriteItems = res.data.products;
+          this.cdr.markForCheck();
+          this.commonService.FavoriteItemLength$.next(this.favoriteItems.length);
+        }else{
+          this.toastService.error( '', res.message)
+        }
       },
     });
     this.subscriptions.push(sub1);
@@ -52,7 +56,7 @@ export class FavoriteComponent implements OnInit, OnDestroy {
           this.favoriteItems.splice(index, 1);
           this.toastService.show(res.message, 'Removed from favorites');
           this.cdr.markForCheck();
-          this.commonService.FavoriteItemLength.next(this.favoriteItems.length);
+          this.commonService.FavoriteItemLength$.next(this.favoriteItems.length);
         }
       },
     });
@@ -61,7 +65,7 @@ export class FavoriteComponent implements OnInit, OnDestroy {
   }
 
   getCurrencyInfo() {
-    let sub3 = this.commonService.currencyChanges.subscribe({
+    let sub3 = this.commonService.currencyChanges$.subscribe({
       next: (res) => {
         this.currencyInfo = res;
         this.cdr.markForCheck();

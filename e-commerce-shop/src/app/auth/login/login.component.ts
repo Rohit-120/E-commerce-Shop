@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       let sub1 = this.authService.userLogin(this.loginForm.value).subscribe({
         next: (res) => {
             if (res.type === 'success') {
-              this.authService.isLoggedIn.next(true);
+              this.authService.isLoggedIn$.next(true);
               this.storageService.set('token', res.token);
               this.toastService.success(res.message, 'Logged in');
               this.router.navigate(['/dashboard']);

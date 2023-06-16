@@ -57,7 +57,7 @@ export class FeaturedProductComponent implements OnInit, OnDestroy {
   }
 
   getCurrencyInfo() {
-    let sub2 = this.commonService.currencyChanges.subscribe({
+    let sub2 = this.commonService.currencyChanges$.subscribe({
       next: (res) => {
         this.currencyInfo = res;
         this.cdr.markForCheck();

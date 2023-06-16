@@ -63,6 +63,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   totalProductToOrder: any;
   totalAmountOfProducts: any;
+
   orderBody: any = {
     shipToDifferentAddress: false,
     billingId: '',
@@ -105,7 +106,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   getCartDetails() {
     console.log('Get Cart Item Details called');
     
-    let sub1 = this.commonService.totalCartItems.subscribe({
+    let sub1 = this.commonService.totalCartItems$.subscribe({
       next: (res: any) => {
         console.log(res, 'cart details in checkout comp');
           this.totalProductToOrder = res;
@@ -115,7 +116,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     this.subscriptions.push(sub1);
 
     if (this.totalProductToOrder) {
-      this.commonService.cartTotalAmount.subscribe({
+      this.commonService.cartTotalAmount$.subscribe({
         next : (res: any) => {
          this.totalAmountOfProducts = res
          this.cdr.markForCheck();
@@ -126,7 +127,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
 
   getCurrencyInfo() {
-    let sub4 = this.commonService.currencyChanges.subscribe({
+    let sub4 = this.commonService.currencyChanges$.subscribe({
       next: (res) => {
         console.log(res, 'currentCurrency');
         
@@ -164,7 +165,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
               this.apiCall.placeOrder(this.orderBody).subscribe({
                 next: (res) => {
                   console.log(res, 'Place Order with shipping address');
-
                   if (res.type === 'success') {
                     this.toastService.success(res.message, 'Order Placed');
                   }
@@ -192,6 +192,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       next: (res) => {
         console.log("Res",res)
         if (res.type === 'success') {
+          console.log('AddressBook ====> ', res.data.addressBook);
+          
           this.userAddressList = res.data.addressBook;
           this.cdr.markForCheck();
           if (this.userAddressList) {

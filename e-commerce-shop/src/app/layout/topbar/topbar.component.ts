@@ -7,6 +7,7 @@ import {
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, subscribeOn } from 'rxjs';
+import { TimeInterval } from 'rxjs/internal/operators/timeInterval';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { CommonService } from 'src/app/shared/services/common.service';
@@ -83,10 +84,17 @@ export class TopbarComponent implements OnInit {
     this.checkCartItemLength();
     this.checkFavoriteItemLength();
     this.getUserName();
+    this.getSomething();
+    this.checkTokenValidation();
+  }
+
+  getSomething() {
+    console.log( this.authService.isAuthTokenValid());
+    
   }
 
   checkLoginStatus() {
-    let sub1 = this.authService.isLoggedIn.subscribe({
+    let sub1 = this.authService.isLoggedIn$.subscribe({
       next: (res) => {
         if (res) {
           this.isLogin = res;
@@ -100,7 +108,7 @@ export class TopbarComponent implements OnInit {
   }
 
   checkFavoriteItemLength(){
-    let sub2 = this.commonService.FavoriteItemLength.subscribe({
+    let sub2 = this.commonService.FavoriteItemLength$.subscribe({
       next: (res) => {
         this.totalFavoriteLength = res;
         this.cdr.markForCheck();
@@ -110,8 +118,8 @@ export class TopbarComponent implements OnInit {
   }
 
   checkCartItemLength() {
-    let sub2 = this.commonService.CartItemsLength.subscribe({
-      next: (res) => {
+    let sub2 = this.commonService.CartItemsLength$.subscribe({
+      next: (res : any) => {
         this.totalCartLength = res;
         this.cdr.markForCheck();
       },
@@ -120,7 +128,7 @@ export class TopbarComponent implements OnInit {
   }
 
   productSearchClick() {
-    this.commonService.dataFromSearchInput.next(this.searchData);
+    this.commonService.dataFromSearchInput$.next(this.searchData);
     this.router.navigate([`/shop`]);
   }
 
@@ -128,7 +136,7 @@ export class TopbarComponent implements OnInit {
     let name = item.name;
     let price = item.currencyPrice;
     this.currencyChange = item.name;
-    this.commonService.currencyChanges.next({
+    this.commonService.currencyChanges$.next({
       currencyName: name,
       currencyPrice: price,
     });
@@ -147,8 +155,16 @@ export class TopbarComponent implements OnInit {
 
   getUserName() {
     this.userDetails = this.authService.decodeToken();
+    console.log('this.userDetails ====> ', this.userDetails, );
+    
     this.cdr.markForCheck();
   }
+
+  checkTokenValidation(){
+    setInterval(() => {
+      this.authService.isAuthTokenValid();
+    },500000)
+  }  
 
   logOut() {
     if (this.storageService.get('token')) {
@@ -163,7 +179,7 @@ export class TopbarComponent implements OnInit {
           console.log('user logout succesfully', res);
           if (res) {
             this.storageService.remove('token');
-            this.authService.isLoggedIn.next(false);
+            this.authService.isLoggedIn$.next(false);
             this.router.navigate(['/auth/login']);
             this.toastService.warning(res.message, 'Logged out');
           }
@@ -171,4 +187,5 @@ export class TopbarComponent implements OnInit {
       });
     }
   }
+
 }

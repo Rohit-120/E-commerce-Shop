@@ -84,7 +84,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   }
 
   getCurrencyInfo() {
-    let sub4 = this.commonService.currencyChanges.subscribe({
+    let sub4 = this.commonService.currencyChanges$.subscribe({
       next: (res) => {
         this.currencyInfo = res;
         this.cdr.markForCheck();

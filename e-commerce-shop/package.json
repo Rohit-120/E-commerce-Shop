@@ -20,6 +20,7 @@
     "@angular/router": "^14.0.0-next.0",
     "@ng-select/ng-select": "^9.1.0",
     "jwt-decode": "^3.1.2",
+    "moment": "^2.29.4",
     "ngx-drag-scroll": "^15.0.0",
     "ngx-pagination": "^6.0.3",
     "ngx-toastr": "^15.2.2",

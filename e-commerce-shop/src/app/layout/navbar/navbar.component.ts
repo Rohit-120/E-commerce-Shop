@@ -67,7 +67,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
           if (res.type === 'success') {
             this.navCategories = res.data.categories;
             this.cdr.markForCheck();
-            this.commonService.categories.next(this.navCategories);
+            this.commonService.categories$.next(this.navCategories);
           }
         },
       });
@@ -79,7 +79,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       next: (res) => {
         if (res.type === 'success') {
           this.totalCartLength = res.data.products.length;
-          this.commonService.CartItemsLength.next(res.data.products.length);
+          this.commonService.CartItemsLength$.next(res.data.products.length);
           this.cdr.markForCheck();
         }
       },
@@ -95,7 +95,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       next: (res: any) => {
         if (res.type === 'success') {
           this.favoriteItemsLength = res.data.products.length;
-          this.commonService.FavoriteItemLength.next(res.data.products.length);
+          this.commonService.FavoriteItemLength$.next(res.data.products.length);
           this.cdr.markForCheck();
         }
       },

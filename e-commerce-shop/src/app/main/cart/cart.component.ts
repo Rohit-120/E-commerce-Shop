@@ -63,13 +63,13 @@ export class CartComponent implements OnInit, OnDestroy {
       next: (res: any) => {
         if (res.type === 'success') {
           this.cartItems = res.data.products;
-          this.commonService.CartItemsLength.next(this.cartItems.length);
-          this.commonService.totalCartItems.next(res.data.products);
+          this.commonService.CartItemsLength$.next(this.cartItems.length);
+          this.commonService.totalCartItems$.next(res.data.products);
           this.getAllTotal();
-          this.commonService.cartTotalAmount.next({total : this.subTotal, shipping: this.shipping});
+          this.commonService.cartTotalAmount$.next({total : this.subTotal, shipping: this.shipping});
           this.cdr.markForCheck();
         }else{
-          this.toastService.error(res.message, 'Something went wrong');
+          this.toastService.error('', res.message);
         }
       },
     });
@@ -135,7 +135,7 @@ export class CartComponent implements OnInit, OnDestroy {
       next: (res) => {
         if (res.type === 'success') {
           this.cartItems.splice(index, 1);
-          this.commonService.CartItemsLength.next(this.cartItems.length);
+          this.commonService.CartItemsLength$.next(this.cartItems.length);
           this.getAllTotal();
           this.toastService.show(res.message, `${removeItemTitle}`);
           this.cdr.markForCheck();
@@ -146,7 +146,7 @@ export class CartComponent implements OnInit, OnDestroy {
 
   //to get different currency of products
   getCurrencyInfo() {
-    let sub3 = this.commonService.currencyChanges.subscribe({
+    let sub3 = this.commonService.currencyChanges$.subscribe({
       next: (res) => {
         this.currencyInfo = res;
         this.cdr.markForCheck();

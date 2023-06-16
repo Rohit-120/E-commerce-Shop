@@ -31,11 +31,11 @@
                     <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
                         <a routerLink = '/favorite' class="btn px-0">
                             <i class="fas fa-heart text-primary"></i>
-                            <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;" >{{favoriteItemsLength || (commonService.FavoriteItemLength | async)}}</span>
+                            <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;" >{{favoriteItemsLength || (commonService.FavoriteItemLength$ | async)}}</span>
                         </a>
                         <a class="btn px-0 ml-3" routerLink='/cart'>
                             <i class="fas fa-shopping-cart text-primary"></i>
-                            <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">{{(commonService.CartItemsLength | async)}}</span>
+                            <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">{{(commonService.CartItemsLength$ | async)}}</span>
                         </a>
                     </div>
                 </div>

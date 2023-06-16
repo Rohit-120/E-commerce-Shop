@@ -1,52 +1,43 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { ApiService } from './api.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CommonService {
-
-  favorite : BehaviorSubject<any> = new BehaviorSubject<any>('')
-  FavoriteItemLength = new BehaviorSubject<any>('');
-  CartItemsLength = new BehaviorSubject<any>(null)
-  // favoriteItems = new Subject<number>();
-  categories = new BehaviorSubject<any[]>([]);
-
-  currencyChanges  = new BehaviorSubject<any>({currencyName : 'USD', currencyPrice : 1});
+  FavoriteItemLength$ = new BehaviorSubject<any>(0);
+  CartItemsLength$: any = new BehaviorSubject<number>(0);
+  categories$ = new BehaviorSubject<any[]>([]);
+  currencyChanges$ = new BehaviorSubject<any>({
+    currencyName: 'USD',
+    currencyPrice: 1,
+  });
 
   //user search input fields of products.
-  dataFromSearchInput = new BehaviorSubject<any>('')
+  dataFromSearchInput$ = new BehaviorSubject<any>('');
 
-  totalCartItems = new BehaviorSubject<any[]>([]);
-  cartTotalAmount = new BehaviorSubject<any>({});
-   
+  totalCartItems$ = new BehaviorSubject<any[]>([]);
+  cartTotalAmount$ = new BehaviorSubject<any>({});
 
-  constructor(
-    private apiService: ApiService,
-  ) { }
+  constructor(private apiService: ApiService) {}
 
+  addToCartClick(id: any, qty: number, isAddedFrom?: boolean): Observable<any> {
+    let length!: number;
 
-  // addToCartClick(isAddedFrom:boolean,id: any,qty: number) {
-  //   console.log('addToCart =====>  ', id);
-  //  this.apiService
-  //     .addToCart({ isAddedFromShop: isAddedFrom, productId: id, quantity: qty })
-  //     .subscribe({
-  //       next: (res: any) => {
-  //         if (res.type === 'success') {
-  //           this.toastService.success(res.message, 'Added to cart');
-  //         }
-  //       },
-  //     });
-  // }
+    this.CartItemsLength$.subscribe((res: number) => {
+      length = res;
+    });
 
-  addToCartClick(id: any, qty: number, isAddedFrom?:boolean):Observable<any>{
-    console.log({ isAddedFromShop: isAddedFrom, productId: id, quantity: qty });
-    
-    // this.commonService.CartItemsLength.next(this.CartItemsLength)
-    return this.apiService.addToCart({ isAddedFromShop: isAddedFrom, productId: id, quantity: qty })
+    if (length) {
+      this.CartItemsLength$.next(length + 1);
+    }
+
+    return this.apiService.addToCart({
+      isAddedFromShop: isAddedFrom,
+      productId: id,
+      quantity: qty,
+    });
+
   }
-
-
-  
 }
