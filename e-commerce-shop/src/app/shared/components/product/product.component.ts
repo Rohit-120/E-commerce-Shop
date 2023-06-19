@@ -64,7 +64,7 @@ export class ProductComponent implements OnInit, OnDestroy {
         if (res.type === 'success') {
           this.toastService.success(res.message, 'Added to cart');
         } else {
-          this.toastService.error(res.message, 'Error while add to cart');
+          this.toastService.error(res.message, 'Login to add to cart');
         }
       },
       error: (err: any) => {},
@@ -77,6 +77,8 @@ export class ProductComponent implements OnInit, OnDestroy {
       next: (res: any) => {
         if (res.type === 'success') {
           this.toastService.success(res.message, 'Added to Favorite');
+        }else{
+          this.toastService.error(res.message, 'Login to add to Favorite');
         }
       },
     });

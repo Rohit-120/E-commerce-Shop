@@ -1,15 +1,15 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpService } from './http.service';
 import {
+  FORGOT_PASSWORD,
+  RESET_PASSWORD,
   TOKEN_GENERATION,
   USER_LOGIN,
   USER_LOGOUT,
   USER_REGISTRATION,
 } from '../constants/apiEndPoint';
 import jwtDecode from 'jwt-decode';
-import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root',
@@ -29,6 +29,16 @@ export class AuthService {
 
   userLogout(): Observable<any> {
     return this.http.getRequest(USER_LOGOUT);
+  }
+
+  //API for reset password
+
+  forgotPassword(body: any): Observable<any> {
+    return this.http.postRequest(FORGOT_PASSWORD, body);
+  }
+
+  resetPassword(body: any): Observable<any> {
+    return this.http.postRequest(RESET_PASSWORD, body);
   }
 
   decodeToken(): Observable<any> {

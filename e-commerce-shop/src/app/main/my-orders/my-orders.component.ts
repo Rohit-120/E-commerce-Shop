@@ -23,7 +23,7 @@ export class MyOrdersComponent implements OnInit {
     this.apiCall.orderList().subscribe({
       next : (res) => {
         console.log( res.data.orders, 'orders')
-        this.orderList = res.data.orders[0];
+        this.orderList = res.data.orders;
         this.cdr.markForCheck();
       }
     })

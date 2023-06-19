@@ -1,4 +1,25 @@
 
+<div class="container">
+  <table class="table text-center table-bordered">
+    <thead>
+    <tr >
+      <th scope="col">Id</th>
+      <th scope="col">Ordered On</th>
+      <th scope="col">Payment method</th>
+      <th scope="col">Amount</th>
+    </tr>
+   </thead>
+   <tbody>
+    <tr *ngFor="let order of orderList; let index = index" >
+      <td>{{order._id}}</td>
+      <td>{{order.createdOn  | date}}</td>
+      <td>{{order.paymentMethod | uppercase}}</td>
+      <td>{{order.orderAmount}}</td>
+      <!-- <td><button class="btn btn-warning" (click)="onEditClick(order, index)">Action</button></td> -->
+    </tr>
+  </tbody>
+  </table>  
+</div>
 
 <!-- <section>
     <div class="container py-5 h-100">

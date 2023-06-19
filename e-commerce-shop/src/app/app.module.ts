@@ -21,6 +21,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { AuthModule } from './auth/auth.module';
 import { TokenInterceptor } from './shared/interceptors/token.interceptor';
 import { VendorComponent } from 'src/main/components/vendor/vendor.component';
+import { ErrorHandleInterceptor } from './shared/interceptors/error-handle.interceptor';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,11 @@ import { VendorComponent } from 'src/main/components/vendor/vendor.component';
     // VendorComponent
   ],
   providers: [
+    {
+      provide : HTTP_INTERCEPTORS, 
+      useClass : ErrorHandleInterceptor,
+      multi : true,
+    },
     {
       provide : HTTP_INTERCEPTORS,
       useClass : TokenInterceptor,

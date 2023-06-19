@@ -67,7 +67,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   orderBody: any = {
     shipToDifferentAddress: false,
     billingId: '',
-    totalAmount: 500,
+    totalAmount: null,
     shippingAmount: 100,
     paymentMethod: 'Cash on delivery',
   };
@@ -118,8 +118,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     if (this.totalProductToOrder) {
       this.commonService.cartTotalAmount$.subscribe({
         next : (res: any) => {
-         this.totalAmountOfProducts = res
-         this.cdr.markForCheck();
+          this.totalAmountOfProducts = res
+          this.cdr.markForCheck();
+          console.log(this.totalAmountOfProducts, 'total amount');
         }
       })
     }
@@ -129,8 +130,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   getCurrencyInfo() {
     let sub4 = this.commonService.currencyChanges$.subscribe({
       next: (res) => {
-        console.log(res, 'currentCurrency');
-        
         this.currencyInfo = res;
         this.cdr.markForCheck();
       },
@@ -141,9 +140,15 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   placeOrder() {
     //if billing and shipping address are same
     if (!this.isShippingAddressEnabled) {
+      console.log('place order called');
       this.orderBody.billingId = this.userDefaultAddress.addressId;
+      this.orderBody.totalAmount = this.totalAmountOfProducts.total
+      console.log(this.orderBody, 'lllllllllllllllllllllllllllllllllllll');
+      
       this.apiCall.placeOrder(this.orderBody).subscribe({
         next: (res) => {
+          console.log(res, 'place order');
+          
           if (res.type === 'success') {
             this.toastService.success(res.message, 'Order Placed');
           }

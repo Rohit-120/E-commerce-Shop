@@ -38,6 +38,5 @@ export class CommonService {
       productId: id,
       quantity: qty,
     });
-
   }
 }

@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { FullComponent } from '../layout/full/full.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { ShopComponent } from './shop/shop.component';
 import { CartComponent } from './cart/cart.component';
 import { CheckoutComponent } from './checkout/checkout.component';
 import { ContactComponent } from './contact/contact.component';
@@ -26,14 +25,14 @@ const routes: Routes = [
         path : 'dashboard',
         component : DashboardComponent
       },
-      {
-        path : 'shop',
-        component : ShopComponent
-      },
-      {
-        path : 'shop/:category',
-        component : ShopComponent
-      },
+      // {
+      //   path : 'shop',
+      //   component : ShopComponent
+      // },
+      // {
+      //   path : 'shop/:category',
+      //   component : ShopComponent
+      // },
       {
         path : 'shop-detail',
         component : ShopDetailComponent
@@ -63,6 +62,10 @@ const routes: Routes = [
         path : 'favorite',
         component : FavoriteComponent,
         canActivate : [AuthGuard]
+      },
+      {
+        path : 'shop',
+        loadChildren : () => import('../main/shop/shop.module').then(m => m.ShopModule)
       },
       {
         path : 'auth',

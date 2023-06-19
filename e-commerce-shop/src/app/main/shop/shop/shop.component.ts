@@ -134,14 +134,14 @@ export class ShopComponent implements OnInit, OnDestroy {
           // this.commonService.CartItemsLength.next()
           this.toastService.success(res.message, 'Added to cart');
         } else {
-          this.toastService.error(res.message, 'Error while add to cart');
+          this.toastService.error(res.message, 'Login to add to Cart');
         }
       },
-      error: (err: any) => {
-        if (err.type === 'error') {
-          
+      error: (error: any) => {
+        if (error.type === 'error') {
+          this.toastService.error(error.error.message, 'Favorites');
         }
-      },  
+      },
     });
 
     this.subscriptions.push(sub3);
@@ -152,14 +152,14 @@ export class ShopComponent implements OnInit, OnDestroy {
       next: (res) => {
         if (res.type === 'success') {
           this.toastService.success(res.message, 'Added to Favorites');
-        } else if (res.type === 'error') {
-          console.log('error***********', res.message);
+        } else {
+          this.toastService.error(res.message, 'Login to add to Favorite');
         }
       },
       error: (error) => {
         if (error.status == 409) {
           console.log(error.error.message);
-          this.toastService.success(error.error.message, 'Favorites');
+          this.toastService.error(error.error.message, 'Favorites');
         }
       },
     });

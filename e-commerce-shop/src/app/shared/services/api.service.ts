@@ -19,9 +19,6 @@ import {
   REMOVE_FAVORITE,
   SIGNUP_FOOTER,
   UPDATE_ADDRESS,
-  USER_LOGIN,
-  USER_LOGOUT,
-  USER_REGISTRATION,
   VENDORS,
 } from '../constants/apiEndPoint';
 
@@ -69,7 +66,7 @@ export class ApiService {
   }
 
   removeCartProduct(_id: any): Observable<any> {
-    console.log( _id);
+    console.log(_id);
 
     return this.http.deleteRequest(REMOVE_CART + '/' + _id);
   }
@@ -84,7 +81,7 @@ export class ApiService {
 
   removeFavoriteProduct(_id: any): Observable<any> {
     console.log(_id, ';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;');
-    
+
     return this.http.deleteRequest(REMOVE_FAVORITE + '/' + _id);
   }
 
@@ -105,21 +102,21 @@ export class ApiService {
     return this.http.getRequest(ADDRESS_LIST);
   }
 
-  removeAddress(addressId: string):Observable<any>{
-    return this.http.deleteRequest(REMOVE_ADDRESS+"/"+addressId)
+  removeAddress(addressId: string): Observable<any> {
+    return this.http.deleteRequest(REMOVE_ADDRESS + '/' + addressId);
   }
 
-  updateAddress(addressId: string, body : any):Observable<any>{
-    return this.http.putRequest(UPDATE_ADDRESS+"/"+addressId, body)
+  updateAddress(addressId: string, body: any): Observable<any> {
+    return this.http.putRequest(UPDATE_ADDRESS + '/' + addressId, body);
   }
 
   //API for Orders
-  placeOrder(body : any):Observable<any>{
-    return this.http.postRequest(PLACE_ORDER, body)
+  placeOrder(body: any): Observable<any> {
+    return this.http.postRequest(PLACE_ORDER, body);
   }
 
-  orderList():Observable<any>{
-    return this.http.getRequest(ORDER_LIST)
+  orderList(): Observable<any> {
+    return this.http.getRequest(ORDER_LIST);
   }
 
   //Footer email Signup api

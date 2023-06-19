@@ -6,7 +6,6 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { CartComponent } from './cart/cart.component';
 import { CheckoutComponent } from './checkout/checkout.component';
 import { ContactComponent } from './contact/contact.component';
-import { ShopComponent } from './shop/shop.component';
 import { CategoriesComponent } from './categories/categories.component';
 import { SharedModule } from '../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -27,7 +26,6 @@ import { MyOrdersComponent } from './my-orders/my-orders.component';
     CartComponent,
     CheckoutComponent,
     ContactComponent,
-    ShopComponent,
     CategoriesComponent,
     VendorComponent,
     ShopDetailComponent,

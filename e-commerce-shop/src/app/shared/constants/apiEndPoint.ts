@@ -16,6 +16,10 @@ export const USER_REGISTRATION = `${LOCAL_HOST}/register`
 export const USER_LOGIN = `${LOCAL_HOST}/login`;
 export const USER_LOGOUT = `${LOCAL_HOST}/logout`;
 
+//API for reset password
+export const FORGOT_PASSWORD = `${LOCAL_HOST}/forgot`;
+export const RESET_PASSWORD = `${LOCAL_HOST}/reset`;
+
 //API for user Cart products
 export const CART_PRODUCTS = `${LOCAL_HOST}/products/cart`;
 export const REMOVE_CART = `${LOCAL_HOST}/products/cart/remove`;
