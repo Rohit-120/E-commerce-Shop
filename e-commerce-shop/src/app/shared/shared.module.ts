@@ -10,6 +10,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FavoriteComponent } from './components/favorite/favorite.component';
 import { FilterPipe } from './pipes/filter.pipe';
 import { ImagePipe } from './pipes/image.pipe';
+import { FeaturedProductComponent } from './components/featured-product/featured-product.component';
 
 @NgModule({
   declarations: [
@@ -19,14 +20,24 @@ import { ImagePipe } from './pipes/image.pipe';
     FavoriteComponent,
     FilterPipe,
     ImagePipe,
+    FeaturedProductComponent,
   ],
   imports: [
     CommonModule,
     SharedRoutingModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
-  exports : [ProductComponent, SpecialOfferComponent, RatingComponent, ReactiveFormsModule, FavoriteComponent, FilterPipe, ImagePipe]
+  exports: [
+    ProductComponent,
+    SpecialOfferComponent,
+    RatingComponent,
+    ReactiveFormsModule,
+    FavoriteComponent,
+    FilterPipe,
+    ImagePipe,
+    FeaturedProductComponent,
+  ],
 })
-export class SharedModule { }
+export class SharedModule {}

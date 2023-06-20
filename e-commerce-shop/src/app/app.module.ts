@@ -20,7 +20,6 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { AuthModule } from './auth/auth.module';
 import { TokenInterceptor } from './shared/interceptors/token.interceptor';
-import { VendorComponent } from 'src/main/components/vendor/vendor.component';
 import { ErrorHandleInterceptor } from './shared/interceptors/error-handle.interceptor';
 
 @NgModule({
@@ -48,7 +47,7 @@ import { ErrorHandleInterceptor } from './shared/interceptors/error-handle.inter
     NgSelectModule,
     NgxPaginationModule,
     AuthModule,
-    // VendorComponent
+    
   ],
   providers: [
     {

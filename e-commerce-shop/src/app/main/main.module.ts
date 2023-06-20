@@ -11,14 +11,12 @@ import { SharedModule } from '../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxUsefulSwiperModule } from 'ngx-useful-swiper';
 import { DragScrollModule } from 'ngx-drag-scroll';
-import { ShopDetailComponent } from './shop-detail/shop-detail.component';
-import { FeaturedProductComponent } from 'src/main/components/featured-product/featured-product.component';
+import { FeaturedProductComponent } from 'src/app/shared/components/featured-product/featured-product.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from '../shared/interceptors/token.interceptor';
-import { VendorComponent } from 'src/main/components/vendor/vendor.component';
+import { VendorComponent } from 'src/app/shared/components/vendor/vendor.component';
 import { MyOrdersComponent } from './my-orders/my-orders.component';
-
 
 @NgModule({
   declarations: [
@@ -28,9 +26,7 @@ import { MyOrdersComponent } from './my-orders/my-orders.component';
     ContactComponent,
     CategoriesComponent,
     VendorComponent,
-    ShopDetailComponent,
-    FeaturedProductComponent,
-    MyOrdersComponent
+    MyOrdersComponent,
   ],
   imports: [
     CommonModule,
@@ -42,13 +38,12 @@ import { MyOrdersComponent } from './my-orders/my-orders.component';
     MainRoutingModule,
     NgxPaginationModule,
   ],
-  providers : [
+  providers: [
     {
-      provide : HTTP_INTERCEPTORS,
-      useClass : TokenInterceptor,
-      multi : true
-    }
-
-  ]
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true,
+    },
+  ],
 })
-export class MainModule { }
+export class MainModule {}

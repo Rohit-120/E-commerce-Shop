@@ -6,7 +6,7 @@ import { CartComponent } from './cart/cart.component';
 import { CheckoutComponent } from './checkout/checkout.component';
 import { ContactComponent } from './contact/contact.component';
 import { NotFoundComponent } from '../not-found/not-found.component';
-import { ShopDetailComponent } from './shop-detail/shop-detail.component';
+import { ShopDetailComponent } from './shop/shop-detail/shop-detail.component';
 import { FavoriteComponent } from '../shared/components/favorite/favorite.component';
 import { AuthGuard } from '../shared/guards/auth.guard';
 import { MyOrdersComponent } from './my-orders/my-orders.component';
@@ -33,14 +33,14 @@ const routes: Routes = [
       //   path : 'shop/:category',
       //   component : ShopComponent
       // },
-      {
-        path : 'shop-detail',
-        component : ShopDetailComponent
-      },
-      {
-        path : 'shop-detail/:id',
-        component : ShopDetailComponent
-      },
+      // {
+      //   path : 'shop-detail',
+      //   component : ShopDetailComponent
+      // },
+      // {
+      //   path : 'shop-detail/:id',
+      //   component : ShopDetailComponent
+      // },
       {
         path : 'cart', 
         component : CartComponent,

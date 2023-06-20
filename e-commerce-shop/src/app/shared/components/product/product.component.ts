@@ -52,7 +52,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   }
 
   onShopDetail(item: any) {
-    this.router.navigate(['shop-detail', item._id]);
+    this.router.navigate(['shop/shop-detail', item._id]);
   }
 
   //function for add to cart a product

@@ -121,7 +121,7 @@ export class ShopComponent implements OnInit, OnDestroy {
           this.getProduct();
         }
       },
-    });
+    }); 
     this.subscriptions.push(sub2);
   }
 

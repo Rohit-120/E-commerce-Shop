@@ -5,6 +5,7 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/shared/services/api.service';
@@ -25,7 +26,8 @@ export class FeaturedProductComponent implements OnInit, OnDestroy {
     private apiCall: ApiService,
     private cdr: ChangeDetectorRef,
     public commonService: CommonService,
-    private toastService: ToastrService
+    private toastService: ToastrService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -47,15 +49,17 @@ export class FeaturedProductComponent implements OnInit, OnDestroy {
 
   //function for add to cart a product
   addToCartClick(id: any) {
-    this.apiCall.addToCart({ isAddedFromShop : true,  productId: id, quantity: 1 }).subscribe({
-      next: (res: any) => {
-        if (res.type === 'success') {
-          this.toastService.success(res.message, 'Added to cart');
-        }else{
-          this.toastService.error(res.message, 'Login to add to cart');
-        }
-      },
-    });
+    this.apiCall
+      .addToCart({ isAddedFromShop: true, productId: id, quantity: 1 })
+      .subscribe({
+        next: (res: any) => {
+          if (res.type === 'success') {
+            this.toastService.success(res.message, 'Added to cart');
+          } else {
+            this.toastService.error(res.message, 'Login to add to cart');
+          }
+        },
+      });
   }
 
   getCurrencyInfo() {
@@ -73,17 +77,21 @@ export class FeaturedProductComponent implements OnInit, OnDestroy {
 
   onFavoriteClick(productId: any) {
     this.apiCall.addToFavorite(productId).subscribe({
-      next : (res: any) => {
+      next: (res: any) => {
         if (res.type === 'success') {
           this.toastService.success(res.message, 'Added to Favorite');
-        }else{
+        } else {
           this.toastService.error(res.message, 'Login to add to Favorite');
         }
-      }
-    })
+      },
+    });
   }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
+  }
+
+  shopDetails(item: any) {
+    this.router.navigate(['shop/shop-detail', item._id]);
   }
 }

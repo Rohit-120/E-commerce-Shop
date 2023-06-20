@@ -7,18 +7,22 @@ import { DragScrollModule } from 'ngx-drag-scroll';
 import { ImagePipe } from 'src/app/shared/pipes/image.pipe';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { ShopDetailComponent } from './shop-detail/shop-detail.component';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
   declarations: [
-    ShopComponent
+    ShopComponent,
+    ShopDetailComponent
   ],
   imports: [
     CommonModule,
     ShopRoutingModule,
     DragScrollModule,
     NgxPaginationModule,
-    SharedModule
+    SharedModule,
+    FormsModule,
 
   ],
   providers : [
