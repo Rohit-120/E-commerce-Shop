@@ -36,27 +36,30 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   currencyInfo: any;
 
   addressBillingForm = this.fb.group({
-    title: new FormControl('', Validators.required),
-    name: new FormControl('', Validators.required),
-    mobileNo: new FormControl('', Validators.required),
-    addressLineOne: new FormControl('', Validators.required),
-    addressLineTwo: new FormControl('', Validators.required),
-    landmark: new FormControl('', Validators.required),
-    country: new FormControl('', Validators.required),
-    city: new FormControl('', Validators.required),
-    state: new FormControl('', Validators.required),
-    pincode: new FormControl('', Validators.required),
+    title: new FormControl('Home', Validators.required),
+    name: new FormControl('Rohit', Validators.required),
+    mobileNo: new FormControl('+916545498689', Validators.required),
+    addressLineOne: new FormControl('kargil petrol pupm', Validators.required),
+    addressLineTwo: new FormControl(
+      'near gujarat high court',
+      Validators.required
+    ),
+    landmark: new FormControl('sola', Validators.required),
+    country: new FormControl('india', Validators.required),
+    city: new FormControl('Ahmadabad', Validators.required),
+    state: new FormControl('Gujarat', Validators.required),
+    pincode: new FormControl('385885', Validators.required),
   });
 
   shippingAddressForm = this.fb.group({
     title: new FormControl('Home', Validators.required),
     name: new FormControl('lav', Validators.required),
-    mobileNo: new FormControl('9875463284', Validators.required),
+    mobileNo: new FormControl('+919875463284', Validators.required),
     addressLineOne: new FormControl('A one Apartment', Validators.required),
     addressLineTwo: new FormControl('32 street', Validators.required),
-    landmark: new FormControl('gota', Validators.required),
+    landmark: new FormControl('Gota', Validators.required),
     country: new FormControl('India', Validators.required),
-    city: new FormControl('Ahmedabad', Validators.required),
+    city: new FormControl('Ahmadabad', Validators.required),
     state: new FormControl('Gujarat', Validators.required),
     pincode: new FormControl('389865', Validators.required),
   });
@@ -99,33 +102,32 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
     this.getAddressList();
     this.getCartDetails();
-    this.getCurrencyInfo()
+    this.getCurrencyInfo();
   }
 
   //To get Cart Item details using ApiService
   getCartDetails() {
     console.log('Get Cart Item Details called');
-    
+
     let sub1 = this.commonService.totalCartItems$.subscribe({
       next: (res: any) => {
         console.log(res, 'cart details in checkout comp');
-          this.totalProductToOrder = res;
-          this.cdr.markForCheck();
+        this.totalProductToOrder = res;
+        this.cdr.markForCheck();
       },
     });
     this.subscriptions.push(sub1);
 
     if (this.totalProductToOrder) {
       this.commonService.cartTotalAmount$.subscribe({
-        next : (res: any) => {
-          this.totalAmountOfProducts = res
+        next: (res: any) => {
+          this.totalAmountOfProducts = res;
           this.cdr.markForCheck();
           console.log(this.totalAmountOfProducts, 'total amount');
-        }
-      })
+        },
+      });
     }
   }
-
 
   getCurrencyInfo() {
     let sub4 = this.commonService.currencyChanges$.subscribe({
@@ -142,13 +144,12 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     if (!this.isShippingAddressEnabled) {
       console.log('place order called');
       this.orderBody.billingId = this.userDefaultAddress.addressId;
-      this.orderBody.totalAmount = this.totalAmountOfProducts.total
+      this.orderBody.totalAmount = this.totalAmountOfProducts.total;
       console.log(this.orderBody, 'lllllllllllllllllllllllllllllllllllll');
-      
+
       this.apiCall.placeOrder(this.orderBody).subscribe({
         next: (res) => {
           console.log(res, 'place order');
-          
           if (res.type === 'success') {
             this.toastService.success(res.message, 'Order Placed');
           }
@@ -165,6 +166,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
             if (res.addedAddressId) {
               this.orderBody.billingId = this.userDefaultAddress.addressId;
               this.orderBody.deliveryId = res.addedAddressId;
+              this.orderBody.totalAmount = this.totalAmountOfProducts.total;
               this.orderBody.shipToDifferentAddress = true;
 
               this.apiCall.placeOrder(this.orderBody).subscribe({
@@ -195,10 +197,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   getAddressList() {
     let sub2 = this.apiCall.getAddressList().subscribe({
       next: (res) => {
-        console.log("Res",res)
+        console.log('Res', res);
         if (res.type === 'success') {
-          console.log('AddressBook ====> ', res.data.addressBook);
-          
           this.userAddressList = res.data.addressBook;
           this.cdr.markForCheck();
           if (this.userAddressList) {
@@ -220,7 +220,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   editAddress(address: any, action?: string, index?: any) {
     this.isAddressId = address.addressId;
     this.userDefaultAddress = address;
-    console.log(address, 'addressChanged');
 
     if (action === 'change') {
       this.title = 'Update Address';

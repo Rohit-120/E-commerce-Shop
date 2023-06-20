@@ -7,7 +7,6 @@ import {
 } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { Router } from '@angular/router';
-import { StorageService } from '../../services/storage.service';
 import { CommonService } from '../../services/common.service';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
@@ -29,14 +28,13 @@ export class ProductComponent implements OnInit, OnDestroy {
     private apiCall: ApiService,
     private cdr: ChangeDetectorRef,
     private router: Router,
-    private storageService: StorageService,
     public commonService: CommonService,
     private toastService: ToastrService
   ) {}
-
+  
+  
   ngOnInit() {
     this.getProducts();
-
     this.getCurrencyInfo();
   }
 
@@ -44,7 +42,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   getProducts() {
     let sub1 = this.apiCall.getAllProduct().subscribe({
       next: (res: any) => {
-        this.products = res.data.products;
+        this.products = res?.data?.products;
         this.cdr.markForCheck();
       },
     });
@@ -62,9 +60,9 @@ export class ProductComponent implements OnInit, OnDestroy {
     let sub2 = this.commonService.addToCartClick(id, 1, true).subscribe({
       next: (res: any) => {
         if (res.type === 'success') {
-          this.toastService.success(res.message, 'Added to cart');
+          this.toastService.success(res?.message, 'Added to cart');
         } else {
-          this.toastService.error(res.message, 'Login to add to cart');
+          this.toastService.error(res?.message, 'Login to add to cart');
         }
       },
       error: (err: any) => {},

@@ -13,8 +13,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxUsefulSwiperModule } from 'ngx-useful-swiper';
-import {  DragScrollModule } from 'ngx-drag-scroll';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http'
+import { DragScrollModule } from 'ngx-drag-scroll';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { SharedModule } from './shared/shared.module';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgxPaginationModule } from 'ngx-pagination';
@@ -31,7 +31,6 @@ import { ErrorHandleInterceptor } from './shared/interceptors/error-handle.inter
     FullComponent,
     NavbarComponent,
     NotFoundComponent,
-    
   ],
   imports: [
     BrowserModule,
@@ -47,21 +46,19 @@ import { ErrorHandleInterceptor } from './shared/interceptors/error-handle.inter
     NgSelectModule,
     NgxPaginationModule,
     AuthModule,
-    
   ],
   providers: [
     {
-      provide : HTTP_INTERCEPTORS, 
-      useClass : ErrorHandleInterceptor,
-      multi : true,
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorHandleInterceptor,
+      multi: true,
     },
     {
-      provide : HTTP_INTERCEPTORS,
-      useClass : TokenInterceptor,
-      multi : true
-    }
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent],
-  
 })
-export class AppModule { }
+export class AppModule {}

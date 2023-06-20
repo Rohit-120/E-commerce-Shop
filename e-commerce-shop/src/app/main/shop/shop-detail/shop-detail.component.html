@@ -7,7 +7,7 @@
                     <div class="carousel-item active">
                         <img class="w-100 h-100" src="{{singleProductDetails?.image | image }}" alt="Image">
                     </div>
-               </div>            
+                </div>
             </div>
         </div>
 
@@ -16,11 +16,13 @@
                 <!-- <h3>{{singleProductDetails.title}}</h3> -->
                 <div class="d-flex mb-3">
                     <div class="text-primary mr-2">
-                        <app-rating [rating]="singleProductDetails?.rating.rate" [ratingCount]="singleProductDetails?.rating.count"></app-rating>    
+                        <app-rating [rating]="singleProductDetails?.rating.rate"
+                            [ratingCount]="singleProductDetails?.rating.count"></app-rating>
                     </div>
                     <!-- <small class="pt-1">({{singleProductDetails?.rating.count}})</small> -->
                 </div>
-                <h3 class="font-weight-semi-bold mb-4">{{singleProductDetails?.price * currencyInfo?.currencyPrice | currency : currencyInfo?.currencyName}}</h3>
+                <h3 class="font-weight-semi-bold mb-4">{{singleProductDetails?.price * currencyInfo?.currencyPrice |
+                    currency : currencyInfo?.currencyName}}</h3>
                 <p class="mb-4">{{singleProductDetails?.title}}</p>
                 <div class="d-flex mb-3">
                     <strong class="text-dark mr-3">Sizes:</strong>
@@ -38,7 +40,7 @@
                             <input type="radio" class="custom-control-input" id="color-1" name="color">
                             <label class="custom-control-label" for="color-1">{{singleProductDetails?.color}}</label>
                         </div>
-                       
+
                     </form>
                 </div>
                 <div class="d-flex align-items-center mb-4 pt-2">
@@ -48,29 +50,31 @@
                                 <i class="fa fa-minus"></i>
                             </button>
                         </div>
-                        <input type="text" readonly class="form-control bg-secondary border-0 text-center" [(ngModel)]="body.quantity" >
+                        <input type="text" readonly class="form-control bg-secondary border-0 text-center"
+                            [(ngModel)]="body.quantity">
                         <div class="input-group-btn">
                             <button class="btn btn-primary btn-plus" (click)="increase()">
                                 <i class="fa fa-plus"></i>
                             </button>
                         </div>
                     </div>
-                    <button class="btn btn-primary px-3" (click)="addToCart()" ><i class="fa fa-shopping-cart mr-1"></i> Add To
+                    <button class="btn btn-primary px-3" (click)="addToCart()"><i class="fa fa-shopping-cart mr-1"></i>
+                        Add To
                         Cart</button>
                 </div>
                 <div class="d-flex pt-2">
                     <strong class="text-dark mr-2">Share on:</strong>
                     <div class="d-inline-flex">
-                        <a class="text-dark px-2" >
+                        <a class="text-dark px-2">
                             <i class="fab fa-facebook-f"></i>
                         </a>
-                        <a class="text-dark px-2" >
+                        <a class="text-dark px-2">
                             <i class="fab fa-twitter"></i>
                         </a>
-                        <a class="text-dark px-2" >
+                        <a class="text-dark px-2">
                             <i class="fab fa-linkedin-in"></i>
                         </a>
-                        <a class="text-dark px-2" >
+                        <a class="text-dark px-2">
                             <i class="fab fa-pinterest"></i>
                         </a>
                     </div>
@@ -82,7 +86,8 @@
         <div class="col">
             <div class="bg-light p-30">
                 <div class="nav nav-tabs mb-4">
-                    <a *ngFor="let item of detailNavbar; let index = index" class="nav-item nav-link text-dark   " [ngClass]="{'active' : navbarToggle == index}" (click)="navbarClick(index)">{{item}}</a>
+                    <a *ngFor="let item of detailNavbar; let index = index" class="nav-item nav-link text-dark   "
+                        [ngClass]="{'active' : navbarToggle == index}" (click)="navbarClick(index)">{{item}}</a>
                     <!-- <a class="nav-item nav-link text-dark">Information</a>
                     <a class="nav-item nav-link text-dark">Reviews ({{singleProductDetails?.rating.count}})</a> -->
                 </div>
@@ -94,20 +99,23 @@
                     <div class="tab-pane fade" [ngClass]="{'show active' : navbarToggle == 1}">
                         <h4 class="mb-3">Additional Information</h4>
                         <p>{{singleProductDetails?.description}}</p>
-                       
+
                     </div>
                     <div class="tab-pane fade" [ngClass]="{'show active' : navbarToggle == 2}">
                         <div class="row">
                             <div class="col-md-6">
-                                <h4 class="mb-4">({{singleProductDetails?.rating.count}}) review for "{{singleProductDetails?.title}}"</h4>
+                                <h4 class="mb-4">({{singleProductDetails?.rating.count}}) review for
+                                    "{{singleProductDetails?.title}}"</h4>
                                 <div class="media mb-4" *ngFor="let review of productReviews">
-                                    <img src="{{review.user?.profileImage| image}}" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
+                                    <img src="{{review.user?.profileImage| image}}" alt="Image"
+                                        class="img-fluid mr-3 mt-1" style="width: 45px;">
                                     <div class="media-body">
-                                        <h6>{{review.user?.name}}<small> - <i>{{review.createdOn | date}}</i></small></h6>
+                                        <h6>{{review.user?.name}}<small> - <i>{{review.createdOn | date}}</i></small>
+                                        </h6>
                                         <div class="text-primary mb-2">
-                                            
-                                            <app-rating [rating]="review.rating" class="mb-2" ></app-rating>
-                                        </div> 
+
+                                            <app-rating [rating]="review.rating" class="mb-2"></app-rating>
+                                        </div>
                                         <p>{{review.review}}</p>
                                     </div>
                                 </div>
@@ -117,53 +125,61 @@
                                 <small>Your email address will not be published. Required fields are marked *</small>
                                 <div class="d-flex my-3">
                                     <p class="mb-0 mr-2">Your Rating * :</p>
-                                
+
                                 </div>
                                 <form [formGroup]="reviewForm" (ngSubmit)="onReviewSubmit()">
                                     <div class="form-group">
-                                        <input
-                                            class="rating"
-                                            max="5"
-                                            min="1"
+                                        <input class="rating" max="5" min="1"
                                             oninput="this.style.setProperty('--value', `${this.valueAsNumber}`)"
-                                            step="0.5"
-                                            style="--value:4"
-                                            type="range"
-                                            formControlName="rating"
-                                        >
+                                            step="0.5" style="--value:4" type="range" formControlName="rating">
                                     </div>
                                     <div class="form-group">
                                         <label for="message">Your Review *</label>
-                                        <textarea [ngClass]="{'invalid-data' : reviewForm.controls['reviewMessage'].invalid && (reviewForm.controls['reviewMessage'].dirty || reviewForm.controls['reviewMessage'].touched)}" id="message" formControlName="reviewMessage"  cols="30" rows="5" class="form-control"></textarea>
-                                        <ul *ngIf="reviewForm.controls['reviewMessage'].invalid && (reviewForm.controls['reviewMessage'].dirty || reviewForm.controls['reviewMessage'].touched)" > 
-                                            <li *ngIf="reviewForm.controls['reviewMessage'].hasError('required')" style="color: red;">
+                                        <textarea
+                                            [ngClass]="{'invalid-data' : reviewForm.controls['reviewMessage'].invalid && (reviewForm.controls['reviewMessage'].dirty || reviewForm.controls['reviewMessage'].touched)}"
+                                            id="message" formControlName="reviewMessage" cols="30" rows="5"
+                                            class="form-control"></textarea>
+                                        <ul
+                                            *ngIf="reviewForm.controls['reviewMessage'].invalid && (reviewForm.controls['reviewMessage'].dirty || reviewForm.controls['reviewMessage'].touched)">
+                                            <li *ngIf="reviewForm.controls['reviewMessage'].hasError('required')"
+                                                style="color: red;">
                                                 Review Message is required.
                                             </li>
                                         </ul>
                                     </div>
                                     <div class="form-group">
                                         <label for="name">Your Name *</label>
-                                        <input [ngClass]="{'invalid-data' : reviewForm.controls['name'].invalid && (reviewForm.controls['name'].dirty || reviewForm.controls['name'].touched)}" type="text" formControlName="name"  class="form-control" id="name">
-                                        <ul *ngIf="reviewForm.controls['name'].invalid && (reviewForm.controls['name'].dirty || reviewForm.controls['name'].touched)" > 
-                                            <li *ngIf="reviewForm.controls['name'].hasError('required')" style="color: red;">
+                                        <input
+                                            [ngClass]="{'invalid-data' : reviewForm.controls['name'].invalid && (reviewForm.controls['name'].dirty || reviewForm.controls['name'].touched)}"
+                                            type="text" formControlName="name" class="form-control" id="name">
+                                        <ul
+                                            *ngIf="reviewForm.controls['name'].invalid && (reviewForm.controls['name'].dirty || reviewForm.controls['name'].touched)">
+                                            <li *ngIf="reviewForm.controls['name'].hasError('required')"
+                                                style="color: red;">
                                                 Your name is required.
                                             </li>
                                         </ul>
                                     </div>
                                     <div class="form-group">
                                         <label for="email">Your Email *</label>
-                                        <input [ngClass]="{'invalid-data' : reviewForm.controls['email'].invalid && (reviewForm.controls['email'].dirty || reviewForm.controls['email'].touched)}" type="email" formControlName="email"  class="form-control" id="email">
-                                        <ul *ngIf="reviewForm.controls['email'].invalid && (reviewForm.controls['email'].dirty || reviewForm.controls['email'].touched)" > 
-                                            <li *ngIf="reviewForm.controls['email'].hasError('email')" style="color: red;">
+                                        <input
+                                            [ngClass]="{'invalid-data' : reviewForm.controls['email'].invalid && (reviewForm.controls['email'].dirty || reviewForm.controls['email'].touched)}"
+                                            type="email" formControlName="email" class="form-control" id="email">
+                                        <ul
+                                            *ngIf="reviewForm.controls['email'].invalid && (reviewForm.controls['email'].dirty || reviewForm.controls['email'].touched)">
+                                            <li *ngIf="reviewForm.controls['email'].hasError('email')"
+                                                style="color: red;">
                                                 Enter valid email !
                                             </li>
-                                            <li *ngIf="reviewForm.controls['email'].hasError('required')" style="color: red;">
+                                            <li *ngIf="reviewForm.controls['email'].hasError('required')"
+                                                style="color: red;">
                                                 Your email is required.
                                             </li>
                                         </ul>
                                     </div>
                                     <div class="form-group mb-0">
-                                        <button  value="Leave Your Review" class="btn btn-primary px-3">Leave Your Review</button>
+                                        <button value="Leave Your Review" class="btn btn-primary px-3">Leave Your
+                                            Review</button>
                                     </div>
                                 </form>
                             </div>
@@ -173,6 +189,6 @@
             </div>
         </div>
     </div>
-    </div>
+</div>
 
-    <!-- Shop Detail End -->
+<!-- Shop Detail End -->

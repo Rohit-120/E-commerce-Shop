@@ -25,7 +25,7 @@
                                         <i class="fa fa-minus"></i>
                                     </button>
                                 </div>
-                                <input type="text" min="1" max="5" class="form-control form-control-sm bg-secondary border-0 text-center" name="item.quantity" [(ngModel)]="item.quantity">
+                                <input type="text" min="1" max="5" readonly class="form-control form-control-sm bg-secondary border-0 text-center" name="item.quantity" [(ngModel)]="item.quantity">
                                 <div class="input-group-btn">
                                     <button class="btn btn-sm btn-primary btn-plus" (click)="increase(index, item.product.productId)">
                                         <i class="fa fa-plus"></i>

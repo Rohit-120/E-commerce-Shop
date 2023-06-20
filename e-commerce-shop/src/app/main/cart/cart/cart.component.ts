@@ -5,7 +5,7 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { Toast, ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { BreadcrumbService } from 'src/app/shared/services/breadcrumb.service';
@@ -66,9 +66,12 @@ export class CartComponent implements OnInit, OnDestroy {
           this.commonService.CartItemsLength$.next(this.cartItems.length);
           this.commonService.totalCartItems$.next(res.data.products);
           this.getAllTotal();
-          this.commonService.cartTotalAmount$.next({total : this.subTotal, shipping: this.shipping});
+          this.commonService.cartTotalAmount$.next({
+            total: this.subTotal,
+            shipping: this.shipping,
+          });
           this.cdr.markForCheck();
-        }else{
+        } else {
           this.toastService.error('', res.message);
         }
       },

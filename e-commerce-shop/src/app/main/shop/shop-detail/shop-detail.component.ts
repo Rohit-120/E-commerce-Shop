@@ -95,12 +95,13 @@ export class ShopDetailComponent implements OnInit, OnDestroy {
   getSingleProductDetails() {
     let sub1 = this.apiCall.getSingleProduct(this.singleProductId).subscribe({
       next: (res) => {
+        console.log(res, 'single product details');
         
-        this.singleProductDetails = res.data.products[0];
+        this.singleProductDetails = res.data.product;
         
         //Incase if there is review added to product details.
-        if (res.data.products[0].reviews.length) {
-          this.productReviews = res.data.products[0].reviews;
+        if (res.data.product.reviews.length) {
+          this.productReviews = res.data.product.reviews;
         }
         this.cdr.markForCheck();
       },
