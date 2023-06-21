@@ -43,7 +43,7 @@
                 </div>
                 <!-- Size End -->
             </div>
-            <!-- Shop Sidebar End -->
+            <!-- Shop Sidebar End -->   
 
 
             <!-- Shop Product Start -->
@@ -80,7 +80,7 @@
                 <div *ngFor="let item of itemsByCategories | paginate  : { itemsPerPage : perPageItems, currentPage : currPage, totalItems : totalProducts}" class="col-lg-4 col-md-6 col-sm-6 pb-1">
                         <div class="product-item bg-light mb-4">
                             <div class="product-img position-relative overflow-hidden">
-                                <img class="img-fluid w-100" style="height:300px ;" src="{{item.image | image}}" alt="">
+                                <img class="img-fluid w-75" style="height:300px ;" src="{{item.image | image}}" alt="">
                                 <div class="product-action">
                                     <a class="btn btn-outline-dark btn-square" (click)="addToCartClick(item._id)"><i class="fa fa-shopping-cart"></i></a>
                                     <a class="btn btn-outline-dark btn-square" (click)="addToFavorite(item._id)"><i class="fa fa-heart" [ngClass]="{'text-danger' : item.isFavorite}"></i></a>

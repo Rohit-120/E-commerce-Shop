@@ -13,7 +13,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from '../shared/interceptors/token.interceptor';
 import { VendorComponent } from 'src/app/shared/components/vendor/vendor.component';
-import { MyOrdersComponent } from './my-orders/my-orders.component';
+import { MyOrdersComponent } from './orders/my-orders/my-orders.component';
 
 @NgModule({
   declarations: [

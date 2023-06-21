@@ -165,6 +165,8 @@ export class ShopDetailComponent implements OnInit, OnDestroy {
       this.body.rating = this.reviewForm.value.rating;
       this.body.review = this.reviewForm.value.reviewMessage;
 
+      console.log(this.body, 'review body///////////////////');
+      
       let sub4 = this.apiCall.addReview(this.body).subscribe({
         next: (res) => {
           if (res) {

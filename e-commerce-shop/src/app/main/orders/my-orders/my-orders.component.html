@@ -1,0 +1,23 @@
+
+<div class="container">
+  <table class="table text-center table-primary table-striped table-borderless table-hover">
+    <thead>
+    <tr >
+      <th scope="col">Id</th>
+      <th scope="col">Ordered On</th>
+      <th scope="col">Payment method</th>
+      <th scope="col">Amount</th>
+      <th scope="col">View Details</th>
+    </tr>
+   </thead>
+   <tbody>
+    <tr *ngFor="let order of orderList; let index = index" >
+      <td>{{order._id}}</td>
+      <td>{{order.createdOn  | date}}</td>
+      <td>{{order.paymentMethod | uppercase}}</td>
+      <td>{{order.orderAmount}}</td>
+      <td  [routerLink]="['order-details', order._id]" class="btn-outline-primary" style="cursor: pointer;" ><button class="btn"><i class="fas fa-eye text-info" style="font-size: 25px;"></i></button></td>
+    </tr>
+  </tbody>
+  </table>  
+</div>

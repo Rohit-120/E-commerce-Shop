@@ -119,24 +119,25 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     this.subscriptions.push(sub1);
 
     if (this.totalProductToOrder) {
-      this.commonService.cartTotalAmount$.subscribe({
+       let sub2 = this.commonService.cartTotalAmount$.subscribe({
         next: (res: any) => {
           this.totalAmountOfProducts = res;
           this.cdr.markForCheck();
           console.log(this.totalAmountOfProducts, 'total amount');
         },
       });
+      this.subscriptions.push(sub2);
     }
   }
 
   getCurrencyInfo() {
-    let sub4 = this.commonService.currencyChanges$.subscribe({
+    let sub3 = this.commonService.currencyChanges$.subscribe({
       next: (res) => {
         this.currencyInfo = res;
         this.cdr.markForCheck();
       },
     });
-    this.subscriptions.push(sub4);
+    this.subscriptions.push(sub3);
   }
 
   placeOrder() {
@@ -147,7 +148,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       this.orderBody.totalAmount = this.totalAmountOfProducts.total;
       console.log(this.orderBody, 'lllllllllllllllllllllllllllllllllllll');
 
-      this.apiCall.placeOrder(this.orderBody).subscribe({
+     let sub4 = this.apiCall.placeOrder(this.orderBody).subscribe({
         next: (res) => {
           console.log(res, 'place order');
           if (res.type === 'success') {
@@ -155,11 +156,12 @@ export class CheckoutComponent implements OnInit, OnDestroy {
           }
         },
       });
+      this.subscriptions.push(sub4);
     } //if billing and shipping address are different
     else {
       if (this.shippingAddressForm.valid) {
         //to add shipping address to user address list
-        this.apiCall.addAddress(this.shippingAddressForm.value).subscribe({
+       let sub5 = this.apiCall.addAddress(this.shippingAddressForm.value).subscribe({
           next: (res) => {
             console.log(res.addedAddressId, 'place order');
             //if shipping address is added to user list place order with different address
@@ -169,7 +171,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
               this.orderBody.totalAmount = this.totalAmountOfProducts.total;
               this.orderBody.shipToDifferentAddress = true;
 
-              this.apiCall.placeOrder(this.orderBody).subscribe({
+              let sub6 = this.apiCall.placeOrder(this.orderBody).subscribe({
                 next: (res) => {
                   console.log(res, 'Place Order with shipping address');
                   if (res.type === 'success') {
@@ -177,9 +179,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
                   }
                 },
               });
+              this.subscriptions.push(sub6);
             }
           },
         });
+        this.subscriptions.push(sub5);
       } else {
         this.toastService.info('Please enter valid information !');
       }
@@ -195,7 +199,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   getAddressList() {
-    let sub2 = this.apiCall.getAddressList().subscribe({
+    let sub7 = this.apiCall.getAddressList().subscribe({
       next: (res) => {
         console.log('Res', res);
         if (res.type === 'success') {
@@ -214,7 +218,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       },
     });
 
-    this.subscriptions.push(sub2);
+    this.subscriptions.push(sub7);
   }
 
   editAddress(address: any, action?: string, index?: any) {
@@ -231,7 +235,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   updateAddress() {
-    let sub3 = this.apiCall
+    let sub8 = this.apiCall
       .updateAddress(this.isAddressId, this.addressBillingForm.value)
       .subscribe({
         next: (res) => {
@@ -242,12 +246,12 @@ export class CheckoutComponent implements OnInit, OnDestroy {
           }
         },
       });
-    this.subscriptions.push(sub3);
+    this.subscriptions.push(sub8);
   }
 
   removeAddress(addressId: string, index: number) {
     console.log(addressId, 'removeAddress');
-    let sub4 = this.apiCall.removeAddress(addressId).subscribe({
+    let sub9 = this.apiCall.removeAddress(addressId).subscribe({
       next: (res) => {
         if (res.type === 'success') {
           this.userAddressList.splice(index, 1);
@@ -258,7 +262,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         }
       },
     });
-    this.subscriptions.push(sub4);
+    this.subscriptions.push(sub9);
   }
 
   ngOnDestroy(): void {

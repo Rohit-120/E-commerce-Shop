@@ -13,6 +13,7 @@ import {
   FAVORITE_PRODUCTS,
   FILTERS,
   ORDER_LIST,
+  PLACED_ORDER_DETAILS,
   PLACE_ORDER,
   REMOVE_ADDRESS,
   REMOVE_CART,
@@ -117,6 +118,10 @@ export class ApiService {
 
   orderList(): Observable<any> {
     return this.http.getRequest(ORDER_LIST);
+  }
+
+  orderDetails(id: any): Observable<any> {
+    return this.http.getRequest(PLACED_ORDER_DETAILS + '/' + id);
   }
 
   //Footer email Signup api

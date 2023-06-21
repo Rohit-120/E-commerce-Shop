@@ -43,6 +43,9 @@ export const UPDATE_ADDRESS = `${LOCAL_HOST}/address/update`;
 //api for Orders
 export const PLACE_ORDER = `${LOCAL_HOST}/orders`;
 export const ORDER_LIST = `${LOCAL_HOST}/orders`;
+export const PLACED_ORDER_DETAILS = `${LOCAL_HOST}/orders`;
+
+
 
 //Token regeneration
 export const TOKEN_GENERATION = `${LOCAL_HOST}/generate-token`;

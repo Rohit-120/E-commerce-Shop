@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/shared/services/api.service';
+import { BreadcrumbService } from 'src/app/shared/services/breadcrumb.service';
 
 @Component({
   selector: 'app-my-orders',
@@ -12,10 +13,23 @@ export class MyOrdersComponent implements OnInit {
 
   constructor(
     private apiCall : ApiService,
-    private cdr : ChangeDetectorRef
+    private cdr : ChangeDetectorRef,
+    private breadcrumbService : BreadcrumbService
   ) { }
 
   ngOnInit(): void {
+
+    // Breadcrumb Setup
+    this.breadcrumbService.breadcrumb.next([
+      {
+        label: 'Home',
+        url: '/',
+      },
+      {
+        label: 'My Orders',
+        url: 'my-orders',
+      },
+    ]);
     this.getOrderList();
   }
 
