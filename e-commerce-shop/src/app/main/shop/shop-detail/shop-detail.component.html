@@ -130,7 +130,7 @@
                                 </div>
                                 <form [formGroup]="reviewForm" (ngSubmit)="onReviewSubmit()">
                                     <div class="form-group">
-                                        <input class="rating" max="5" min="1"
+                                        <input class="rating" max="5" min="0.5"
                                             oninput="this.style.setProperty('--value', `${this.valueAsNumber}`)"
                                             step="0.5" style="--value:4" type="range" formControlName="rating">
                                     </div>

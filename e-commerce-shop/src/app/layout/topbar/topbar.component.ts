@@ -2,7 +2,9 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  OnChanges,
   OnInit,
+  SimpleChanges,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -19,7 +21,17 @@ import { StorageService } from 'src/app/shared/services/storage.service';
   styleUrls: ['./topbar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TopbarComponent implements OnInit {
+export class TopbarComponent implements OnInit, OnChanges {
+  
+  isLogin: boolean = false;
+  currencyChange: string = 'USD';
+  languageLabel!: string;
+  totalCartLength!: number;
+  totalFavoriteLength!: number;
+  searchData: string = '';
+  userDetails: any;
+  subscriptions: Subscription[] = [];
+  
   topbarNavItems: any = [
     {
       navItem: 'About',
@@ -39,15 +51,7 @@ export class TopbarComponent implements OnInit {
     },
   ];
 
-  isLogin: boolean = false;
-
   // object to select currency and Language
-
-  currencyChange: string = 'USD';
-  languageLabel!: string;
-  totalCartLength!: number;
-  totalFavoriteLength!: number;
-
   currencies: any = [
     { name: 'USD', currencyPrice: 1 },
     { name: 'EUR', currencyPrice: 0.92 },
@@ -66,9 +70,6 @@ export class TopbarComponent implements OnInit {
     { label: 'GU', code: 'gu' },
   ];
 
-  searchData: string = '';
-  userDetails: any;
-  subscriptions: Subscription[] = [];
   constructor(
     private commonService: CommonService,
     private cdr: ChangeDetectorRef,
@@ -84,12 +85,17 @@ export class TopbarComponent implements OnInit {
     this.checkCartItemLength();
     this.checkFavoriteItemLength();
     this.getUserName();
-    this.getSomething();
-    this.checkTokenValidation();
+    // this.checkTokenValidation();
+
+    // this.apiCall.trySomething().subscribe({
+    //   next : (res) => {
+    //     console.log('trySomething =======> ',res);
+        
+    //   }
+    // })
   }
 
-  getSomething() {
-    console.log( this.authService.isAuthTokenValid());
+  ngOnChanges(changes: SimpleChanges): void {
     
   }
 
@@ -107,7 +113,7 @@ export class TopbarComponent implements OnInit {
     this.subscriptions.push(sub1);
   }
 
-  checkFavoriteItemLength(){
+  checkFavoriteItemLength() {
     let sub2 = this.commonService.FavoriteItemLength$.subscribe({
       next: (res) => {
         this.totalFavoriteLength = res;
@@ -119,7 +125,7 @@ export class TopbarComponent implements OnInit {
 
   checkCartItemLength() {
     let sub2 = this.commonService.CartItemsLength$.subscribe({
-      next: (res : any) => {
+      next: (res: any) => {
         this.totalCartLength = res;
         this.cdr.markForCheck();
       },
@@ -145,26 +151,20 @@ export class TopbarComponent implements OnInit {
   onLanguageChange(language: any) {
     this.languageLabel = language.label;
     let lanCode = language.code;
-
-    console.log(language.code);
-
     document.cookie = 'googtrans=' + `/en/${lanCode}`;
-    // this.cdr.markForCheck()
     location.reload();
   }
 
   getUserName() {
     this.userDetails = this.authService.decodeToken();
-    console.log('this.userDetails ====> ', this.userDetails, );
-    
     this.cdr.markForCheck();
   }
 
-  checkTokenValidation(){
-    setInterval(() => {
-      this.authService.isAuthTokenValid();
-    },500000)
-  }  
+  // checkTokenValidation() {
+  //   setInterval(() => {
+  //     this.authService.isAuthTokenValid();
+  //   }, 1000);
+  // }
 
   logOut() {
     if (this.storageService.get('token')) {
@@ -187,5 +187,4 @@ export class TopbarComponent implements OnInit {
       });
     }
   }
-
 }

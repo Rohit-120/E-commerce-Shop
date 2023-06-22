@@ -118,12 +118,10 @@ export class CartComponent implements OnInit, OnDestroy {
   // to get the total price
   getAllTotal() {
     let tempTotal: number = 0;
-
     for (const item of this.cartItems) {
       tempTotal += item.total;
     }
     this.subTotal = tempTotal;
-
     this.subTotal <= 0 ? (this.shipping = 0) : (this.shipping = 10);
   }
 

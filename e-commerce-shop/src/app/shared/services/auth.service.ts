@@ -48,24 +48,16 @@ export class AuthService {
 
   isAuthTokenValid(): void {
     const tokenData: any = this.decodeToken();
-    let minute = 0;
-    tokenData
-      ? (minute = this.getMinutes(new Date(tokenData?.exp * 1000), new Date()))
-      : '';
-    if (minute < 10) {
+    let currentTime = Math.floor(new Date().getTime() / 1000);
+
+    if (currentTime > tokenData.exp) {
       this.reGenerateToken();
     }
-  }
-
-  getMinutes(d1: any, d2: any) {
-    const mins = Math.floor(Math.abs(d1 - d2) / 60000);
-    return mins;
   }
 
   reGenerateToken(): void {
     this.http.postRequest(TOKEN_GENERATION, null).subscribe((res: any) => {
       localStorage.setItem('token', res.token);
-      // this.setAuthToken(res.token)
     });
   }
 }

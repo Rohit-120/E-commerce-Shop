@@ -22,7 +22,7 @@
                     <h5>{{item?.price * currencyInfo.currencyPrice  | currency : currencyInfo.currencyName}}</h5><h6 class="text-muted ml-2"><del>{{item?.price * currencyInfo.currencyPrice  | currency : currencyInfo.currencyName}}</del></h6>
                 </div>
                 <div class="d-flex align-items-center justify-content-center mb-1 text-primary" *ngIf="item.rating.rate">
-                    <app-rating [rating] = "item.rating.rate" [ratingCount]="item.rating.count" ></app-rating>
+                    <app-rating [rating]="item.rating.rate" [ratingCount]="item.rating.count" ></app-rating>
                 </div>
             </div>
         </div>

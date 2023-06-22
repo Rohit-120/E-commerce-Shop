@@ -18,13 +18,19 @@ export class TokenInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    let authHeader = this.storageService.get('token');
+    let token = this.storageService.get('token');
+    
+  
+    if (token && !request.url.includes('generate-token')) {
+      this.authService.isAuthTokenValid() 
+    }
 
-    if (authHeader) {
+    if (token) {
       request = request.clone({
-        headers: request.headers.set('token', authHeader),
+        headers: request.headers.set('token', token),
       });
     }
+      
     return next.handle(request);
   }
 }

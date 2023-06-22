@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       'rohit.p@webcodegenie.com',
       [Validators.required, Validators.email],
     ],
-    password: ['rohitt', Validators.required],
+    password: ['rohit', Validators.required],
   });
 
   constructor(

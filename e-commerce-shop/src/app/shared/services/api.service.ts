@@ -22,12 +22,17 @@ import {
   UPDATE_ADDRESS,
   VENDORS,
 } from '../constants/apiEndPoint';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  constructor(private http: HttpService) {}
+  constructor(private http: HttpService,
+    private httpC: HttpClient
+    
+    
+    ) {}
 
   // Node API calls
 
@@ -36,6 +41,10 @@ export class ApiService {
     return this.http.postRequest(ALL_PRODUCTS, body);
   }
 
+  trySomething(): Observable<any> {
+    return this.httpC.get('')
+  }
+  
   getSingleProduct(id: any): Observable<any> {
     console.log(ALL_PRODUCTS + '/' + id, 'Single Product APIService');
 
